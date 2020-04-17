@@ -1,6 +1,6 @@
-# flutter_app2
+# we-now app
 
-A new Flutter application.
+校园社交类APP flutter 
 
 ## Getting Started
 
