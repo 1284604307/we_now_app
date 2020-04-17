@@ -1,76 +1,106 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app2/pages/home/home_banner.dart';
-import 'package:flutter_app2/pages/home/home_news_page.dart';
-import 'package:flutter_app2/pages/home/index/news_list.dart';
-import 'package:flutter_app2/services/indexNews.dart';
-import 'package:flutter_app2/services/model/news.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_app2/pages/global/global_config.dart';
+import 'follow.dart';
+import 'recommend.dart';
+import 'hot.dart';
+import 'search_page.dart';
+import 'ask_page.dart';
 
-class HomePage extends StatefulWidget{
+class HomePage extends StatefulWidget {
+
   @override
-  HomePageState createState()=>HomePageState();
+  _HomePageState createState() => new _HomePageState();
+
 }
 
-class HomePageState extends State<HomePage>{
+class _HomePageState extends State<HomePage> {
 
-  NewsListModal newsData = NewsListModal([]);
-
-  void getNewsList() async{
-    var data = await getNewsResult();
-    NewsListModal list = NewsListModal.fromJson(data);
-    setState(() {
-      newsData.data.addAll(list.data);
-      print(newsData.data);
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    getNewsList();
-    super.initState();
-  }
-
-  @override
-  Scaffold build(BuildContext context) {
-//    double width = MediaQuery.of(context).size.width;
-//    double height = width * 540.0/1080.0;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Show Now",style: TextStyle(
-          color: Colors.white
-        ),),
-//        leading: Icon(Icons.home),
-        actions: <Widget>[
-          //右侧内边距
-          Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: (){
-                BotToast.showText(text: "功能未做,应跳转到搜索页");
-              },
-              child: Icon(
-                Icons.search,
-                color: Colors.white,
-              ),
-            ),
-          )
-        ],
-      ),
-      backgroundColor: Colors.black12,
-      body: Container(
-        color: Colors.white,
-        child: Flex(
+  Widget barSearch() {
+    return new Container(
+        height: 35,
+        child: new Row(
           children: <Widget>[
-            BannerWiget(),
-            HomeNewsPage(list: newsData),
-            Expanded(
-              child: ListView.builder(itemBuilder: (BuildContext context, int index) {
-                return BannerWiget();
-              }),
+            new Expanded(
+                child: new FlatButton.icon(
+                  onPressed: (){
+                    Navigator.of(context).push(new MaterialPageRoute(
+                        builder: (context) {
+                          return new SearchPage();
+                        }
+                    ));
+                  },
+                  icon: new Icon(
+                      Icons.search,
+                      color: GlobalConfig.fontColor,
+                      size: 24.0
+                  ),
+                  label: new Text(
+                    "坚果R1摄像头损坏",
+                    style: new TextStyle(color: GlobalConfig.fontColor),
+                  ),
+                )
+            ),
+            new Container(
+              decoration: new BoxDecoration(
+                  border: new BorderDirectional(
+                      start: new BorderSide(color: GlobalConfig.fontColor, width: 1.0)
+                  )
+              ),
+              height: 12.0,
+              width: 1.0,
+            ),
+            new Container(
+                child: new FlatButton.icon(
+                  onPressed: (){
+                    Navigator.of(context).push(new MaterialPageRoute(
+                        builder: (context) {
+                          return new AskPage();
+                        }
+                    ));
+                  },
+                  icon: new Icon(
+                      Icons.border_color,
+                      color: GlobalConfig.fontColor,
+                      size: 14.0
+                  ),
+                  label: new Text(
+                    "提问",
+                    style: new TextStyle(color: GlobalConfig.fontColor),
+                  ),
+                )
             )
-          ], direction: Axis.vertical,
+          ],
+        ),
+        decoration: new BoxDecoration(
+          borderRadius: const BorderRadius.all(const Radius.circular(4.0)),
+          color: GlobalConfig.searchBackgroundColor,
+        )
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new DefaultTabController(
+      length: 3,
+      child: new Scaffold(
+        appBar: new AppBar(
+          title: barSearch(),
+          bottom: new TabBar(
+            labelColor: GlobalConfig.dark == true ? new Color(0xFF63FDD9) : Colors.blue,
+            unselectedLabelColor: GlobalConfig.dark == true ? Colors.white : Colors.black,
+            tabs: [
+              new Tab(text: "关注"),
+              new Tab(text: "推荐"),
+              new Tab(text: "热榜"),
+            ],
+          ),
+        ),
+        body: new TabBarView(
+            children: [
+              new Follow(),
+              new Recommend(),
+              new Hot()
+            ]
         ),
       ),
     );
