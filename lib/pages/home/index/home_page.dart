@@ -86,8 +86,8 @@ class _HomePageState extends State<HomePage> {
         appBar: new AppBar(
           title: barSearch(),
           bottom: new TabBar(
-            labelColor: GlobalConfig.dark == true ? new Color(0xFF63FDD9) : Colors.blue,
-            unselectedLabelColor: GlobalConfig.dark == true ? Colors.white : Colors.black,
+            labelColor: GlobalConfig.dark? Colors.white : Colors.black,
+            unselectedLabelColor: GlobalConfig.themeColor ,
             tabs: [
               new Tab(text: "关注"),
               new Tab(text: "推荐"),

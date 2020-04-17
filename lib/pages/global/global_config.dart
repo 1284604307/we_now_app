@@ -6,7 +6,7 @@ class GlobalConfig {
     primaryColor: Colors.white,
     scaffoldBackgroundColor: new Color(0xFFEBEBEB),
   );
-  static Color searchBackgroundColor = new Color(0xFFEBEBEB);
+  static Color searchBackgroundColor = Colors.white;//new Color(0xFFEBEBEB);
   static Color cardBackgroundColor = Colors.white;
   static Color fontColor = Colors.black54;
   static Color titleColor = Colors.white;

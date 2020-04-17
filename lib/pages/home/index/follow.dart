@@ -218,6 +218,7 @@ class _FollowState extends State<Follow> {
     return new SingleChildScrollView(
         child: new Container(
           margin: const EdgeInsets.only(top: 5.0),
+          color: Color.fromRGBO(0, 0, 0, 0.0 6),
           child: new Column(
             children: <Widget>[
               wordsCard(articleList[0]),
