@@ -106,6 +106,7 @@ class HotState extends State<Hot>{
   Widget build(BuildContext context) {
     return new SingleChildScrollView(
         child: new Container(
+        color: GlobalConfig.globalBackgroundColor,
         margin: const EdgeInsets.only(top: 5.0),
         child: new Column(
           children: <Widget>[

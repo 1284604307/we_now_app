@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'question_page.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
 
+/**
+ * @author Ming
+ * @date 2020/4/18
+ * @email 1284604307@qq.com
+ */
 class Common {
   static Widget searchInput(BuildContext context) {
     return new Container(

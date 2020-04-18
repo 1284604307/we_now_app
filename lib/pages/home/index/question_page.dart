@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'reply_page.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
 
+/**
+ * @author Ming
+ * @date 2020/4/18
+ * @email 1284604307@qq.com
+ */
 class QuestionPage extends StatefulWidget {
   @override
   QuestionPageState createState() => new QuestionPageState();

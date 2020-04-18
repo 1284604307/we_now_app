@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app2/pages/global/global_config.dart';
 
 class MessagePage extends StatefulWidget{
   @override
@@ -12,7 +13,11 @@ class MessagePageState extends State<MessagePage>{
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
-          title:Text("消息"),
+          title: Container(
+            child: Text("消息",style: TextStyle(
+                color: GlobalConfig.titleColor
+            ),),
+          ),
         ),
         body: Container(
           child: RaisedButton(
@@ -22,9 +27,10 @@ class MessagePageState extends State<MessagePage>{
             },
           ),
         ),
-      ), onWillPop: () {
-        Navigator.pop(context);
-    },
+      ),
+      onWillPop: () {
+
+      },
     );
   }
 }

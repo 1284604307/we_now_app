@@ -9,6 +9,11 @@ import 'package:path_provider/path_provider.dart';
 import 'CustomInterceptors.dart';
 import 'LogsInterceptors.dart';
 
+/**
+ * @author Ming
+ * @date 2020/4/18
+ * @email 1284604307@qq.com
+ */
 class Api{
   static BaseOptions opt;
   static const Api_Host = "http://192.168.101.7:8888";

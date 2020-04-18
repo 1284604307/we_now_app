@@ -4,6 +4,11 @@ import 'package:flutter_app2/services/model/news.dart';
 
 import 'index/news_detail_page.dart';
 
+/**
+ * @author Ming
+ * @date 2020/4/18
+ * @email 1284604307@qq.com
+ */
 class HomeNewsPage extends StatelessWidget{
 
   final NewsListModal list;

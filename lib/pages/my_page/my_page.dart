@@ -3,6 +3,11 @@ import 'package:flutter_app2/pages/my_page/my_page_self_card.dart';
 
 import 'my_page_card_item.dart';
 
+/**
+ * @author Ming
+ * @date 2020/4/18
+ * @email 1284604307@qq.com
+ */
 class MyPage extends StatefulWidget{
   @override
   MyPageState createState()=>MyPageState();

@@ -53,7 +53,6 @@ class _FollowState extends State<Follow> {
     return new Container(
         color: GlobalConfig.cardBackgroundColor,
         margin: const EdgeInsets.only(top: 5.0, bottom: 5.0),
-        //回复页
         child: new FlatButton(
           // 分别是点击时 点击处的水滴扩散的颜色 和 背景色
           splashColor: Colors.white,
@@ -187,7 +186,6 @@ class _FollowState extends State<Follow> {
                   ),
                   padding: const EdgeInsets.only(bottom: 8.0)
               ),
-
               new Container(
                 child: new Row(
                   children: <Widget>[
@@ -218,7 +216,7 @@ class _FollowState extends State<Follow> {
     return new SingleChildScrollView(
         child: new Container(
           margin: const EdgeInsets.only(top: 5.0),
-          color: Color.fromRGBO(0, 0, 0, 0.0 6),
+          color: GlobalConfig.globalBackgroundColor,
           child: new Column(
             children: <Widget>[
               wordsCard(articleList[0]),

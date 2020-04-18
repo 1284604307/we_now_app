@@ -83,11 +83,13 @@ class _HomePageState extends State<HomePage> {
     return new DefaultTabController(
       length: 3,
       child: new Scaffold(
+        backgroundColor: GlobalConfig.globalBackgroundColor,
         appBar: new AppBar(
           title: barSearch(),
           bottom: new TabBar(
-            labelColor: GlobalConfig.dark? Colors.white : Colors.black,
+            labelColor: GlobalConfig.dark? Colors.white : Colors.white,
             unselectedLabelColor: GlobalConfig.themeColor ,
+            indicatorColor: Colors.white,
             tabs: [
               new Tab(text: "关注"),
               new Tab(text: "推荐"),

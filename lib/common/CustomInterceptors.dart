@@ -5,6 +5,12 @@ import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 
 import 'Api.dart';
 import 'Global.dart';
+
+/**
+ * @author Ming
+ * @date 2020/4/18
+ * @email 1284604307@qq.com
+ */
 class CustomInterceptors extends InterceptorsWrapper {
   @override
   Future onRequest(RequestOptions options) {

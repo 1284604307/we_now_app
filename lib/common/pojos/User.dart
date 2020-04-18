@@ -8,6 +8,11 @@ import 'package:flutter_app2/common/Global.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'User.g.dart';
 
+/**
+ * @author Ming
+ * @date 2020/4/18
+ * @email 1284604307@qq.com
+ */
 @JsonSerializable()
 class User{
   var username = "999";

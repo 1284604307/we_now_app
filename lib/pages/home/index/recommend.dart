@@ -3,6 +3,11 @@ import 'article.dart';
 import 'reply_page.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
 
+/**
+ * @author Ming
+ * @date 2020/4/18
+ * @email 1284604307@qq.com
+ */
 class Recommend extends StatefulWidget {
 
   @override
@@ -95,7 +100,8 @@ class RecommendState extends State<Recommend> {
   @override
   Widget build(BuildContext context) {
     return new SingleChildScrollView(
-        child: new Container(
+      child: new Container(
+        color: GlobalConfig.globalBackgroundColor,
         margin: const EdgeInsets.only(top: 5.0),
         child: new Column(
           children: <Widget>[
