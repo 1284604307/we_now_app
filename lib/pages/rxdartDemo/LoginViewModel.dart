@@ -50,8 +50,9 @@ class LoginModel {
   /// Stream.fromFuture 等构造方法。更多细节参考官方文档
   /// 因为是 demo 所以用 Future.delayed 模拟请求过程
   Stream<int> login(dynamic data) => Stream.fromFuture(
+
     Future.delayed(Duration(seconds: 2), () {
-      if (data["username"] == "lzyprime" && data["password"] == "123")
+      if (data["username"] == "" && data["password"] == "")
         return 0;
       return -1;
     }),
@@ -71,6 +72,8 @@ class LoginViewModel with ChangeNotifier {
       "username": usernameController.text,
       "password": passwordController.text,
     };
+
+    print(data);
 
     /// 不为 0 说明上一条请求未完成，直接退出
     if (state != 0) return;

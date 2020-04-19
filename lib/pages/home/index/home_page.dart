@@ -6,14 +6,19 @@ import 'hot.dart';
 import 'search_page.dart';
 import 'ask_page.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatefulWidget{
+
 
   @override
   _HomePageState createState() => new _HomePageState();
 
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin  {
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 
   Widget barSearch() {
     return new Container(
@@ -77,6 +82,25 @@ class _HomePageState extends State<HomePage> {
         )
     );
   }
+  PageController _controller = PageController();
+  @override
+  void dispose(){
+    _controller.dispose();
+    super.dispose();
+  }
+
+
+  final _navigationItems = [
+    new Tab(text: "关注"),
+    new Tab(text: "推荐"),
+    new Tab(text: "热榜"),
+  ];
+  /// 统一管理导航项目对应的组件列表。
+  final _widgetOptions = [
+    new Follow(),
+    new Recommend(),
+    new Hot()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -90,19 +114,11 @@ class _HomePageState extends State<HomePage> {
             labelColor: GlobalConfig.dark? Colors.white : Colors.white,
             unselectedLabelColor: GlobalConfig.themeColor ,
             indicatorColor: Colors.white,
-            tabs: [
-              new Tab(text: "关注"),
-              new Tab(text: "推荐"),
-              new Tab(text: "热榜"),
-            ],
+            tabs: _navigationItems,
           ),
         ),
         body: new TabBarView(
-            children: [
-              new Follow(),
-              new Recommend(),
-              new Hot()
-            ]
+            children: _widgetOptions
         ),
       ),
     );

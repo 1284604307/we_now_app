@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -25,8 +26,7 @@ class Api{
   // PersistCookieJar 会将cookie保存到本地
 //  static final PersistCookieJar cookieJar = new PersistCookieJar();
   static Dio getDio(){
-
-//    if(dio==null){
+    if(dio==null){
       opt = BaseOptions(
         headers: {
           "Auth-Type":"APP_MATH",
@@ -36,26 +36,35 @@ class Api{
       );
       dio = new Dio(opt);
       // 获取存储cookie的本地地址
-      cookieJar = PersistCookieJar(dir:appDocPath+"/.cookies/");
-//      dio.interceptors.add(LogsInterceptors());
       dio.interceptors.add(CustomInterceptors());
       //置入cookieManager
       dio.interceptors.add(CookieManager(cookieJar));
-      print(opt);
-//    }
+    }
     return dio;
   }
 
-  static init(){
-    getAppDocDir();
-    user = User.getUser();
-    User.initInfo();
+  static init() async{
+    await getCookieJar().then(
+        (path){
+          print(path);
+          user = User.getUser();
+          if(cookieJar.domains!=null&&cookieJar.domains.length>1){
+            user.initInfo();
+          }
+        }
+    );
+//    Api.cookieJar = new PersistCookieJar(dir:"./cookies");
+//    getApplicationDocumentsDirectory().then((onValue){
+//      print(onValue.path);
+//      Api.appDocPath = onValue.path;
+//          //PersistCookieJar(dir:Api.appDocPath+"/.cookies/");
+//    });
   }
 
-  static Future<String> getAppDocDir() async {
+  static Future<String> getCookieJar() async {
     await getApplicationDocumentsDirectory().then((onValue){
-      print(onValue.path);
       appDocPath = onValue.path;
+      cookieJar = PersistCookieJar(dir:appDocPath+"/.cookies/");
     });
   }
 

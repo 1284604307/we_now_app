@@ -29,7 +29,7 @@ class MePage extends StatelessWidget{
         ),
       ),
       onWillPop: () {
-
+        Navigator.pop(context);
       }
     );
   }

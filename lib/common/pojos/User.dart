@@ -14,7 +14,7 @@ part 'User.g.dart';
  * @email 1284604307@qq.com
  */
 @JsonSerializable()
-class User{
+class User with ChangeNotifier{
   var username = "999";
   var create = "9991";
   var like = "9992";
@@ -41,7 +41,7 @@ class User{
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
-  static initInfo() async{
+  initInfo() async{
     Dio dio = Api.getDio();
     var res = await dio.get("/user");
     print(res);
@@ -52,6 +52,7 @@ class User{
         Api.user =  User.fromJson(data['data']);
         print(Api.user.toJson());
         Api.login = true;
+        notifyListeners();
       }
     }else{
       BotToast.showText(text:"服务错误");

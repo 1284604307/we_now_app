@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app2/common/Api.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
 
 class MessagePage extends StatefulWidget{
@@ -23,6 +24,15 @@ class MessagePageState extends State<MessagePage>{
           itemCount: 12,
           itemBuilder: (BuildContext context, int index) {
             print(index);
+            if(index==0)
+              return Container(
+                child: RaisedButton(
+                  onPressed: (){
+                    Api.user.initInfo();
+                  },
+                  child: Text("getInfo"),
+                ),
+              );
             return Container(
               child: messageWidget(),
 //              decoration: BoxDecoration(

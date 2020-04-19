@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app2/common/Global.dart';
@@ -28,6 +31,8 @@ class AppState extends State<App>{
   MessagePage messagePage;
   MyPage myPage;
 
+
+
   //根据当前索引返回不同页面
   currentPage(){
     switch(_currentIndex){
@@ -54,54 +59,89 @@ class AppState extends State<App>{
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     Global.context = context;
-    //    SystemChrome.setEnabledSystemUIOverlays([]);
-    //虚拟按键背景
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: currentPage(),
-      //底部导航栏
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        unselectedLabelStyle: TextStyle(
-          color: Colors.transparent
-        ),
-        //通过fixedColor设置选中的颜色
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _currentIndex,
-        onTap: (index){
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        //底部导航栏
-        items: [
-          BottomNavigationBarItem(
-            title: Text(
-                '首页',
+    DateTime  _willPopTime ;
+
+    final pageController = PageController();
+    final bodyList = [HomePage(), CirclePage(), MessagePage(),MyPage()];
+
+    void onTap(int index) {
+      pageController.jumpToPage(index);
+    }
+
+    void onPageChanged(int index) {
+      setState(() {
+        _currentIndex = index;
+      });
+    }
+
+    List<BottomNavigationBarItem> navigationItem = [
+      BottomNavigationBarItem(
+          title: Text(
+            '首页',
 //              style: TextStyle(
 //                color: _currentIndex == 0?Colors.redAccent:Color(0xff999999)
 //              ),
-            ),
-            icon:Icon(Icons.home)
+          ),
+          icon:Icon(Icons.home)
 //            icon: _currentIndex == 0? Icon(Icons.home):Icon(Icons.home)
-          ),
-          BottomNavigationBarItem(
-              title: Text('广场'),
-              icon: Icon(Icons.grain)
-          ),
-          BottomNavigationBarItem(
-              title: Text('消息'),
-              icon: Icon(_currentIndex != 2?Icons.notifications_none:Icons.notifications)
-          ),
-          BottomNavigationBarItem(
-              title: Text('我的'),
-              icon: Icon(_currentIndex != 3?Icons.person_outline:Icons.person)
-          ),
-        ],
-      ) ,
+      ),
+      BottomNavigationBarItem(
+          title: Text('广场'),
+          icon: Icon(Icons.grain)
+      ),
+      BottomNavigationBarItem(
+          title: Text('消息'),
+          icon: Icon(_currentIndex != 2?Icons.notifications_none:Icons.notifications)
+      ),
+      BottomNavigationBarItem(
+          title: Text('我的'),
+          icon: Icon(_currentIndex != 3?Icons.person_outline:Icons.person)
+      ),
+    ];
+
+    return WillPopScope(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: PageView(
+          controller: pageController,
+          onPageChanged: onPageChanged,
+          children: bodyList,
+          physics: NeverScrollableScrollPhysics(), // 禁止滑动
+        ),
+        //底部导航栏
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.white,
+          unselectedLabelStyle: TextStyle(color: Colors.transparent),
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _currentIndex,
+          onTap: onTap,
+          //底部导航栏
+          items: navigationItem,
+        ) ,
+      ),
+      onWillPop: () async {
+        if (_currentIndex != 0) {
+          setState(() {
+            _currentIndex = 0;
+          });
+          return false;
+        } else {
+          if (_willPopTime == null || (DateTime.now().difference(_willPopTime) >
+              Duration(seconds: 1))) {
+            //两次点击间隔超过1秒，重新计时
+            BotToast.showText(text: "再次点击将退出应用");
+            _willPopTime = DateTime.now();
+            print(_willPopTime);
+            return false;
+          }
+          return true;
+        }
+      }
     );
   }
+
 }

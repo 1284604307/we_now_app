@@ -17,10 +17,6 @@ class RxDartDemoState extends State<RxDartDemo>{
   @override
   void initState(){
     super.initState();
-    Stream.fromIterable([1, 2, 3])
-        .throttleTime(Duration(seconds: 1))
-        .listen(print); // prints 3
-    print(2);
   }
 
 

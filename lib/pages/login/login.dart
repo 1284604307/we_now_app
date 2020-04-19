@@ -116,27 +116,28 @@ class LoginPageState extends State<LoginPage>{
           )
       ), onWillPop: () {
           print("退出登录页");
-        Navigator.pop(context);
+          Navigator.pop(context);
       },
     );
   }
 
 
   Future<void> login() async {
-    var data = {'username': userController.text, 'password': passController.text,'rememberMe':false};
+    var data = {'username': userController.text, 'password': passController.text,'rememberMe':true};
     print(data);
 
     FormData formData = new FormData.fromMap(data);
 
     Dio dio = Api.getDio();
-    var response = await dio.post("http://192.168.101.7:8888/login", data:formData);
+    var response = await dio.post("/login", data:formData);
     if(response.statusCode==200){
       var res = json.decode(response.toString());
       print(res["code"]);
       if(res["code"]==0){
         BotToast.showText(text: "登陆成功");
-        User.initInfo().then((){
-          Navigator.pop(context,"update");
+        Navigator.pop(context);
+        Api.user.initInfo().then((){
+          print(res);
         });
       }else{
         BotToast.showText(text:res['msg']);
