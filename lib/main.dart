@@ -5,6 +5,7 @@ import 'package:flutter_app2/pages/chat/chat_page.dart';
 import 'package:flutter_app2/pages/loading.dart';
 import 'package:flutter_app2/pages/login/login.dart';
 import 'package:flutter_app2/pages/me/me_page.dart';
+import 'package:flutter_app2/pages/rxdartDemo/rDemo.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 import 'common/Api.dart';
@@ -37,7 +38,7 @@ void main() {
                 ),
               ),
         },
-        home: LoadingPage(),
+        home: RxDartDemo(), // LoadingPage(),
       ))
     );
 

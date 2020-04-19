@@ -21,7 +21,7 @@ class Article {
 List<Article> articleList = [
   new Article(
       "https://pic3.zhimg.com/50/2b8be8010409012e7cdd764e1befc4d1_s.jpg",
-      "learner",
+      "王本淞",
       "赞同了回答",
       "2小时前",
       "在三体中，罗辑为什么会把控制权交给程心，难道他没有推测过后果吗？",
