@@ -217,7 +217,8 @@ class _FollowState extends State<Follow> {
         child: new Container(
           margin: const EdgeInsets.only(top: 5.0),
           color: GlobalConfig.globalBackgroundColor,
-          child: new Column(
+          child: new ListView(
+            primary: false,
             children: <Widget>[
               wordsCard(articleList[0]),
               wordsCard(articleList[1]),
@@ -225,6 +226,7 @@ class _FollowState extends State<Follow> {
               billboard(),
               wordsCard(articleList[3])
             ],
+            shrinkWrap: true,
           ),
         )
     );

@@ -16,7 +16,7 @@ void main() {
           child:MaterialApp(
             title: '好奇宝宝',
             //自定义主题
-            theme: mDefaultTheme,
+            theme: ThemeData.light(),
             navigatorObservers: [BotToastNavigatorObserver()],//2.registered route observer
             routes: <String, WidgetBuilder>{
               "app": (BuildContext c) => App(),

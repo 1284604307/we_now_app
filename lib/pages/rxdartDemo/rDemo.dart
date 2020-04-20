@@ -23,7 +23,7 @@ class RxDartDemoState extends State<RxDartDemo>{
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter mvvm Demo',
+      title: 'mvvm Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

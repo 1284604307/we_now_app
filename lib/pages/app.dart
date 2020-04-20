@@ -9,7 +9,7 @@ import 'package:flutter_app2/pages/my_page/my_page.dart';
 import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 
 import 'about_us_page.dart';
-import 'weights/circle_page.dart';
+import 'circle/circle_page.dart';
 import 'home/index/home_page.dart';
 
 class App extends StatefulWidget{
@@ -34,30 +34,30 @@ class AppState extends State<App>{
 
 
   //根据当前索引返回不同页面
-  currentPage(){
-    switch(_currentIndex){
-      case 0:
-        if(homePage==null){
-          homePage=HomePage();
-        }
-        return homePage;
-      case 2:
-        if(messagePage==null){
-          messagePage=MessagePage();
-        }
-        return messagePage;
-      case 1:
-        if(circlePage==null){
-          circlePage=CirclePage();
-        }
-        return circlePage;
-      case 3:
-        if(myPage==null){
-          myPage=MyPage();
-        }
-        return myPage;
-    }
-  }
+//  currentPage(){
+//    switch(_currentIndex){
+//      case 0:
+//        if(homePage==null){
+//          homePage=HomePage();
+//        }
+//        return homePage;
+//      case 2:
+//        if(messagePage==null){
+//          messagePage=MessagePage();
+//        }
+//        return messagePage;
+//      case 1:
+//        if(circlePage==null){
+//          circlePage=CirclePage();
+//        }
+//        return circlePage;
+//      case 3:
+//        if(myPage==null){
+//          myPage=MyPage();
+//        }
+//        return myPage;
+//    }
+//  }
 
 
   @override
@@ -125,9 +125,11 @@ class AppState extends State<App>{
       ),
       onWillPop: () async {
         if (_currentIndex != 0) {
-          setState(() {
-            _currentIndex = 0;
-          });
+//          setState(() {
+//            _currentIndex = 0;
+//          });
+
+          pageController.jumpToPage(0);
           return false;
         } else {
           if (_willPopTime == null || (DateTime.now().difference(_willPopTime) >
