@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/common/Api.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
+import 'package:flutter_app2/pages/maps/other.dart';
 
 class MessagePage extends StatefulWidget{
   @override
@@ -23,7 +24,6 @@ class MessagePageState extends State<MessagePage>{
         body: ListView.builder(
           itemCount: 12,
           itemBuilder: (BuildContext context, int index) {
-            print(index);
             if(index==0)
               return Container(
                 child: RaisedButton(
@@ -51,31 +51,40 @@ class MessagePageState extends State<MessagePage>{
   Widget messageWidget(){
     String name = "老王";
     String content = "这里是消息模板";
-    return Container(
-      margin: const EdgeInsets.only(bottom: 1.0),
-      padding: EdgeInsets.all(10),
-      color: Colors.white,
-      child: new Column(
-        children: <Widget>[
-          new Container(
-              child: new Text(
-                  name,
-                  style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0, height: 1.3, color: GlobalConfig.dark == true? Colors.white70 : Colors.black)
-              ),
-              margin: new EdgeInsets.only(top: 6.0, bottom: 2.0),
-              alignment: Alignment.topLeft
-          ),
-          new Container(
-            child: new Row(
-              children: <Widget>[
-                new Expanded(
-                    child: new Text(content)
+    return InkWell(
+      onTap: (){
+        Navigator.push(context, MaterialPageRoute(
+            builder: (BuildContext context) {
+              return SelectLocationFromMapPage();
+            }
+        ));
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 1.0),
+        padding: EdgeInsets.all(10),
+        color: Colors.white,
+        child: new Column(
+          children: <Widget>[
+            new Container(
+                child: new Text(
+                    name,
+                    style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0, height: 1.3, color: GlobalConfig.dark == true? Colors.white70 : Colors.black)
                 ),
-                new Icon(Icons.linear_scale, color: GlobalConfig.fontColor)
-              ],
+                margin: new EdgeInsets.only(top: 6.0, bottom: 2.0),
+                alignment: Alignment.topLeft
             ),
-          ),
-        ],
+            new Container(
+              child: new Row(
+                children: <Widget>[
+                  new Expanded(
+                      child: new Text(content)
+                  ),
+                  new Icon(Icons.linear_scale, color: GlobalConfig.fontColor)
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

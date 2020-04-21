@@ -28,6 +28,9 @@ class LoginPageState extends State<LoginPage>{
   TextEditingController passController = TextEditingController();
   TextFormField passwordText;
   var _showPass = false;
+  final _usernameFocus = FocusNode();
+  final _passwordFocus = FocusNode();
+  var _isLoading = false;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;

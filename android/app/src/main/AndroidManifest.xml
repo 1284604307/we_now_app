@@ -9,7 +9,12 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="校园时光"
         android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="5d08b4cb651701bd1647eb34093cb703"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

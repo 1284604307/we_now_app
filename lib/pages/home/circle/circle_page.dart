@@ -1,12 +1,13 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app2/pages/circle/circle_recommend.dart';
-import 'package:flutter_app2/pages/circle/circle_talk.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
 import 'package:flutter_app2/pages/home/index/follow.dart';
 import 'package:flutter_app2/pages/home/index/hot.dart';
 import 'package:flutter_app2/pages/home/index/recommend.dart';
 import 'package:provider/provider.dart';
+
+import 'circle_recommend.dart';
+import 'circle_talk.dart';
 
 class CirclePage extends StatefulWidget{
   @override

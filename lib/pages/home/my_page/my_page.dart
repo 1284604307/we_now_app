@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app2/pages/my_page/my_page_self_card.dart';
 
 import 'my_page_card_item.dart';
+import 'my_page_self_card.dart';
 
 /**
  * @author Ming

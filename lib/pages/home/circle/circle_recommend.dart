@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app2/pages/circle/circle_talk.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
+
+import 'circle_talk.dart';
 
 class CircleRecommend extends StatefulWidget {
 

@@ -1,16 +1,17 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app2/pages/chat/chat_page.dart';
+import 'package:flutter_app2/pages/home/chat/chat_page.dart';
+import 'package:flutter_app2/pages/home/me/me_page.dart';
 import 'package:flutter_app2/pages/loading.dart';
 import 'package:flutter_app2/pages/login/login.dart';
-import 'package:flutter_app2/pages/me/me_page.dart';
 import 'package:flutter_app2/pages/rxdartDemo/rDemo.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:provider/provider.dart';
 
 import 'pages/app.dart';
 void main() {
+
   runApp(
       BotToastInit(
           child:MaterialApp(

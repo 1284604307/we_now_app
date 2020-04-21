@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app2/common/Global.dart';
 import 'package:flutter_app2/pages/home/message/message_page.dart';
-import 'package:flutter_app2/pages/my_page/my_page.dart';
 import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 
 import 'about_us_page.dart';
-import 'circle/circle_page.dart';
+import 'home/circle/circle_page.dart';
 import 'home/index/home_page.dart';
+import 'home/my_page/my_page.dart';
 
 class App extends StatefulWidget{
   @override
