@@ -10,6 +10,7 @@ import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 
 import 'about_us_page.dart';
 import 'home/circle/circle_page.dart';
+import 'home/home/index.dart';
 import 'home/index/home_page.dart';
 import 'home/my_page/my_page.dart';
 
@@ -27,19 +28,13 @@ class AppState extends State<App>{
 
   var _currentIndex = 0;
 
-  HomePage homePage;
-  CirclePage circlePage;
-  MessagePage messagePage;
-  MyPage myPage;
-
-
   @override
   Widget build(BuildContext context) {
     Global.context = context;
     DateTime  _willPopTime ;
 
     final pageController = PageController();
-    final bodyList = [HomePage(), CirclePage(), MessagePage(),MyPage()];
+    final bodyList = [Home(),HomePage(), CirclePage(), MessagePage(),MyPage()];
 
 
     void onTap(int index) {
@@ -56,16 +51,23 @@ class AppState extends State<App>{
       BottomNavigationBarItem(
           title: Text(
             '首页',
-//              style: TextStyle(
-//                color: _currentIndex == 0?Colors.redAccent:Color(0xff999999)
-//              ),
           ),
           icon:Icon(Icons.home)
 //            icon: _currentIndex == 0? Icon(Icons.home):Icon(Icons.home)
       ),
       BottomNavigationBarItem(
-          title: Text('广场'),
-          icon: Icon(Icons.grain)
+          title: Text(
+            '保留页',
+//              style: TextStyle(
+//                color: _currentIndex == 0?Colors.redAccent:Color(0xff999999)
+//              ),
+          ),
+          icon:Icon(Icons.compare_arrows)
+//            icon: _currentIndex == 0? Icon(Icons.home):Icon(Icons.home)
+      ),
+      BottomNavigationBarItem(
+          title: Text('圈子'),
+          icon: Icon(Icons.toll)
       ),
       BottomNavigationBarItem(
           title: Text('消息'),
