@@ -4,7 +4,9 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
+import 'package:flutter_app2/common/entity/CircleEntity.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'CustomInterceptors.dart';
@@ -23,6 +25,12 @@ class Api{
   static String appDocPath;
   static User user;
   static bool login = false;
+
+  static List<CircleEntity> hotCircles = [];
+
+
+  static JPush jpush = new JPush();
+
   // PersistCookieJar 会将cookie保存到本地
 //  static final PersistCookieJar cookieJar = new PersistCookieJar();
   static Dio getDio(){
@@ -32,6 +40,8 @@ class Api{
           "Auth-Type":"APP_MATH",
           "version":"1.0.0"
         },
+        connectTimeout: 1500,
+        sendTimeout: 1500,
         baseUrl:Api_Host,
       );
       dio = new Dio(opt);

@@ -7,10 +7,13 @@ import 'package:flutter_app2/pages/loading.dart';
 import 'package:flutter_app2/pages/login/login.dart';
 import 'package:flutter_app2/pages/rxdartDemo/rDemo.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:provider/provider.dart';
 
+import 'common/Api.dart';
 import 'pages/app.dart';
 void main() {
+
 
   runApp(
       BotToastInit(
@@ -43,6 +46,26 @@ void main() {
       )
   );
 
+
+  Api.jpush = new JPush();
+  Api.jpush.setup(
+    production: false,
+    debug: false, // 设置是否打印 debug 日志
+  );
+  Api.jpush.addEventHandler(
+    // 接收通知回调方法。
+    onReceiveNotification: (Map<String, dynamic> message) async {
+      print("flutter 接收通知回调方法: $message");
+    },
+    // 点击通知回调方法。
+    onOpenNotification: (Map<String, dynamic> message) async {
+      print("flutter 点击通知回调方法: $message");
+    },
+    // 接收自定义消息回调方法。
+    onReceiveMessage: (Map<String, dynamic> message) async {
+      print("flutter 接收自定义消息回调方法: $message");
+    },
+  );
 
   SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor:Colors.transparent);
   SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);

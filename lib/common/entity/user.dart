@@ -7,7 +7,7 @@ part 'user.g.dart';
 
 @JsonSerializable()
 @FunctionalData()
-class UserEntity extends $UserEntity {
+class UserEntity {
   final int id;
   final String username;
   final String password;

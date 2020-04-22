@@ -24,7 +24,7 @@ class CustomInterceptors extends InterceptorsWrapper {
   }
   @override
   Future onError(DioError err) {
-    print("ERROR[${err?.response?.statusCode}] => PATH: ${err?.request?.path}");
+//    print("ERROR[${err?.response?.statusCode}] => PATH: ${err?.request?.path}");
     formatError(err);
     return super.onError(err);
   }
@@ -54,7 +54,7 @@ class CustomInterceptors extends InterceptorsWrapper {
       //DEFAULT Default error type, Some other Error. In this case, you can read the DioError.error if it is not null.
       err="未知错误";
     }
-    print(err);
+//    print(err);
     BotToast.showText(text: err);
   }
 }

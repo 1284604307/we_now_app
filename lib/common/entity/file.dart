@@ -7,7 +7,7 @@ enum FileThumbType { SMALL, MIDDLE, LARGE, HUGE }
 
 @JsonSerializable()
 @FunctionalData()
-class FileEntity extends $FileEntity {
+class FileEntity {
   final int id;
   final int userId;
   final String region;
@@ -46,7 +46,7 @@ class FileEntity extends $FileEntity {
 
 @JsonSerializable()
 @FunctionalData()
-class FileMetaEntity extends $FileMetaEntity {
+class FileMetaEntity {
   final String name;
   final int size;
   final String type;

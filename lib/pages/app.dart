@@ -4,6 +4,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app2/common/Global.dart';
+import 'package:flutter_app2/common/entity/MessageEntity.dart';
 import 'package:flutter_app2/pages/home/message/message_page.dart';
 import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 
@@ -32,34 +33,6 @@ class AppState extends State<App>{
   MyPage myPage;
 
 
-
-  //根据当前索引返回不同页面
-//  currentPage(){
-//    switch(_currentIndex){
-//      case 0:
-//        if(homePage==null){
-//          homePage=HomePage();
-//        }
-//        return homePage;
-//      case 2:
-//        if(messagePage==null){
-//          messagePage=MessagePage();
-//        }
-//        return messagePage;
-//      case 1:
-//        if(circlePage==null){
-//          circlePage=CirclePage();
-//        }
-//        return circlePage;
-//      case 3:
-//        if(myPage==null){
-//          myPage=MyPage();
-//        }
-//        return myPage;
-//    }
-//  }
-
-
   @override
   Widget build(BuildContext context) {
     Global.context = context;
@@ -67,6 +40,7 @@ class AppState extends State<App>{
 
     final pageController = PageController();
     final bodyList = [HomePage(), CirclePage(), MessagePage(),MyPage()];
+
 
     void onTap(int index) {
       pageController.jumpToPage(index);

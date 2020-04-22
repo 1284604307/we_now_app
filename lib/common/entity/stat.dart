@@ -5,7 +5,7 @@ part 'stat.g.dart';
 
 @JsonSerializable()
 @FunctionalData()
-class UserStatEntity extends $UserStatEntity {
+class UserStatEntity {
   final int id;
   final int userId;
   final int postCount;
@@ -34,7 +34,7 @@ class UserStatEntity extends $UserStatEntity {
 
 @JsonSerializable()
 @FunctionalData()
-class PostStatEntity extends $PostStatEntity {
+class PostStatEntity {
   final int id;
   final int postId;
   final int likeCount;

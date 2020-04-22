@@ -11,7 +11,7 @@ enum PostListType { FOLLOWING, HOT }
 
 @JsonSerializable()
 @FunctionalData()
-class PostEntity extends $PostEntity {
+class PostEntity {
   static final typeNames = {
     PostType.TEXT: '文字',
     PostType.IMAGE: '图片',

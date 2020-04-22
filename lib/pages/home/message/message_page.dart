@@ -12,6 +12,7 @@ class MessagePageState extends State<MessagePage>{
 
   @override
   Widget build(BuildContext context) {
+
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(

@@ -2,6 +2,8 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app2/common/Api.dart';
+import 'package:flutter_app2/common/entity/CircleEntity.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
 import 'package:flutter_app2/wights/show_image.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,7 +14,9 @@ import 'package:photo_view/photo_view.dart';
  * @date 2020/4/19
  * @email 1284604307@qq.com
  */
-Widget talkWidget(count){
+Widget talkWidget(count,CircleEntity circle){
+
+
 
   return Container(
     color: Colors.white,
@@ -34,12 +38,12 @@ Widget talkWidget(count){
                   crossAxisAlignment: CrossAxisAlignment.start,//垂直方向 向左靠齐
                   children: <Widget>[
                     Text(
-                      "发布人",
+                      circle.name,
                       textAlign: TextAlign.left,
                       style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      "2小时前xxxxxxxxxxxxxxx",
+                      circle.createDate,
                       maxLines: 5,
                       overflow: TextOverflow.clip,
                       textAlign: TextAlign.left,
@@ -54,30 +58,36 @@ Widget talkWidget(count){
           children: <Widget>[
             new Container(
                 child: new Text(
-                    "就像蝴蝶飞呀飞呀飞\nxxxxxxxxxxxxxxxxxxxxxxxxxxx\n",
+                    "${circle.content}",
                 ),
                 margin: new EdgeInsets.only(top: 6.0, bottom: 2.0),
                 alignment: Alignment.topLeft
             ),
-            GridView.builder(
-              primary: false,
-              shrinkWrap: true,
-              itemCount: count,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3, //横轴三个子widget
-                crossAxisSpacing: 5,
-                mainAxisSpacing: 5 //分别是 x y 的间隔
-              ),
-              itemBuilder: (i,c){
-                return Container(
-                  color: Colors.lightBlueAccent,
-                );
-              },
-            ),
+            // desc 九图组件
+            circle.url!=null?gridViewNithWight(circle.url):Container(),
           ],
         )
       ],
     ),
+  );
+}
+// desc 九图展示
+gridViewNithWight(List<String> urls){
+  if(urls.length==0) return Container();
+  return GridView.builder(
+    primary: false,
+    shrinkWrap: true,
+    itemCount: urls.length,
+    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3, //横轴三个子widget
+        crossAxisSpacing: 5,
+        mainAxisSpacing: 5 //分别是 x y 的间隔
+    ),
+    itemBuilder: (i,c){
+      return Container(
+        color: Colors.lightBlueAccent,
+      );
+    },
   );
 }
 
@@ -85,7 +95,6 @@ class CreateCirclePage extends StatefulWidget{
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _State();
   }
 
