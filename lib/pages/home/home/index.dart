@@ -1,7 +1,9 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_app2/common/Api.dart';
+import 'package:flutter_app2/pages/global/global_config.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 
 class Home extends StatefulWidget {
@@ -22,10 +24,21 @@ class _State extends State<Home> {
       child: AspectRatio(
         aspectRatio: 16 / 9,
         child: Swiper(
+          autoplay: true,
+          autoplayDelay:1500,
+          autoplayDisableOnInteraction: true,
+          viewportFraction: 1,
+          scale: 0.8,
           itemBuilder: (BuildContext context, int index) {
-            return new Image.network(
-              imgList[index]["url"],
-              fit: BoxFit.fill,
+            return Container(
+              margin: EdgeInsets.all(5),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child:  new Image.network(
+                    imgList[index]["url"],
+                    fit: BoxFit.fill,
+                  )
+              ),
             );
           },
           itemCount: imgList.length,
@@ -38,8 +51,12 @@ class _State extends State<Home> {
   //首页热门商品
   Widget _hotProductWidget() {}
 
-  //首页热门商品
-
+  List<String> imgList = [
+    "https://www.itying.com/images/flutter/1.png",
+    "https://www.itying.com/images/flutter/2.png",
+    "https://www.itying.com/images/flutter/3.png",
+    "https://www.itying.com/images/flutter/4.png"
+  ];
 
   List<Widget> _getListData() {
     List listData=[
@@ -49,7 +66,7 @@ class _State extends State<Home> {
         "imageUrl": 'https://www.itying.com/images/flutter/1.png',
       },
       {
-        "title": 'Childhood in a picture',
+        "title": 'Childhood in',
         "author": 'Google',
         "imageUrl": 'https://www.itying.com/images/flutter/2.png',
       },
@@ -127,35 +144,92 @@ class _State extends State<Home> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
+  Widget HorListView(){
+    return Column(
       children: <Widget>[
-        _swiperWidget(),
-        SizedBox(height: 10),
         Container(
-          //不给高度的话显示不了哈，就跟android里，scrollview里嵌套listview一样，要计算高度的意思，这里我就先随便给个，其实我觉得应该是要根据item的高度来算的，但我现在不会算啊
-          height: 100.0,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, position) {
-              return Container(
-                color: Colors.red,
-                alignment: Alignment.center,
-                child: Text(
-                  "${position}",
-                  style: TextStyle(color: Colors.yellow, fontSize: 50.0),
-                ),
-                padding: EdgeInsets.all(10.0),
-              );
-            },
-            itemCount: 88,
+          margin: EdgeInsets.only(left: 15,right: 15),
+          child: Row(
+            children: <Widget>[
+              Text("优秀文章榜",style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20
+              ),),
+              Text("   原创",style: TextStyle(
+                color: Colors.black26
+              ),)
+            ],
           ),
         ),
-
-        _recProductWidget()
-
+        Container(
+          height: 180,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return Container(
+                margin: EdgeInsets.all(10),
+                child: Stack(
+                  children: <Widget>[
+                    ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      child: Container(
+                        width: 200,
+                        decoration: BoxDecoration(
+                          border: new Border.all(color: Color.fromRGBO(0, 0, 0, 0.08), width: 0.5), // 边色与边宽度
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              width: 200,
+                              height: 100,
+                              color: Colors.redAccent[100*index%200+100],
+                              child: Image.network(imgList[index%4],fit: BoxFit.fill,),
+                            ),
+                            Container(
+                              margin: EdgeInsets.all(5),
+                              child: Center(
+                                child: Text("穷尽一生，寻找一个梦的终点. 来吧，一起去寻找！",maxLines: 2,textAlign: TextAlign.center,),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+            itemCount: imgList.length,
+          ),
+        )
       ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Container(
+        color: GlobalConfig.globalBackgroundColor,
+        child: ListView(
+          children: <Widget>[
+            ClipRRect(
+              child: Container(
+                margin: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(50)),
+                ),
+                child: _swiperWidget(),
+              ),
+            ),
+            SizedBox(height: 10),
+            HorListView(),
+            _recProductWidget()
+          ],
+        ),
+      ),
     );
   }
 }
