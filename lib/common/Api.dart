@@ -4,13 +4,13 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_app2/common/entity/CircleEntity.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'CustomInterceptors.dart';
-import 'LogsInterceptors.dart';
 
 /**
  * @author Ming
@@ -26,8 +26,9 @@ class Api{
   static User user;
   static bool login = false;
 
-  static List<CircleEntity> hotCircles = [];
+  static ScrollController globalScrollController = ScrollController(initialScrollOffset: 0,keepScrollOffset: true);
 
+  static List<CircleEntity> hotCircles = [];
 
   static JPush jpush = new JPush();
 
@@ -79,16 +80,14 @@ class Api{
   }
 
   static void get(
-      String url,
-      {
-        Map<String, dynamic> data,
-        Map<String, dynamic> headers,
-        Function success,
-        Function error
-      }
-      ) async {
-    // 对接收到的请求参数进行从处理
-  }
-
-
+    String url,
+    {
+      Map<String, dynamic> data,
+      Map<String, dynamic> headers,
+      Function success,
+      Function error
+    }
+    ) async {
+      // 对接收到的请求参数进行从处理
+    }
 }

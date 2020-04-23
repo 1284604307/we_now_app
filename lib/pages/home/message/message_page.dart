@@ -23,7 +23,9 @@ class MessagePageState extends State<MessagePage>{
           ),
         ),
         body: ListView.builder(
+          controller: Api.globalScrollController,
           itemCount: 12,
+          key: PageStorageKey(2),
           itemBuilder: (BuildContext context, int index) {
             if(index==0)
               return Container(
