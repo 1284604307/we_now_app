@@ -1,22 +1,32 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:bot_toast/bot_toast.dart';
+import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app2/common/Api.dart';
 import 'package:flutter_app2/common/entity/CircleEntity.dart';
+import 'package:flutter_app2/common/pojos/AjaxResult.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
-import 'package:flutter_app2/wights/show_image.dart';
+import 'package:flutter_app2/pages/wights/ClickableImage.dart';
+import 'package:flutter_app2/pages/wights/show_image.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:photo_view/photo_view.dart';
+
+import 'circle_show.dart';
 
 /**
  * @author Ming
  * @date 2020/4/19
  * @email 1284604307@qq.com
  */
-Widget talkWidget(count,CircleEntity circle){
-
-
+Widget talkWidget(context,count,CircleEntity circle){
 
   return Container(
     color: Colors.white,
@@ -38,15 +48,16 @@ Widget talkWidget(count,CircleEntity circle){
                   crossAxisAlignment: CrossAxisAlignment.start,//垂直方向 向左靠齐
                   children: <Widget>[
                     Text(
-                      circle.name,
+                      " ${circle.name} ",
                       textAlign: TextAlign.left,
                       style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      circle.createDate,
+                      " ${circle.createDate} ",
                       maxLines: 5,
                       overflow: TextOverflow.clip,
                       textAlign: TextAlign.left,
+                      style: TextStyle(color: Colors.black45,),
                     )
                   ],
                 ),
@@ -54,25 +65,90 @@ Widget talkWidget(count,CircleEntity circle){
             ],
           ),
         ),
+        // desc 动态内容及底部组件
         Column(
           children: <Widget>[
             new Container(
                 child: new Text(
                     "${circle.content}",
                 ),
-                margin: new EdgeInsets.only(top: 6.0, bottom: 2.0),
+                margin: new EdgeInsets.only(top: 6.0, bottom: 6.0),
                 alignment: Alignment.topLeft
             ),
             // desc 九图组件
-            circle.url!=null?gridViewNithWight(circle.url):Container(),
+            circle.url!=null?gridViewNithWight(circle.url,context):Container(),
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.all(5.0),
+                      child: InkWell(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.star_border,color: Colors.black45,),
+                            Text("  999",style: TextStyle(color: Colors.black45,),)
+                          ],
+                        ),
+                      ),
+                    ),
+                    flex: 1,
+                  ),
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.all(5.0),
+                      child: InkWell(
+                        child: InkWell(
+                          onTap: (){
+                            Navigator.push(context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) {
+                                  return ShowCircle();
+                                }
+                              )
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(Icons.image_aspect_ratio,color: Colors.black45,),
+                              Text("  999",style: TextStyle(color: Colors.black45,),)
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    flex: 2,
+                  ),
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.all(5.0),
+                      child: InkWell(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.favorite_border,color: Colors.black45,),
+                            Text("  999",style: TextStyle(color: Colors.black45,),)
+                          ],
+                        ),
+                      ),
+                    ),
+                    flex: 1,
+                  ),
+                ],
+              ),
+            )
           ],
         )
       ],
     ),
   );
 }
+
 // desc 九图展示
-gridViewNithWight(List<String> urls){
+gridViewNithWight(List<String> urls,BuildContext context){
   if(urls.length==0) return Container();
   return GridView.builder(
     primary: false,
@@ -83,9 +159,24 @@ gridViewNithWight(List<String> urls){
         crossAxisSpacing: 5,
         mainAxisSpacing: 5 //分别是 x y 的间隔
     ),
-    itemBuilder: (i,c){
+    itemBuilder: (c,i){
+      ExtendedImage extendedImage = ExtendedImage.network(
+        urls[i],fit: BoxFit.cover,
+      );
       return Container(
         color: Colors.lightBlueAccent,
+        child: GestureDetector(
+          child: extendedImage,
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
+              return ShowImagePage(extendedImage: ExtendedImage.network(
+                urls[i],fit: BoxFit.contain,width: double.infinity,height: double.infinity,
+                mode: ExtendedImageMode.gesture ,
+              ));
+            })
+            );
+          }
+        ),
       );
     },
   );
@@ -105,13 +196,17 @@ class _State extends State<CreateCirclePage> with AutomaticKeepAliveClientMixin 
 
 
   List<Widget> images = [];
+  List<Asset> asserts = [];
+  List<Uint8List> imageData = [];
 
   @override
   Widget build(BuildContext context) {
-
-
-    TextEditingController contentController = TextEditingController();
-
+    TextEditingController circleTextController = TextEditingController();
+    circleTextController.text = Api.newCircleEntity.content ;
+    print(Api.newCircleEntity.content);
+    circleTextController.addListener((){
+      Api.newCircleEntity.content = circleTextController.text;
+    });
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -127,8 +222,9 @@ class _State extends State<CreateCirclePage> with AutomaticKeepAliveClientMixin 
                   child:Text("发布")
               ),
               onTap: (){
-                print(contentController.toString());
+                print(circleTextController.toString());
                 print(images.toList().toString());
+                publish();
               },
             ),
           )
@@ -140,8 +236,9 @@ class _State extends State<CreateCirclePage> with AutomaticKeepAliveClientMixin 
           children: <Widget>[
             Container(
               padding: EdgeInsets.only(bottom: 30),
+              // desc 动态内容文本框
               child: TextField(
-                controller: contentController,
+                controller:circleTextController,
                 autofocus: true,
                 minLines: 6,
                 maxLines: 1000,
@@ -168,26 +265,31 @@ class _State extends State<CreateCirclePage> with AutomaticKeepAliveClientMixin 
                     if(index >= 9) return null;
                     return selectNewImage();
                   }
+                  // desc 返回一个包装了删除键的栈
                   return Stack(
                     children: <Widget>[
                       images[index],
-                      Stack(
-                        children: <Widget>[
-                          Positioned(
-                            right: 0,
-                            top: 0,
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(40),
+                          child: Container(
+                            width: 30, height: 30,
+                            color: Color.fromRGBO(0, 0, 0, 0.25),
                             child: IconButton(
-                              icon: Icon(Icons.close),
+                              icon: Icon(Icons.close,size: 15,color: Colors.white,),
                               onPressed: (){
                                 print(index);
-                                images.removeAt(index);
                                 setState(() {
+                                  images.removeAt(index);
+                                  asserts.removeAt(index);
                                 });
                               },
                             ),
-                          )
-                        ],
-                      ),
+                          ),
+                        ),
+                      )
                     ],
                   );
                 },
@@ -199,47 +301,83 @@ class _State extends State<CreateCirclePage> with AutomaticKeepAliveClientMixin 
     );
   }
 
+  void publish() async{
+    List<String> url = [];
+    // desc 有图片先上传
+    if(asserts.length>0){
+      BotToast.showText(text: "上传图片");
+
+      FormData data = new FormData();
+      for(var i =0 ;i<asserts.length;i++){
+
+        MultipartFile multipartFile =await MultipartFile.fromBytes(
+          imageData[i],
+          // 文件名
+          filename: '${asserts[i].name}.jpg',
+          // 文件类型
+          contentType: MediaType("image", "jpg"),
+        );
+        print("第 $i 次 发送");
+        data.files.add(MapEntry("files",multipartFile));
+      }
+      var res = await Api.getDio().post("/user/upload/files",data:data);
+      print(res);
+      AjaxResult ajaxResult = AjaxResult.fromJson(res.data);
+      if (ajaxResult.code==0) {
+        url =  List<String>.from(ajaxResult.data);
+      };
+    }
+    var n = CircleEntity();
+    n.content = Api.newCircleEntity.content;
+    n.url = url;
+    BotToast.showText(text: "上传动态");
+    var res = await Api.getDio().post("/public/user/circle/",data: n);
+    print(res);
+  }
+
   Widget selectNewImage(){
 //    var _width = (this.context.size.width -40)/3;
     return Listener(
         onPointerDown: (event) async {
-          print(event);
-          print((this.context.size.width - 40)/3);
-          ImagePicker.pickImage(source: ImageSource.gallery).then(
-              (image){
-                print("image good--------------------- $image ");
-                setState(() {
+          //desc 每行单张图片大小 (this.context.size.width - 40)/3
+//          print((this.context.size.width - 40)/3);
+          List<Asset> package ;
+          try{
+            package = await MultiImagePicker.pickImages(
+                enableCamera: true,
+                maxImages: 9,
+                selectedAssets: asserts,
+                cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+                materialOptions: MaterialOptions(
+//                actionBarColor: GlobalConfig.titleColor,
+                  actionBarTitle: "选择图片",
+                  allViewTitle: "所有图片",
+                  selectCircleStrokeColor: "#000000",
+                )
+            );
+          } catch(e){
+            return;
+          }
+          print("------------${asserts.length}------------------");
+          List<Widget> newImages = [];
+          List<Uint8List> datas = [];
+          for(var i =0; i<package.length;i++){
 
-                  images.add(
-//                      PhotoView(
-//                        imageProvider: FileImage(image),
-//                      )
-                      GestureDetector(
-                        child: ExtendedImage.file(
-                          image,width: double.infinity,
-                          height: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                        onTap: (){
-                          print("双击");
-                          Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
-                            print(image);
-                            return ShowImagePage(image);
-                          })
-                          );
-                        },
-                      )
-                  );
-//                  images.add(ZoomableImage(FileImage(image)));
-//                  images.add(Image.file(image,fit: BoxFit.cover,width: double.infinity,height: double.infinity,));
-                });
-              }
-          );
-//          images.add(
-//              Container(
-//                color: Colors.black12,
-//              )
-//          );
+            ByteData memoryData = await package[i].getByteData(quality: 100);
+            Uint8List data =  memoryData.buffer.asUint8List();
+            datas.add(data);
+            print("  加载 -------------- ${package[i].name} ----------------------");
+            newImages.add(
+                ClickableImage(list:data)
+            );
+          }
+          await asserts.addAll(package);
+          setState(() {
+              asserts = package;
+              images = newImages;
+              imageData = datas;
+          });
+
         },
         child:LayoutBuilder(
           builder: (context,con){
@@ -248,11 +386,6 @@ class _State extends State<CreateCirclePage> with AutomaticKeepAliveClientMixin 
               color: Color.fromRGBO(0, 0, 0, 0.1),
               child: Container(
                 child: Icon(Icons.add,size:con.maxWidth,color: Color.fromRGBO(0, 0, 0, 0.12),),
-//                decoration: new BoxDecoration(
-//                    border: new Border.all(
-//                      color: Colors.black38, width: 0.5,
-//                    )
-//                ),
               ),
             );
         },
@@ -261,7 +394,6 @@ class _State extends State<CreateCirclePage> with AutomaticKeepAliveClientMixin 
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
 }

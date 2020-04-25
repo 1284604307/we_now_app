@@ -4,7 +4,7 @@ part 'CircleEntity.g.dart';
 
 @JsonSerializable()
 class CircleEntity{
-    String username;
+    String username ;
     String name;
     String content;
     String createDate;

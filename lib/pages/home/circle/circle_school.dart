@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/common/Api.dart';
@@ -7,20 +9,31 @@ import 'package:flutter_app2/pages/global/global_config.dart';
 
 import 'circle_talk.dart';
 
-class CircleRecommend extends StatefulWidget {
+class CircleSchool extends StatefulWidget {
 
   @override
   _State createState() => new _State();
 
 }
 
-class _State extends State<CircleRecommend> {
+class _State extends State<CircleSchool> {
+
+  List<CircleEntity> hotCircles = [
+    CircleEntity.fromJson({
+      "name":"滑稽",
+      "name":"123",
+      "content":"123",
+      "createDate":"123",
+      "url": null,
+      "type":"123",
+    })
+  ];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    loadingData(false);
+
   }
 
   loadingData(bool refresh)async{
@@ -72,12 +85,12 @@ class _State extends State<CircleRecommend> {
         child:  new ListView.builder(
               primary: false,
               shrinkWrap: true,
-              itemCount: Api.hotCircles.length==0?1:Api.hotCircles.length,
+              itemCount: hotCircles.length==0?1:hotCircles.length,
               itemBuilder: (BuildContext context, int index) {
-                if(index==0&&Api.hotCircles.length==0){
+                if(index==0&&hotCircles.length==0){
                   return noDataView();
                 }
-                return talkWidget(context,index,Api.hotCircles[index]);
+                return talkWidget(context,index,hotCircles[index]);
               },
               physics: new AlwaysScrollableScrollPhysics(),
             )

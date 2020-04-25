@@ -7,6 +7,7 @@ import 'package:flutter_app2/pages/home/index/recommend.dart';
 import 'package:provider/provider.dart';
 
 import 'circle_recommend.dart';
+import 'circle_school.dart';
 import 'circle_talk.dart';
 
 class CirclePage extends StatefulWidget{
@@ -23,7 +24,7 @@ class CirclePageState extends State<CirclePage>{
   /// 统一管理导航项目对应的组件列表。
   final _widgetOptions = [
     new CircleRecommend(),
-    new Recommend(),
+    new CircleSchool(),
   ];
 
   @override

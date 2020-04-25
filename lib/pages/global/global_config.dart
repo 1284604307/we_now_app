@@ -15,6 +15,6 @@ class GlobalConfig {
   static Color cardBackgroundColor = Colors.white;
   static Color globalBackgroundColor = Color.fromRGBO(0, 0, 0, 0.02);
   static Color fontColor = Colors.black54;
-  static Color titleColor = Colors.white;
+  static Color titleColor = Colors.black;
   static Color themeColor = Colors.black54;
 }

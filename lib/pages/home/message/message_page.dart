@@ -23,6 +23,7 @@ class MessagePageState extends State<MessagePage>{
           ),
         ),
         body: ListView.builder(
+          physics: BouncingScrollPhysics(),
           controller: Api.globalScrollController,
           itemCount: 12,
           key: PageStorageKey(2),

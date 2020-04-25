@@ -14,13 +14,21 @@ import 'common/Api.dart';
 import 'pages/app.dart';
 void main() {
 
+  const SystemUiOverlayStyle dark = SystemUiOverlayStyle(
+    systemNavigationBarColor: Colors.transparent,
+    systemNavigationBarDividerColor: null,
+    statusBarColor: null,
+    systemNavigationBarIconBrightness: Brightness.light,
+    statusBarIconBrightness: Brightness.dark,
+    statusBarBrightness: Brightness.light,
+  );
 
   runApp(
       BotToastInit(
           child:MaterialApp(
             title: '好奇宝宝',
+            theme: mDefaultTheme,
             //自定义主题
-            theme: ThemeData.light(),
             navigatorObservers: [BotToastNavigatorObserver()],//2.registered route observer
             routes: <String, WidgetBuilder>{
               "app": (BuildContext c) => App(),
@@ -47,6 +55,7 @@ void main() {
   );
 
 
+
   Api.jpush = new JPush();
   Api.jpush.setup(
     production: false,
@@ -67,13 +76,16 @@ void main() {
     },
   );
 
-  SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor:Colors.transparent);
-  SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+//  SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor:Colors.transparent);
+  SystemChrome.setSystemUIOverlayStyle(dark);
+//  SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
 }
 
 
 
 final ThemeData mDefaultTheme  = ThemeData(
-    primaryColor: Colors.lightBlueAccent
+    primaryColor: Colors.white,
+    bottomAppBarColor: Colors.white,
+  highlightColor: Colors.black
 );
 

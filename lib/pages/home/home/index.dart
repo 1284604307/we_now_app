@@ -210,7 +210,9 @@ class _State extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("首页"),
+      ),
       body: Container(
         color: GlobalConfig.globalBackgroundColor,
         child: ListView(

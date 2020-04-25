@@ -28,6 +28,8 @@ class Api{
 
   static ScrollController globalScrollController = ScrollController(initialScrollOffset: 0,keepScrollOffset: true);
 
+  static CircleEntity newCircleEntity = CircleEntity();
+
   static List<CircleEntity> hotCircles = [];
 
   static JPush jpush = new JPush();
@@ -41,8 +43,8 @@ class Api{
           "Auth-Type":"APP_MATH",
           "version":"1.0.0"
         },
-        connectTimeout: 1500,
-        sendTimeout: 1500,
+        connectTimeout: 10000,
+        sendTimeout: 10000,
         baseUrl:Api_Host,
       );
       dio = new Dio(opt);

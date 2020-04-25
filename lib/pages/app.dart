@@ -91,6 +91,10 @@ class AppState extends State<App>{
         //底部导航栏
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.white,
+          selectedItemColor: Colors.black,
+          selectedIconTheme: IconThemeData(size: 25),
+          unselectedIconTheme: IconThemeData(size: 20),
+          selectedFontSize: 14,
           unselectedLabelStyle: TextStyle(color: Colors.transparent),
           type: BottomNavigationBarType.fixed,
           currentIndex: _currentIndex,

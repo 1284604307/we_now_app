@@ -41,7 +41,7 @@ class LoginPageState extends State<LoginPage>{
       controller: passController,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.all(10.0),
-        icon: Icon(Icons.verified_user),
+        icon: Icon(Icons.verified_user,color: Colors.black54),
         labelText: '请输入密码 )',
         helperText: '',
         suffix:  IconButton(
@@ -61,13 +61,13 @@ class LoginPageState extends State<LoginPage>{
         child: Scaffold(
           backgroundColor: Colors.white,
           resizeToAvoidBottomPadding:false,
-  //        appBar: AppBar(
-  //          backgroundColor: Colors.blueAccent,
-  //          centerTitle: true,
-  //          title: Text("登录",style: TextStyle(
-  //              color: Colors.white
-  //          ),),
-  //        ),
+          appBar: AppBar(
+            backgroundColor: Colors.blueAccent,
+            centerTitle: true,
+            title: Text("登录",style: TextStyle(
+                color: Colors.white
+            ),),
+          ),
           body: Container(
             alignment: Alignment.center,
             child: new Container(
@@ -76,32 +76,32 @@ class LoginPageState extends State<LoginPage>{
                   margin: EdgeInsets.all(20),
                   child: Column(
                     children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.all(20),
-                        child:Text(
-                          "登录",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 24,
-                          ),
-                        )
-                      ),
+//                      Container(
+//                        margin: EdgeInsets.all(20),
+//                        child:Text(
+//                          "登录",
+//                          textAlign: TextAlign.center,
+//                          style: TextStyle(
+//                            fontSize: 24,
+//                          ),
+//                        )
+//                      ),
                       TextFormField(
                         controller: userController,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(10.0),
-                            icon: Icon(Icons.perm_contact_calendar),
-                            labelText: '请输入你的用户名 )',
-                            helperText: '',
-                            suffix:  IconButton(
-                              icon: Icon(Icons.close),
-                              onPressed: (){
-                                setState(() {
-                                  userController.clear();
-                                });
-                              },
-                            )
-                          ),
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(10.0),
+                          icon: Icon(Icons.perm_contact_calendar,color: Colors.black54,),
+                          labelText: '请输入你的用户名 )',
+                          helperText: '',
+                          suffix:  IconButton(
+                            icon: Icon(Icons.close),
+                            onPressed: (){
+                              setState(() {
+                                userController.clear();
+                              });
+                            },
+                          )
+                        ),
                         autofocus: true,
                       ),
                       passwordText,

@@ -36,6 +36,7 @@ dependencies:
   path_provider: 1.6.5
   provider: ^4.0.1
   dio_cookie_manager: 1.0.0
+  http_parser: 3.1.4
   # Your other regular dependencies here
   json_annotation: ^3.0.0
   flutter_custom_dialog: ^1.0.19
@@ -44,27 +45,30 @@ dependencies:
 
   # 选择图片
   image_picker: 0.6.5
+    #多张图片选择
+  multi_image_picker: ^4.6.5
   # 图片操作加强库 放大 缩小 下载等
   extended_image: 0.7.2
 
   photo_view: 0.9.2
 
+  # desc 只加载了依赖但没有用
   rxdart: 0.23.1
   functional_data: 0.2.3
 
-  # 权限请求
+  # desc 动态权限请求
   decorated_flutter: 0.12.0+1
   permission_handler: ^3.0.0 # 5.0.0+hotfix.3
-  # 高德地图  IOS ANDROID 分端适配  < 第三方 >
-#  amap_map_fluttify: 0.20.0
-#  amap_location_fluttify: ^0.11.0 # 定位
-#  amap_search_fluttify: 0.8.2+1
-#  amap_map_fluttify: 0.21.0-dev.4
-#  amap_search_fluttify: 0.9.0-dev.1
+
+  # desc 高德地图  IOS ANDROID 分端适配  < 第三方 >
   amap_all_fluttify: 0.13.1+1
-  #  5d08b4cb651701bd1647eb34093cb703
-  # 极光推送  IOS ANDROID 分端依赖配置 < 官方库 >
+
+  # key 5d08b4cb651701bd1647eb34093cb703
+  # desc 极光推送  IOS ANDROID 分端依赖配置 < 官方库 >
   jpush_flutter: 0.5.3
+
+  # desc 上下划栏
+  sliding_up_panel: 1.0.2
 
 dev_dependencies:
   # Your other dev_dependencies here
