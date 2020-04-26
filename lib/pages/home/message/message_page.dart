@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app2/common/Api.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
 import 'package:flutter_app2/pages/maps/other.dart';
+import 'package:provider/provider.dart';
 
 class MessagePage extends StatefulWidget{
   @override
@@ -15,36 +16,27 @@ class MessagePageState extends State<MessagePage>{
 
     return WillPopScope(
       child: Scaffold(
-        appBar: AppBar(
-          title: Container(
-            child: Text("消息",style: TextStyle(
-                color: GlobalConfig.titleColor
-            ),),
+          appBar: AppBar(
+            title: Container(
+              child: Text("消息",style: TextStyle(
+                  color: GlobalConfig.titleColor
+              ),),
+            ),
           ),
-        ),
-        body: ListView.builder(
-          physics: BouncingScrollPhysics(),
-          controller: Api.globalScrollController,
-          itemCount: 12,
-          key: PageStorageKey(2),
-          itemBuilder: (BuildContext context, int index) {
-            if(index==0)
+          body: ListView.builder(
+            physics: BouncingScrollPhysics(),
+            controller: Api.globalScrollController,
+            itemCount: 12,
+            key: PageStorageKey(2),
+            itemBuilder: (BuildContext context, int index) {
               return Container(
-                child: RaisedButton(
-                  onPressed: (){
-                    Api.user.initInfo();
-                  },
-                  child: Text("getInfo"),
-                ),
-              );
-            return Container(
-              child: messageWidget(),
+                child: messageWidget(),
 //              decoration: BoxDecoration(
 //                  border: Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))
 //              ),
-            );
-          },
-        )
+              );
+            },
+          )
       ),
       onWillPop: () {
 

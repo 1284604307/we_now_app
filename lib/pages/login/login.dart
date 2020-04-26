@@ -10,7 +10,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter_app2/common/Api.dart';
 import 'package:flutter_app2/common/Global.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
+import 'package:flutter_app2/pages/wights/button_progress_indicator.dart';
+import 'package:flutter_app2/pages/wights/login_widget.dart';
+import 'package:flutter_app2/services/generated/l10n.dart';
+import 'package:flutter_app2/services/model/viewModel/login_model.dart';
+import 'package:flutter_app2/services/net/restful_go.dart';
+import 'package:flutter_app2/services/provider/provider_widget.dart';
 import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
+import 'package:provider/provider.dart';
 
 /**
  * @author Ming
@@ -31,11 +38,19 @@ class LoginPageState extends State<LoginPage>{
   final _usernameFocus = FocusNode();
   final _passwordFocus = FocusNode();
   var _isLoading = false;
+
+
+  @override
+  void dispose() {
+    userController.dispose();
+    passController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     Global.context = context;
-
 
     passwordText = TextFormField(
       controller: passController,
@@ -62,11 +77,8 @@ class LoginPageState extends State<LoginPage>{
           backgroundColor: Colors.white,
           resizeToAvoidBottomPadding:false,
           appBar: AppBar(
-            backgroundColor: Colors.blueAccent,
             centerTitle: true,
-            title: Text("登录",style: TextStyle(
-                color: Colors.white
-            ),),
+            title: Text("登录"),
           ),
           body: Container(
             alignment: Alignment.center,
@@ -74,46 +86,41 @@ class LoginPageState extends State<LoginPage>{
                 height: 400,
                 child: Container(
                   margin: EdgeInsets.all(20),
-                  child: Column(
-                    children: <Widget>[
-//                      Container(
-//                        margin: EdgeInsets.all(20),
-//                        child:Text(
-//                          "登录",
-//                          textAlign: TextAlign.center,
-//                          style: TextStyle(
-//                            fontSize: 24,
-//                          ),
-//                        )
-//                      ),
-                      TextFormField(
-                        controller: userController,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.all(10.0),
-                          icon: Icon(Icons.perm_contact_calendar,color: Colors.black54,),
-                          labelText: '请输入你的用户名 )',
-                          helperText: '',
-                          suffix:  IconButton(
-                            icon: Icon(Icons.close),
-                            onPressed: (){
-                              setState(() {
-                                userController.clear();
-                              });
-                            },
-                          )
+                  child: ProviderWidget<LoginModel>(
+                    model: LoginModel(Provider.of(context)),
+                    child:Column(
+                      children: <Widget>[
+                        TextFormField(
+                          controller: userController,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(10.0),
+                            icon: Icon(Icons.perm_contact_calendar,color: Colors.black54,),
+                            labelText: '请输入你的用户名 )',
+                            helperText: '',
+                            suffix:  IconButton(
+                              icon: Icon(Icons.close),
+                              onPressed: (){
+                                setState(() {
+                                  userController.clear();
+                                });
+                              },
+                            )
+                          ),
+                          autofocus: true,
                         ),
-                        autofocus: true,
-                      ),
-                      passwordText,
-                      RaisedButton(
-                        onPressed: login,
-                        child: Text('登录'),
-                        color: Colors.blue,
-                        padding: EdgeInsets.only(left:100,right: 100,top: 10,bottom: 10),
-                        textColor: Colors.white,
-                      )
-                    ],
-                  ),
+                        passwordText,
+                        LoginButton(userController,passController),
+                      ],
+                    ),
+                    builder: (context, model, child) {
+                      return Form(
+                        onWillPop: () async {
+                          return !model.isBusy;
+                        },
+                        child: child,
+                      );
+                    },
+                  )
                 )
             ),
           )
@@ -125,29 +132,46 @@ class LoginPageState extends State<LoginPage>{
   }
 
 
-  Future<void> login() async {
-    var data = {'username': userController.text, 'password': passController.text,'rememberMe':true};
-    print(data);
+}
 
-    FormData formData = new FormData.fromMap(data);
+class LoginButton extends StatelessWidget {
+  final nameController;
+  final passwordController;
 
-    Dio dio = Api.getDio();
-    var response = await dio.post("/login", data:formData);
-    if(response.statusCode==200){
-      var res = json.decode(response.toString());
-      print(res["code"]);
-      if(res["code"]==0){
-        BotToast.showText(text: "登陆成功");
-        Navigator.pop(context);
-        Api.user.initInfo().then((){
-          print(res);
-        });
-      }else{
-        BotToast.showText(text:res['msg']);
-        print(res['msg']);
-      }
-    }
+  LoginButton(this.nameController, this.passwordController);
 
+  @override
+  Widget build(BuildContext context) {
+    var model = Provider.of<LoginModel>(context);
+    return Container(
+      width: 300,
+      child: LoginButtonWidget(
+        child: model.isBusy
+            ? ButtonProgressIndicator()
+            : Text(
+              "登录",//S.of(context).signIn
+              style: Theme.of(context)
+                .accentTextTheme
+                .title
+                .copyWith(wordSpacing: 6),
+        ),
+        onPressed: model.isBusy
+            ? null
+            : () {
+          var formState = Form.of(context);
+          if (formState.validate()) {
+            model
+                .login(nameController.text, passwordController.text)
+                .then((value) {
+              if (value) {
+                Navigator.of(context).pop(true);
+              } else {
+                model.showErrorMessage(context);
+              }
+            });
+          }
+        },
+      ),
+    );
   }
-
 }

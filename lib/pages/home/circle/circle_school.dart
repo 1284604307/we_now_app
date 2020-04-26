@@ -26,6 +26,7 @@ class _State extends State<CircleSchool> {
       "createDate":"123",
       "url": null,
       "type":"123",
+      "user":"{}"
     })
   ];
 

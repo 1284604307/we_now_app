@@ -100,7 +100,7 @@ class ChatScreenState extends State<ChatScreen>  with TickerProviderStateMixin {
 
 
 
-String _name = Api.user.name;
+String _name = Api.user.userName;
 class ChatMessage extends StatelessWidget {
 
   ChatMessage({this.text, this.animationController});

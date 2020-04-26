@@ -34,7 +34,7 @@ dependencies:
   dio_flutter_transformer: 3.0.2
 #  dio_http_cache: 0.2.6
   path_provider: 1.6.5
-  provider: ^4.0.1
+  provider: ^4.0.5
   dio_cookie_manager: 1.0.0
   http_parser: 3.1.4
   # Your other regular dependencies here
@@ -70,6 +70,15 @@ dependencies:
   # desc 上下划栏
   sliding_up_panel: 1.0.2
 
+  localstorage: 3.0.2+5
+  # desc 如名所示
+  pull_to_refresh: ^1.5.6
+  webview_flutter: 0.3.20+2
+  flutter_html: 0.11.1
+
+  package_info: 0.4.0+17
+  device_info: 0.4.2+2
+
 dev_dependencies:
   # Your other dev_dependencies here
   build_runner: ^1.0.0
@@ -97,6 +106,9 @@ flutter:
   - assets/images/banners/banner2.jpg
   - assets/images/banners/banner3.jpg
   - assets/images/banners/banner4.jpg
+  - assets/images/app/we_now_icon.png
+  - assets/images/app/we_now_round.png
+  - assets/images/app/we_now_start.png
 #    - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

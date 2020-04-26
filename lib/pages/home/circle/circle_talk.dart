@@ -40,7 +40,12 @@ Widget talkWidget(context,count,CircleEntity circle){
             children: <Widget>[
               ClipRRect(
                 borderRadius: BorderRadius.circular(40),
-                child:  Container(width: 40,height: 40,color: Colors.black12,),
+                child:  Container(
+                  width: 40,
+                  height: 40,
+                  color: Colors.black12,
+                  child: Image.network("${circle.user.avatar}"),
+                ),
               ),
               Container(
                 margin: EdgeInsets.only(left: 10),
@@ -48,7 +53,7 @@ Widget talkWidget(context,count,CircleEntity circle){
                   crossAxisAlignment: CrossAxisAlignment.start,//垂直方向 向左靠齐
                   children: <Widget>[
                     Text(
-                      " ${circle.name} ",
+                      " ${circle.user.userName} ",
                       textAlign: TextAlign.left,
                       style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
                     ),

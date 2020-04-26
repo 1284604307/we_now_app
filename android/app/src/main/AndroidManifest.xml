@@ -8,6 +8,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="校园时光"
+        android:roundIcon="@mipmap/we_now_round"
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher">

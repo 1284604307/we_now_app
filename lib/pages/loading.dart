@@ -51,12 +51,11 @@ class _LoadingState extends State<LoadingPage>{
                 children: <Widget>[
                   //加载页面背景图
                   Image.asset(
-                    'assets/images/loading.jpg',
+                    'assets/images/app/we_now_start.png',
                     fit: BoxFit.cover,
                     width: double.infinity,
                     height: double.infinity,
                   ),
-
                   Center(
                     child: Text(
                       'Let\'s Show',

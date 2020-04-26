@@ -8,7 +8,6 @@ class ShowCircle extends StatefulWidget{
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _state();
   }
 
@@ -18,6 +17,7 @@ class _state extends State<ShowCircle>
     with SingleTickerProviderStateMixin {
 
   TabController tabController;
+  PanelController panelController = PanelController();
 
   @override
   void initState() {
@@ -28,14 +28,14 @@ class _state extends State<ShowCircle>
   @override
   Widget build(BuildContext context) {
 
-
-
     var content = "滑稽\n滑天下之大稽\n滑稽之天下滑稽，滑稽也\n有云，滑稽之大着，滑天下也！\n\n\n\n\n\n\n 是言滑稽者，大暨！";
     var time = "2020/4/24 17:00";
     var watch = 9999;
     return SlidingUpPanel(
       minHeight: 45,
       maxHeight: 600,
+      backdropEnabled: true,
+      controller: panelController,
       header: Container(
         width: 400,
         height: 45,
@@ -242,15 +242,24 @@ class _state extends State<ShowCircle>
                 child: Container(
                   alignment: Alignment.center,
                   color: Colors.white,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(right: 12),
-                        child:Icon(Icons.insert_comment,color: Colors.lightBlueAccent,),
-                      ),
-                      Text("评论")
-                    ],
+                  child: InkWell(
+                    onTap: (){
+                      print("test");
+                      if(panelController.isPanelOpen)
+                        panelController.close();
+                      else
+                        panelController.open();
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(right: 12),
+                          child:Icon(Icons.insert_comment,color: Colors.lightBlueAccent,),
+                        ),
+                        Text("评论")
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -274,39 +283,6 @@ class _state extends State<ShowCircle>
           ],
         ),
       );
-  }
-
-  old(){
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: Container(
-            color: GlobalConfig.globalBackgroundColor,
-            child: ListView(
-              physics: new AlwaysScrollableScrollPhysics(),
-              children: <Widget>[
-                Container(
-                  color: Colors.white,
-                  height: 745,
-                  margin: EdgeInsets.only(top: 20),
-                  // desc 评论列表构造器
-                  child: ListView.builder(
-                      shrinkWrap: false,	//禁用滑动事件
-                      itemCount: 100,
-                      itemBuilder: (c,i){
-                        return  commentListBuilder();
-                      }),
-                ),
-              ],
-            ),
-          ),
-        ),
-        Container(
-          height: 40,
-          color: Colors.white,
-        )
-      ],
-    );
   }
 
   // desc 评论列表构造器

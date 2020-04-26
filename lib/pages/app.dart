@@ -4,7 +4,6 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app2/common/Global.dart';
-import 'package:flutter_app2/common/entity/MessageEntity.dart';
 import 'package:flutter_app2/pages/home/message/message_page.dart';
 import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 

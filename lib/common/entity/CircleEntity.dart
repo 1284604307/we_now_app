@@ -1,15 +1,17 @@
+import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'CircleEntity.g.dart';
 
 
 @JsonSerializable()
 class CircleEntity{
+    String id ;
     String username ;
-    String name;
     String content;
     String createDate;
     List<String> url;
     String type;
+    User user;
 
 
     CircleEntity();

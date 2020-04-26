@@ -48,9 +48,7 @@ class Api{
         baseUrl:Api_Host,
       );
       dio = new Dio(opt);
-      // 获取存储cookie的本地地址
-      dio.interceptors.add(CustomInterceptors());
-      //置入cookieManager
+//      dio.interceptors.add(CustomInterceptors());
       dio.interceptors.add(CookieManager(cookieJar));
     }
     return dio;
@@ -66,12 +64,6 @@ class Api{
           }
         }
     );
-//    Api.cookieJar = new PersistCookieJar(dir:"./cookies");
-//    getApplicationDocumentsDirectory().then((onValue){
-//      print(onValue.path);
-//      Api.appDocPath = onValue.path;
-//          //PersistCookieJar(dir:Api.appDocPath+"/.cookies/");
-//    });
   }
 
   static Future<String> getCookieJar() async {
