@@ -1,4 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter_app2/common/entity/CircleEntity.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:flutter_app2/services/model/Article.dart';
 import 'package:flutter_app2/services/model/Banner.dart';
@@ -55,5 +56,17 @@ class RestfulApi {
   static Future fetchTopArticles() async{
     var response = await http.get('/public/article/top');
     return response.data.map<Article>((item) => Article.fromJson(item)).toList();
+  }
+
+  static Future fetchSchoolCircles(pageNum) async{
+
+    var response = await http.get('/public/user/circle/');
+
+    return response.data.map<CircleEntity>((item) => CircleEntity.fromJson(item)).toList();
+  }
+
+  static Future fetchRecommendCircles(pageNum) async{
+    var response = await http.get('/public/user/circle/');
+    return response.data.map<CircleEntity>((item) => CircleEntity.fromJson(item)).toList();
   }
 }

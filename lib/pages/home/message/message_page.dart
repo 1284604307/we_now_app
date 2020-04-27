@@ -18,9 +18,7 @@ class MessagePageState extends State<MessagePage>{
       child: Scaffold(
           appBar: AppBar(
             title: Container(
-              child: Text("消息",style: TextStyle(
-                  color: GlobalConfig.titleColor
-              ),),
+              child: Text("消息"),
             ),
           ),
           body: ListView.builder(
@@ -58,13 +56,13 @@ class MessagePageState extends State<MessagePage>{
       child: Container(
         margin: const EdgeInsets.only(bottom: 1.0),
         padding: EdgeInsets.all(10),
-        color: Colors.white,
+        color: Theme.of(context).canvasColor,
         child: new Column(
           children: <Widget>[
             new Container(
                 child: new Text(
                     name,
-                    style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0, height: 1.3, color: GlobalConfig.dark == true? Colors.white70 : Colors.black)
+                    style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0, height: 1.3)
                 ),
                 margin: new EdgeInsets.only(top: 6.0, bottom: 2.0),
                 alignment: Alignment.topLeft

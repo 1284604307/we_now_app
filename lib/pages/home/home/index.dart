@@ -8,7 +8,9 @@ import 'package:flutter_app2/pages/app.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
 import 'package:flutter_app2/pages/home/circle/test.dart';
 import 'package:flutter_app2/pages/wights/article_list_Item.dart';
+import 'package:flutter_app2/pages/wights/article_skeleton.dart';
 import 'package:flutter_app2/pages/wights/page_route_anim.dart';
+import 'package:flutter_app2/pages/wights/skeleton.dart';
 import 'package:flutter_app2/services/helper/refresh_helper.dart';
 import 'package:flutter_app2/services/model/Article.dart';
 import 'package:flutter_app2/services/model/viewModel/home_model.dart';
@@ -279,7 +281,7 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                             ),
                           ),
                           HomeTopArticleList(),
-//                          HomeArticleList(),
+                          HomeArticleList(),
                         ],
                       )),
                 );
@@ -310,6 +312,32 @@ class HomeTopArticleList extends StatelessWidget {
           );
         },
         childCount: homeModel.topArticles?.length ?? 0,
+      ),
+    );
+  }
+}
+
+class HomeArticleList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    HomeModel homeModel = Provider.of(context);
+    if (homeModel.isBusy) {
+      return SliverToBoxAdapter(
+        child: SkeletonList(
+          builder: (context, index) => ArticleSkeletonItem(),
+        ),
+      );
+    }
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+            (context, index) {
+          Article item = homeModel.list[index];
+          return ArticleItemWidget(
+            item,
+            index: index,
+          );
+        },
+        childCount: homeModel.list?.length ?? 0,
       ),
     );
   }

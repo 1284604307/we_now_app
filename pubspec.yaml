@@ -73,6 +73,9 @@ dependencies:
   # desc 上下划栏
   sliding_up_panel: 1.0.2
 
+  # desc 动画闪光效果
+  shimmer: 1.1.1
+
   localstorage: 3.0.2+5
   # desc 如名所示
   pull_to_refresh: ^1.5.6

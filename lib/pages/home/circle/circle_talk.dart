@@ -29,7 +29,7 @@ import 'circle_show.dart';
 Widget talkWidget(context,count,CircleEntity circle){
 
   return Container(
-    color: Colors.white,
+    color: Theme.of(context).cardColor,
     padding: EdgeInsets.all(15),
     margin: EdgeInsets.only(bottom: 10),
     child: Column(
@@ -55,14 +55,14 @@ Widget talkWidget(context,count,CircleEntity circle){
                     Text(
                       " ${circle.user.userName} ",
                       textAlign: TextAlign.left,
-                      style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Text(
                       " ${circle.createDate} ",
                       maxLines: 5,
                       overflow: TextOverflow.clip,
                       textAlign: TextAlign.left,
-                      style: TextStyle(color: Colors.black45,),
+                      style: TextStyle(color: Theme.of(context).hintColor),
                     )
                   ],
                 ),
@@ -93,8 +93,8 @@ Widget talkWidget(context,count,CircleEntity circle){
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Icon(Icons.star_border,color: Colors.black45,),
-                            Text("  999",style: TextStyle(color: Colors.black45,),)
+                            Icon(Icons.star_border,color: Theme.of(context).primaryColorDark,),
+                            Text("  999",style: TextStyle(color: Theme.of(context).hintColor,),)
                           ],
                         ),
                       ),
@@ -118,8 +118,8 @@ Widget talkWidget(context,count,CircleEntity circle){
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Icon(Icons.image_aspect_ratio,color: Colors.black45,),
-                              Text("  999",style: TextStyle(color: Colors.black45,),)
+                              Icon(Icons.image_aspect_ratio,color: Theme.of(context).primaryColorDark,),
+                              Text("  999",style: TextStyle(color: Theme.of(context).hintColor,),)
                             ],
                           ),
                         ),
@@ -134,8 +134,8 @@ Widget talkWidget(context,count,CircleEntity circle){
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Icon(Icons.favorite_border,color: Colors.black45,),
-                            Text("  999",style: TextStyle(color: Colors.black45,),)
+                            Icon(Icons.favorite_border,color: Theme.of(context).primaryColorDark,),
+                            Text("  999",style: TextStyle(color: Theme.of(context).hintColor,),)
                           ],
                         ),
                       ),

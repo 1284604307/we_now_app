@@ -4,53 +4,27 @@ import 'package:flutter_app2/common/Api.dart';
 import 'package:flutter_app2/common/entity/CircleEntity.dart';
 import 'package:flutter_app2/common/pojos/AjaxResult.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
+import 'package:flutter_app2/services/helper/refresh_helper.dart';
+import 'package:flutter_app2/services/model/viewModel/circle_model.dart';
+import 'package:flutter_app2/services/provider/provider_widget.dart';
+import 'package:flutter_app2/services/provider/view_state_widget.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'circle_talk.dart';
 
 class CircleRecommend extends StatefulWidget {
 
+  CircleRecommend({Key key}) : super(key: key);
   @override
   _State createState() => new _State();
 
 }
 
-class _State extends State<CircleRecommend> {
+class _State extends State<CircleRecommend> with AutomaticKeepAliveClientMixin  {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    loadingData(false);
-  }
-
-  loadingData(bool refresh)async{
-    print("加载数据");
-    if(refresh||Api.hotCircles==null||Api.hotCircles.length==0){
-      var res = await Api.getDio().get("/public/user/circle/").then(
-              (json){
-            if(json.statusCode != 200){
-              BotToast.showText(text: "获取数据失败");
-              return;
-            }
-            print(json.data);
-            var res = AjaxResult.fromJson(json.data);
-            List<CircleEntity> circles =
-              (res.data as List).map((value) => CircleEntity.fromJson(value)).toList();
-            circles.forEach((v){print(v.toJson());});
-            Api.hotCircles = circles;
-            setState(() {
-              BotToast.showText(text: "当前已是最新数据");
-            });
-          }
-      );
-      print(res);
-    }else{
-      print(Api.hotCircles);
-    }
-  }
-
-  Future<Null> refreshData() async{
-    return await loadingData(true);
   }
 
   Widget noDataView(){
@@ -64,25 +38,52 @@ class _State extends State<CircleRecommend> {
 
   @override
   Widget build(BuildContext context) {
-    return new Container(
-//          margin: const EdgeInsets.only(top: 20.0),
-      color: GlobalConfig.globalBackgroundColor,
-      child: RefreshIndicator(
-        onRefresh: refreshData,
-        child:  new ListView.builder(
-              primary: false,
-              shrinkWrap: true,
-              itemCount: Api.hotCircles.length==0?1:Api.hotCircles.length,
-              itemBuilder: (BuildContext context, int index) {
-                if(index==0&&Api.hotCircles.length==0){
-                  return noDataView();
-                }
-                return talkWidget(context,index,Api.hotCircles[index]);
+    return ProviderWidget<CircleRecommendModel>(
+      onModelReady: (model){
+        print("model 准备好了");
+        model.initData();
+      },
+      model: CircleRecommendModel(),
+      builder: (ctx,cRecommendModel,child){
+        return new Container(
+          child: SmartRefresher(
+              onRefresh: ()async{
+                  await cRecommendModel.refresh();
+                  cRecommendModel.showErrorMessage(context);
               },
-              physics: new AlwaysScrollableScrollPhysics(),
-            )
-        ),
+              onLoading: cRecommendModel.loadMore,
+              footer: RefresherFooter(),
+              header: HomeRefreshHeader(),
+              controller: cRecommendModel.refreshController,
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  if (cRecommendModel.list.isEmpty)
+                    SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 50),
+                          child: ViewStateEmptyWidget(
+                              onPressed: cRecommendModel.initData),
+                        )),
+                  // desc 动态列表
+                  if (cRecommendModel.list.isNotEmpty)
+                    SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                        CircleEntity item = cRecommendModel.list[index];
+                        return talkWidget(context, index, item);
+                      },
+                      childCount: cRecommendModel.list?.length ?? 0,
+                    ),
+                  ),
+                ],
+              ) ,
+          ),
+        );
+      },
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 

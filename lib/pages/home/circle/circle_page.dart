@@ -15,7 +15,7 @@ class CirclePage extends StatefulWidget{
   CirclePageState createState()=>CirclePageState();
 }
 
-class CirclePageState extends State<CirclePage>{
+class CirclePageState extends State<CirclePage> with AutomaticKeepAliveClientMixin{
 
   final _navigationItems = [
     new Tab(text: "推荐"),
@@ -32,9 +32,7 @@ class CirclePageState extends State<CirclePage>{
     return new DefaultTabController(
       length: 2,
       child: new Scaffold(
-        backgroundColor: GlobalConfig.globalBackgroundColor,
         appBar: new AppBar(
-          backgroundColor: Colors.white,
           title: Stack(
             children: <Widget>[
               Center(
@@ -42,11 +40,8 @@ class CirclePageState extends State<CirclePage>{
                   alignment: Alignment.center,
                   width: 210,
                   child: new TabBar(
-                    labelColor: GlobalConfig.dark? Colors.white : Colors.black,
-                    unselectedLabelColor: GlobalConfig.themeColor ,
                     labelStyle: TextStyle(fontWeight: FontWeight.bold),
                     unselectedLabelStyle:  TextStyle(fontWeight: FontWeight.normal),
-                    indicatorColor: Colors.blue,
                     tabs: _navigationItems,
                   ),
                 ),
@@ -92,4 +87,8 @@ class CirclePageState extends State<CirclePage>{
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
