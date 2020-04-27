@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:extended_image/extended_image.dart';
@@ -44,7 +45,7 @@ Widget talkWidget(context,count,CircleEntity circle){
                   width: 40,
                   height: 40,
                   color: Colors.black12,
-                  child: Image.network("${circle.user.avatar}"),
+                  child: CachedNetworkImage(imageUrl: "${circle.user.avatar}"),
                 ),
               ),
               Container(

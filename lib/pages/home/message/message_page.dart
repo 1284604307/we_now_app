@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/common/Api.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
+import 'package:flutter_app2/pages/home/circle/test.dart';
 import 'package:flutter_app2/pages/maps/other.dart';
+import 'package:flutter_app2/services/helper/refresh_helper.dart';
+import 'package:flutter_app2/services/model/viewModel/message_model.dart';
+import 'package:flutter_app2/services/provider/provider_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MessagePage extends StatefulWidget{
   @override
@@ -21,19 +26,28 @@ class MessagePageState extends State<MessagePage>{
               child: Text("消息"),
             ),
           ),
-          body: ListView.builder(
-            physics: BouncingScrollPhysics(),
-            controller: Api.globalScrollController,
-            itemCount: 12,
-            key: PageStorageKey(2),
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                child: messageWidget(),
-//              decoration: BoxDecoration(
-//                  border: Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))
-//              ),
+          body: ProviderWidget<MessageViewModel>(
+            model: MessageViewModel(),
+            builder: (BuildContext context, messageModel, Widget child) {
+              return SmartRefresher(
+                controller: messageModel.refreshController,
+                footer: RefresherFooter(),
+                header: HomeRefreshHeader(),
+                onRefresh: ()async{
+                  await messageModel.refresh();
+                  messageModel.showErrorMessage(context);
+                },
+//                enablePullDown: messageModel.list.isNotEmpty,
+                enablePullUp: messageModel.list.isNotEmpty,
+                onLoading: messageModel.loadMore,
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    Messages()
+                  ],
+                ),
               );
             },
+
           )
       ),
       onWillPop: () {
@@ -42,14 +56,37 @@ class MessagePageState extends State<MessagePage>{
     );
   }
 
-  Widget messageWidget(){
+
+}
+
+class Messages extends StatelessWidget {
+
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (ctx,index){
+          return Container(
+            child: messageWidget(context),
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(width: 1, color: Color(0xffe5e5e5)))
+            ),
+          );
+        },
+        childCount: 12,//recommendModel.list?.length ?? 0,
+      ),
+    );
+  }
+
+  Widget messageWidget(context){
     String name = "老王";
     String content = "这里是消息模板";
     return InkWell(
       onTap: (){
         Navigator.push(context, MaterialPageRoute(
             builder: (BuildContext context) {
-              return SelectLocationFromMapPage();
+              return Test();
             }
         ));
       },

@@ -1,4 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -53,8 +54,8 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
               margin: EdgeInsets.all(5),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child:  new Image.network(
-                    imgList[index]["url"],
+                child:  CachedNetworkImage(
+                    imageUrl: imgList[index]["url"],
                     fit: BoxFit.fill,
                   )
               ),
@@ -115,7 +116,8 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                               width: 200,
                               height: 100,
                               color: Colors.redAccent[100*index%200+100],
-                              child: Image.network(imgList[index%4],fit: BoxFit.fill,),
+                              child:  CachedNetworkImage(
+                                imageUrl: imgList[index%4],fit: BoxFit.fill,),
                             ),
                             Container(
                               margin: EdgeInsets.all(5),
@@ -183,7 +185,7 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                               width: 150,
                               height: 150,
                               color: Colors.redAccent[100*index%200+100],
-                              child: Image.network(imgList[index%4],fit: BoxFit.fill,),
+                              child: CachedNetworkImage(imageUrl: imgList[index%4],fit: BoxFit.fill,),
                             ),
                           ],
                         ),
@@ -271,7 +273,7 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                                 )
                             ),
                           if (homeModel.topArticles?.isNotEmpty ?? false)
-                          SliverToBoxAdapter(
+                            SliverToBoxAdapter(
                             child: Column(
                               children: <Widget>[
                                 _swiperWidget(),

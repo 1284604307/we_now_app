@@ -4,10 +4,13 @@ import 'package:flutter_app2/common/Api.dart';
 import 'package:flutter_app2/common/entity/CircleEntity.dart';
 import 'package:flutter_app2/common/pojos/AjaxResult.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
+import 'package:flutter_app2/pages/wights/article_skeleton.dart';
+import 'package:flutter_app2/pages/wights/skeleton.dart';
 import 'package:flutter_app2/services/helper/refresh_helper.dart';
 import 'package:flutter_app2/services/model/viewModel/circle_model.dart';
 import 'package:flutter_app2/services/provider/provider_widget.dart';
 import 'package:flutter_app2/services/provider/view_state_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'circle_talk.dart';
@@ -27,17 +30,9 @@ class _State extends State<CircleRecommend> with AutomaticKeepAliveClientMixin  
     super.initState();
   }
 
-  Widget noDataView(){
-    return new Container(
-      height: 730,
-      child: Center(
-          child: Text("没有数据，刷新一下吧~~"),
-      )
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ProviderWidget<CircleRecommendModel>(
       onModelReady: (model){
         print("model 准备好了");
@@ -47,36 +42,30 @@ class _State extends State<CircleRecommend> with AutomaticKeepAliveClientMixin  
       builder: (ctx,cRecommendModel,child){
         return new Container(
           child: SmartRefresher(
-              onRefresh: ()async{
-                  await cRecommendModel.refresh();
-                  cRecommendModel.showErrorMessage(context);
-              },
-              onLoading: cRecommendModel.loadMore,
-              footer: RefresherFooter(),
-              header: HomeRefreshHeader(),
-              controller: cRecommendModel.refreshController,
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  if (cRecommendModel.list.isEmpty)
-                    SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 50),
-                          child: ViewStateEmptyWidget(
-                              onPressed: cRecommendModel.initData),
-                        )),
-                  // desc 动态列表
-                  if (cRecommendModel.list.isNotEmpty)
-                    SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                        CircleEntity item = cRecommendModel.list[index];
-                        return talkWidget(context, index, item);
-                      },
-                      childCount: cRecommendModel.list?.length ?? 0,
-                    ),
-                  ),
-                ],
-              ) ,
+            controller: cRecommendModel.refreshController,
+            footer: RefresherFooter(),
+            header: HomeRefreshHeader(),
+            onRefresh: ()async{
+                await cRecommendModel.refresh();
+                cRecommendModel.showErrorMessage(context);
+            },
+            enablePullDown: cRecommendModel.list.isNotEmpty,
+            enablePullUp: cRecommendModel.list.isNotEmpty,
+            onLoading: cRecommendModel.loadMore,
+            child: CustomScrollView(
+              slivers: <Widget>[
+                if (cRecommendModel.list.isEmpty)
+                  SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 50),
+                        child: ViewStateEmptyWidget(
+                            onPressed: cRecommendModel.initData),
+                      )),
+                // desc 动态列表
+                if (cRecommendModel.list.isNotEmpty)
+                  _CicleList(),
+              ],
+            ) ,
           ),
         );
       },
@@ -87,3 +76,27 @@ class _State extends State<CircleRecommend> with AutomaticKeepAliveClientMixin  
   bool get wantKeepAlive => true;
 }
 
+
+class _CicleList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    CircleRecommendModel recommendModel = Provider.of(context);
+    if (recommendModel.isBusy) {
+      print("------------busy");
+      return SliverToBoxAdapter(
+        child: SkeletonList(
+          builder: (context, index) => ArticleSkeletonItem(),
+        ),
+      );
+    }
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+            (context, index) {
+          CircleEntity item = recommendModel.list[index];
+          return talkWidget(context, index, item);
+        },
+        childCount: recommendModel.list?.length ?? 0,
+      ),
+    );
+  }
+}
