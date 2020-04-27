@@ -2,12 +2,9 @@ import 'dart:math';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_app2/common/Global.dart';
 import 'package:flutter_app2/pages/home/message/message_page.dart';
-import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 
-import 'about_us_page.dart';
 import 'home/circle/circle_page.dart';
 import 'home/home/index.dart';
 import 'home/index/home_page.dart';
@@ -33,7 +30,7 @@ class AppState extends State<App>{
     DateTime  _willPopTime ;
 
     final pageController = PageController();
-    final bodyList = [Home(),HomePage(), CirclePage(), MessagePage(),MyPage()];
+    final pages = [Home(),HomePage(), CirclePage(), MessagePage(),MyPage()];
 
 
     void onTap(int index) {
@@ -70,27 +67,26 @@ class AppState extends State<App>{
       ),
       BottomNavigationBarItem(
           title: Text('消息'),
-          icon: Icon(_currentIndex != 2?Icons.notifications_none:Icons.notifications)
+          icon: Icon(_currentIndex != 3?Icons.notifications_none:Icons.notifications)
       ),
       BottomNavigationBarItem(
           title: Text('我的'),
-          icon: Icon(_currentIndex != 3?Icons.person_outline:Icons.person)
+          icon: Icon(_currentIndex != 4?Icons.person_outline:Icons.person)
       ),
     ];
 
     return WillPopScope(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: PageView(
+        body: PageView.builder(
+          itemBuilder:(ctx, index) => pages[index],
+          itemCount: pages.length,
           controller: pageController,
           onPageChanged: onPageChanged,
-          children: bodyList,
           physics: NeverScrollableScrollPhysics(), // 禁止滑动
         ),
         //底部导航栏
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.white,
-          selectedItemColor: Colors.black,
           selectedIconTheme: IconThemeData(size: 25),
           unselectedIconTheme: IconThemeData(size: 20),
           selectedFontSize: 14,
@@ -104,13 +100,10 @@ class AppState extends State<App>{
       ),
       onWillPop: () async {
         if (_currentIndex != 0) {
-//          setState(() {
-//            _currentIndex = 0;
-//          });
-
           pageController.jumpToPage(0);
           return false;
-        } else {
+        }
+        else {
           if (_willPopTime == null || (DateTime.now().difference(_willPopTime) >
               Duration(seconds: 1))) {
             //两次点击间隔超过1秒，重新计时

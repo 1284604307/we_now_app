@@ -46,10 +46,21 @@ class IconFonts {
   IconFonts._();
 
   /// iconfont:flutter base
-  static const String fontFamily = 'iconfont';
+  static const String fontFamily = 'alibaba';
 
-  static const IconData pageEmpty = IconData(0xe63c, fontFamily: fontFamily);
-  static const IconData pageError = IconData(0xe600, fontFamily: fontFamily);
-  static const IconData pageNetworkError = IconData(0xe678, fontFamily: fontFamily);
-  static const IconData pageUnAuth = IconData(0xe65f, fontFamily: fontFamily);
+  static const IconData message = IconData(0xe630, fontFamily: fontFamily);
+  static const IconData message2 = IconData(0xe63c, fontFamily: fontFamily);
+  static const IconData runState = IconData(0xe634, fontFamily: fontFamily);
+  static const IconData connect = IconData(0xe60d, fontFamily: fontFamily);
+  static const IconData draw = IconData(0xe664, fontFamily: fontFamily);
+  static const IconData pointer = IconData(0xe653, fontFamily: fontFamily);
+
+  static const IconData pageEmpty = IconData(0xe61d, fontFamily: fontFamily);
+  static const IconData pageError = IconData(0xe602, fontFamily: fontFamily);
+  static const IconData pageNetworkError = IconData(0xe7f6, fontFamily: fontFamily);
+
+  static const IconData theme = IconData(0xe618, fontFamily: fontFamily);
+  static const IconData theme2 = IconData(0xe7aa, fontFamily: fontFamily);
+
+  static const IconData moon = IconData(0xefa7, fontFamily: fontFamily);
 }

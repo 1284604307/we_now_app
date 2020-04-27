@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_app2/pages/app.dart';
 import 'package:flutter_app2/pages/home/chat/chat_page.dart';
 import 'package:flutter_app2/pages/home/circle/test.dart';
 import 'package:flutter_app2/pages/home/me/me_page.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_app2/services/model/Article.dart';
 
 class RouteName {
   static const String root = '/';
+  static const String app = 'app';
   static const String me = 'me';
   static const String chat = 'chat';
   static const String loading = 'loading';
@@ -29,6 +31,8 @@ class Router {
     switch (settings.name) {
       case RouteName.loading:
         return NoAnimRouteBuilder(LoadingPage());
+      case RouteName.app:
+        return NoAnimRouteBuilder(App());
       case RouteName.me:
         return NoAnimRouteBuilder(MePage());
       case RouteName.chat:
