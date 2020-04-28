@@ -25,6 +25,7 @@ class CirclePageState extends State<CirclePage> with AutomaticKeepAliveClientMix
 
   TabController tabController;
 
+  ///最上方导航栏
   final _navigationItems = [
     new Tab(text: "推荐"),
     new Tab(text: "校园"),

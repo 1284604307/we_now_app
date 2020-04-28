@@ -116,6 +116,7 @@ flutter:
   - assets/images/app/we_now_icon.png
   - assets/images/app/we_now_round.png
   - assets/images/app/we_now_start.png
+    - assets/images/app/we_now_start.png
 #    - images/a_dot_ham.jpeg
 
   fonts:

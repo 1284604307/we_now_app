@@ -47,7 +47,7 @@ class BannerWiget extends StatelessWidget{
             autoplay: true,
           ),
         )
-    );;
+    );
   }
 
 }
