@@ -38,7 +38,6 @@ main() async {
                     theme: themeModel.themeData(),
                     darkTheme: themeModel.themeData(platformDarkMode: true),
                     navigatorObservers: [BotToastNavigatorObserver()],
-                    // desc 本意是 i18n ，但是有些bug没完善
                     locale: localeModel.locale,
                     localizationsDelegates: const [
                       S.delegate,

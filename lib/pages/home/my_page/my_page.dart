@@ -26,9 +26,6 @@ class MyPageState extends State<MyPage>{
 
   @override
   Widget build(BuildContext context) {
-
-    bool dark = Theme.of(context).brightness == Brightness.light;
-
     double width = MediaQuery.of(context).size.width;
     return WillPopScope(
       onWillPop: (){
@@ -39,21 +36,23 @@ class MyPageState extends State<MyPage>{
             child:SingleChildScrollView(
               child: Column(
                 children: <Widget>[
+                  // desc 头部栈结构
                   Container(
                     height: 240,
-                    color: Theme.of(context).cardColor,
                     child: Stack(
                       children: <Widget>[
+                        // desc 头部背景色
                         ClipPath(
                           clipper: BottomClipper(),
                           child: Container(
                             height: 210,
+//                            color: Theme.of(context).primaryColor,
                             color: Colors.lightBlueAccent,
                           ),
                         ),
+                        // desc 头部按钮排列
                         Container(
                           width: width,
-                          color: Colors.black12,
                           margin: EdgeInsets.only(top: 30,left: 10,right: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -71,6 +70,7 @@ class MyPageState extends State<MyPage>{
                             ],
                           )
                         ),
+                        // desc 个人信息卡片
                         Positioned(
                           width: width,
                           top: 80,

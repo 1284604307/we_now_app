@@ -11,7 +11,7 @@ abstract class ViewStateRefreshListModel<T> extends ViewStateListModel<T> {
   static const int pageNumFirst = 0;
 
   /// 分页条目数量
-  static const int pageSize = 20;
+  static const int pageSize = 10;
 
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -30,10 +30,8 @@ abstract class ViewStateRefreshListModel<T> extends ViewStateListModel<T> {
     try {
       _currentPageNum = pageNumFirst;
       var data = await loadData(pageNum: pageNumFirst);
-      print("\n\n\n\n\n数据为空吗？？？？？？？？？？？？？？？？？？？？？？？？？？");
       print(data);
       if (data.isEmpty) {
-        print("\n\n数据为空\n\n\n");
         refreshController.refreshCompleted(resetFooterState: true);
         list.clear();
         setEmpty();
@@ -52,6 +50,7 @@ abstract class ViewStateRefreshListModel<T> extends ViewStateListModel<T> {
 
         setIdle();
       }
+
       return data;
     } catch (e, s) {
       /// 页面已经加载了数据,如果刷新报错,不应该直接跳转错误页面

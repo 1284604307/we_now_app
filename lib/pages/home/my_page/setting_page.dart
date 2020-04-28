@@ -36,7 +36,7 @@ class _State extends State<SettingPage> {
 //              }
               if (model.userModel.hasUser) {
                 return Container(
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   padding: EdgeInsets.all(10),
                   child: Row(
                     children: <Widget>[

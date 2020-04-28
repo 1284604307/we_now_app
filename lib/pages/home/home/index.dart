@@ -1,4 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -8,7 +9,9 @@ import 'package:flutter_app2/pages/app.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
 import 'package:flutter_app2/pages/home/circle/test.dart';
 import 'package:flutter_app2/pages/wights/article_list_Item.dart';
+import 'package:flutter_app2/pages/wights/article_skeleton.dart';
 import 'package:flutter_app2/pages/wights/page_route_anim.dart';
+import 'package:flutter_app2/pages/wights/skeleton.dart';
 import 'package:flutter_app2/services/helper/refresh_helper.dart';
 import 'package:flutter_app2/services/model/Article.dart';
 import 'package:flutter_app2/services/model/viewModel/home_model.dart';
@@ -51,8 +54,8 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
               margin: EdgeInsets.all(5),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child:  new Image.network(
-                    imgList[index]["url"],
+                child:  CachedNetworkImage(
+                    imageUrl: imgList[index]["url"],
                     fit: BoxFit.fill,
                   )
               ),
@@ -113,7 +116,8 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                               width: 200,
                               height: 100,
                               color: Colors.redAccent[100*index%200+100],
-                              child: Image.network(imgList[index%4],fit: BoxFit.fill,),
+                              child:  CachedNetworkImage(
+                                imageUrl: imgList[index%4],fit: BoxFit.fill,),
                             ),
                             Container(
                               margin: EdgeInsets.all(5),
@@ -181,7 +185,7 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                               width: 150,
                               height: 150,
                               color: Colors.redAccent[100*index%200+100],
-                              child: Image.network(imgList[index%4],fit: BoxFit.fill,),
+                              child: CachedNetworkImage(imageUrl: imgList[index%4],fit: BoxFit.fill,),
                             ),
                           ],
                         ),
@@ -269,7 +273,7 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                                 )
                             ),
                           if (homeModel.topArticles?.isNotEmpty ?? false)
-                          SliverToBoxAdapter(
+                            SliverToBoxAdapter(
                             child: Column(
                               children: <Widget>[
                                 _swiperWidget(),
@@ -279,7 +283,7 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                             ),
                           ),
                           HomeTopArticleList(),
-//                          HomeArticleList(),
+                          HomeArticleList(),
                         ],
                       )),
                 );
@@ -310,6 +314,32 @@ class HomeTopArticleList extends StatelessWidget {
           );
         },
         childCount: homeModel.topArticles?.length ?? 0,
+      ),
+    );
+  }
+}
+
+class HomeArticleList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    HomeModel homeModel = Provider.of(context);
+    if (homeModel.isBusy) {
+      return SliverToBoxAdapter(
+        child: SkeletonList(
+          builder: (context, index) => ArticleSkeletonItem(),
+        ),
+      );
+    }
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+            (context, index) {
+          Article item = homeModel.list[index];
+          return ArticleItemWidget(
+            item,
+            index: index,
+          );
+        },
+        childCount: homeModel.list?.length ?? 0,
       ),
     );
   }
