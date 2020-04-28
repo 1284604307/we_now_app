@@ -66,7 +66,7 @@ dependencies:
   permission_handler: ^3.0.0 # 5.0.0+hotfix.3
 
   # desc 高德地图  IOS ANDROID 分端适配  < 第三方 >
-#  amap_all_fluttify: 0.13.1+1
+  amap_all_fluttify: 0.13.1+1
 
   # key 5d08b4cb651701bd1647eb34093cb703
   # desc 极光推送  IOS ANDROID 分端依赖配置 < 官方库 >
