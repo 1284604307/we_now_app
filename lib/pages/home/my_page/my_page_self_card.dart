@@ -35,7 +35,7 @@ class MySelfCard extends StatelessWidget{
           child:Consumer<UserModel>(
             builder: (context, model, child) => Container(
               padding: EdgeInsets.all(10),
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               width: width,
               child: Center(
                 // 第一行 头像 + 用户名

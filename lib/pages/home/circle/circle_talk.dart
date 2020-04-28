@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:extended_image/extended_image.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_app2/common/entity/CircleEntity.dart';
 import 'package:flutter_app2/common/pojos/AjaxResult.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
 import 'package:flutter_app2/pages/wights/ClickableImage.dart';
+import 'package:flutter_app2/pages/wights/avatar.dart';
 import 'package:flutter_app2/pages/wights/show_image.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
@@ -28,126 +30,132 @@ import 'circle_show.dart';
  */
 Widget talkWidget(context,count,CircleEntity circle){
 
-  return Container(
-    color: Colors.white,
-    padding: EdgeInsets.all(15),
-    margin: EdgeInsets.only(bottom: 10),
-    child: Column(
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.only(bottom: 5),
-          child: Row(
-            children: <Widget>[
-              ClipRRect(
-                borderRadius: BorderRadius.circular(40),
-                child:  Container(
-                  width: 40,
-                  height: 40,
-                  color: Colors.black12,
-                  child: Image.network("${circle.user.avatar}"),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,//垂直方向 向左靠齐
-                  children: <Widget>[
-                    Text(
-                      " ${circle.user.userName} ",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      " ${circle.createDate} ",
-                      maxLines: 5,
-                      overflow: TextOverflow.clip,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(color: Colors.black45,),
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-        // desc 动态内容及底部组件
-        Column(
-          children: <Widget>[
-            new Container(
-                child: new Text(
-                    "${circle.content}",
-                ),
-                margin: new EdgeInsets.only(top: 6.0, bottom: 6.0),
-                alignment: Alignment.topLeft
-            ),
-            // desc 九图组件
-            circle.url!=null?gridViewNithWight(circle.url,context):Container(),
-            Container(
-              margin: EdgeInsets.only(top: 20),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.all(5.0),
-                      child: InkWell(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(Icons.star_border,color: Colors.black45,),
-                            Text("  999",style: TextStyle(color: Colors.black45,),)
-                          ],
-                        ),
+  return InkWell(
+    onTap: (){
+      Navigator.push(context,
+          MaterialPageRoute(
+              builder: (BuildContext context) {
+                return ShowCircle();
+              }
+          )
+      );
+    },
+    child: Container(
+      color: Theme.of(context).cardColor,
+      padding: EdgeInsets.all(15),
+      margin: EdgeInsets.only(bottom: 10),
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(bottom: 5),
+            child: Row(
+              children: <Widget>[
+                // desc 头像
+                Avatar(CachedNetworkImage(imageUrl: "${circle.user.avatar}")),
+                Container(
+                  margin: EdgeInsets.only(left: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,//垂直方向 向左靠齐
+                    children: <Widget>[
+                      Text(
+                        " ${circle.user.userName} ",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                    ),
-                    flex: 1,
+                      Text(
+                        " ${circle.createDate} ",
+                        maxLines: 5,
+                        overflow: TextOverflow.clip,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(color: Theme.of(context).hintColor),
+                      )
+                    ],
                   ),
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.all(5.0),
-                      child: InkWell(
+                )
+              ],
+            ),
+          ),
+          // desc 动态内容及底部组件
+          Column(
+            children: <Widget>[
+              new Container(
+                  child: new Text(
+                    "${circle.content}",
+                  ),
+                  margin: new EdgeInsets.only(top: 6.0, bottom: 6.0),
+                  alignment: Alignment.topLeft
+              ),
+              // desc 九图组件
+              circle.url!=null?gridViewNithWight(circle.url,context):Container(),
+              Container(
+                margin: EdgeInsets.only(top: 20),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(5.0),
                         child: InkWell(
-                          onTap: (){
-                            Navigator.push(context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) {
-                                  return ShowCircle();
-                                }
-                              )
-                            );
-                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Icon(Icons.image_aspect_ratio,color: Colors.black45,),
-                              Text("  999",style: TextStyle(color: Colors.black45,),)
+                              // desc 收藏按钮
+                              Icon(Icons.share,color: Theme.of(context).primaryColorDark,),
+                              Text(" 转发",style: TextStyle(color: Theme.of(context).hintColor,),)
                             ],
                           ),
                         ),
                       ),
+                      flex: 1,
                     ),
-                    flex: 2,
-                  ),
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.all(5.0),
-                      child: InkWell(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(Icons.favorite_border,color: Colors.black45,),
-                            Text("  999",style: TextStyle(color: Colors.black45,),)
-                          ],
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(5.0),
+                        child: InkWell(
+                          child: InkWell(
+                            onTap: (){
+                              Navigator.push(context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) {
+                                        return ShowCircle();
+                                      }
+                                  )
+                              );
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                // desc 评论
+                                Icon(Icons.image_aspect_ratio,color: Theme.of(context).primaryColorDark,),
+                                Text("  999",style: TextStyle(color: Theme.of(context).hintColor,),)
+                              ],
+                            ),
+                          ),
                         ),
                       ),
+                      flex: 2,
                     ),
-                    flex: 1,
-                  ),
-                ],
-              ),
-            )
-          ],
-        )
-      ],
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(5.0),
+                        child: InkWell(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(Icons.favorite_border,color: Colors.pink,),
+                              Text("  999",style: TextStyle(color: Theme.of(context).hintColor,),)
+                            ],
+                          ),
+                        ),
+                      ),
+                      flex: 1,
+                    ),
+                  ],
+                ),
+              )
+            ],
+          )
+        ],
+      ),
     ),
   );
 }

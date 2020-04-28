@@ -11,11 +11,19 @@ import 'circle_school.dart';
 import 'circle_talk.dart';
 
 class CirclePage extends StatefulWidget{
+
+  CirclePage({Key key}) : super(key: key);
+
   @override
   CirclePageState createState()=>CirclePageState();
 }
 
-class CirclePageState extends State<CirclePage>{
+class CirclePageState extends State<CirclePage> with AutomaticKeepAliveClientMixin{
+
+  @override
+  bool get wantKeepAlive => true;
+
+  TabController tabController;
 
   final _navigationItems = [
     new Tab(text: "推荐"),
@@ -29,12 +37,12 @@ class CirclePageState extends State<CirclePage>{
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return new DefaultTabController(
       length: 2,
+      initialIndex: 0,
       child: new Scaffold(
-        backgroundColor: GlobalConfig.globalBackgroundColor,
         appBar: new AppBar(
-          backgroundColor: Colors.white,
           title: Stack(
             children: <Widget>[
               Center(
@@ -42,11 +50,8 @@ class CirclePageState extends State<CirclePage>{
                   alignment: Alignment.center,
                   width: 210,
                   child: new TabBar(
-                    labelColor: GlobalConfig.dark? Colors.white : Colors.black,
-                    unselectedLabelColor: GlobalConfig.themeColor ,
                     labelStyle: TextStyle(fontWeight: FontWeight.bold),
                     unselectedLabelStyle:  TextStyle(fontWeight: FontWeight.normal),
-                    indicatorColor: Colors.blue,
                     tabs: _navigationItems,
                   ),
                 ),
@@ -92,4 +97,5 @@ class CirclePageState extends State<CirclePage>{
       ),
     );
   }
+
 }

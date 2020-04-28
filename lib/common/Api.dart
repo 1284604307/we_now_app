@@ -73,15 +73,4 @@ class Api{
     });
   }
 
-  static void get(
-    String url,
-    {
-      Map<String, dynamic> data,
-      Map<String, dynamic> headers,
-      Function success,
-      Function error
-    }
-    ) async {
-      // 对接收到的请求参数进行从处理
-    }
 }
