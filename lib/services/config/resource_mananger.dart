@@ -63,4 +63,8 @@ class IconFonts {
   static const IconData theme2 = IconData(0xe7aa, fontFamily: fontFamily);
 
   static const IconData moon = IconData(0xefa7, fontFamily: fontFamily);
+
+
+  static const IconData thumbUp = IconData(0xe9a7, fontFamily: fontFamily);
+  static const IconData share = IconData(0xe60c, fontFamily: fontFamily);
 }

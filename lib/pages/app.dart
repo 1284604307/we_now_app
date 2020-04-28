@@ -62,7 +62,7 @@ class AppState extends State<App>{
 //            icon: _currentIndex == 0? Icon(Icons.home):Icon(Icons.home)
       ),
       BottomNavigationBarItem(
-          title: Text('圈子'),
+          title: Text('动态'),
           icon: Icon(Icons.toll)
       ),
       BottomNavigationBarItem(

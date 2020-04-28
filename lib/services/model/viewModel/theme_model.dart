@@ -13,12 +13,15 @@ class ThemeModel with ChangeNotifier {
   static const theme_UserDarkMode = 'WeNow_ThemeUserDarkMode';
   static const theme_FontIndex = 'WeNow_FontIndex';
 
-  static const fontValueList = ['system', 'kuaile'];
+  static const fontValueList = ['system'];
 
   /// 用户选择的明暗模式
   bool _userDarkMode;
 
+
+
   /// 当前主题颜色
+  Color _normalThemeColor = Colors.white;
   MaterialColor _themeColor;
 
   /// 当前字体索引
@@ -32,6 +35,8 @@ class ThemeModel with ChangeNotifier {
     /// 获取主题色
     _themeColor = Colors.primaries[
         StorageManager.sharedPreferences.getInt(theme_ColorIndex) ?? 5];
+
+    _normalThemeColor = Colors.white;
 
     /// 获取字体
     _fontIndex = StorageManager.sharedPreferences.getInt(theme_FontIndex) ?? 0;

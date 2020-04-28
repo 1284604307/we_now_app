@@ -93,6 +93,7 @@ class _CicleList extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
             (context, index) {
           CircleEntity item = recommendModel.list[index];
+          // desc 动态生成模型
           return talkWidget(context, index, item);
         },
         childCount: recommendModel.list?.length ?? 0,
