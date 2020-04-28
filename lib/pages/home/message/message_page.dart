@@ -51,7 +51,7 @@ class MessagePageState extends State<MessagePage>{
       onTap: (){
         Navigator.push(context, MaterialPageRoute(
             builder: (BuildContext context) {
-              return SelectLocationFromMapPage();
+              return Container();//SelectLocationFromMapPage();
             }
         ));
       },

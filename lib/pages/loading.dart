@@ -56,16 +56,16 @@ class _LoadingState extends State<LoadingPage>{
                     width: double.infinity,
                     height: double.infinity,
                   ),
-                  Center(
-                    child: Text(
-                      'Let\'s Show',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 36,
-                          decoration: TextDecoration.none
-                      ),
-                    ),
-                  ),
+                  //Center(
+                    //child: Text(
+                      //'Let\'s Show',
+                      //style: TextStyle(
+                          //color: Colors.white,
+                          //fontSize: 36,
+                          //decoration: TextDecoration.none
+                      //),
+                    //),
+                  //),
                 ],
               )
           )
