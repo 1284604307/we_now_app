@@ -5,8 +5,8 @@ import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_app2/common/entity/CircleEntity.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
+import 'package:flutter_app2/services/model/Article.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -28,9 +28,9 @@ class Api{
 
   static ScrollController globalScrollController = ScrollController(initialScrollOffset: 0,keepScrollOffset: true);
 
-  static CircleEntity newCircleEntity = CircleEntity();
+  static Article newCircleEntity = Article();
 
-  static List<CircleEntity> hotCircles = [];
+  static List<Article> hotCircles = [];
 
   static JPush jpush = new JPush();
 

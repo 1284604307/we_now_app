@@ -1,14 +1,13 @@
-import 'package:flutter_app2/common/entity/CircleEntity.dart';
+import 'package:flutter_app2/services/model/Article.dart';
 import 'package:flutter_app2/services/net/restful_go.dart';
-import 'package:flutter_app2/services/provider/view_state_list_model.dart';
 import 'package:flutter_app2/services/provider/view_state_refresh_list_model.dart';
 
 /**
  * @createDate  2020/4/27
  */
 class CircleSchoolModel extends ViewStateRefreshListModel {
-  List<CircleEntity> _circles_School;
-  List<CircleEntity> get hotsCircles => _circles_School;
+  List<Article> _circles_School;
+  List<Article> get hotsCircles => _circles_School;
 
   @override
   Future<List> loadData({int pageNum}) async {
@@ -37,8 +36,8 @@ class CircleSchoolModel extends ViewStateRefreshListModel {
 
 class CircleRecommendModel extends ViewStateRefreshListModel {
 
-  List<CircleEntity> _circles_Hots;
-  List<CircleEntity> get recommendCircles => _circles_Hots;
+  List<Article> _circles_Hots;
+  List<Article> get recommendCircles => _circles_Hots;
 
   @override
   Future<List> loadData({int pageNum}) async {

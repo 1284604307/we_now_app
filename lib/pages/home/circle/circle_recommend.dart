@@ -1,12 +1,12 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/common/Api.dart';
-import 'package:flutter_app2/common/entity/CircleEntity.dart';
 import 'package:flutter_app2/common/pojos/AjaxResult.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
 import 'package:flutter_app2/pages/wights/article_skeleton.dart';
 import 'package:flutter_app2/pages/wights/skeleton.dart';
 import 'package:flutter_app2/services/helper/refresh_helper.dart';
+import 'package:flutter_app2/services/model/Article.dart';
 import 'package:flutter_app2/services/model/viewModel/circle_model.dart';
 import 'package:flutter_app2/services/provider/provider_widget.dart';
 import 'package:flutter_app2/services/provider/view_state_widget.dart';
@@ -252,10 +252,11 @@ class _State extends State<CircleRecommend> with AutomaticKeepAliveClientMixin {
                 if (cRecommendModel.list.isEmpty)
                   SliverToBoxAdapter(
                       child: Padding(
-                    padding: const EdgeInsets.only(top: 50),
-                    child: ViewStateEmptyWidget(
-                        onPressed: cRecommendModel.initData),
-                  )),
+                        padding: const EdgeInsets.only(top: 50),
+                        child: ViewStateEmptyWidget(
+                            onPressed: cRecommendModel.initData),
+                      )
+                  ),
                 // desc 动态列表
                 if (cRecommendModel.list.isNotEmpty)
                   _CicleList(),
@@ -285,9 +286,9 @@ class _CicleList extends StatelessWidget {
     }
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          CircleEntity item = recommendModel.list[index];
-          // desc 动态生成模型
+            (context, index) {
+          Article item = recommendModel.list[index];
+          // desc 生成<动态>模型
           return talkWidget(context, index, item);
         },
         childCount: recommendModel.list?.length ?? 0,

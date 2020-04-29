@@ -1,4 +1,3 @@
-import 'package:flutter_app2/common/entity/CircleEntity.dart';
 import 'package:flutter_app2/services/model/Message.dart';
 import 'package:flutter_app2/services/net/restful_go.dart';
 import 'package:flutter_app2/services/provider/view_state_list_model.dart';

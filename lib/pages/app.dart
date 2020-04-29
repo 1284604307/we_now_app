@@ -54,9 +54,6 @@ class AppState extends State<App>{
       BottomNavigationBarItem(
           title: Text(
             '保留页',
-//              style: TextStyle(
-//                color: _currentIndex == 0?Colors.redAccent:Color(0xff999999)
-//              ),
           ),
           icon:Icon(Icons.compare_arrows)
 //            icon: _currentIndex == 0? Icon(Icons.home):Icon(Icons.home)
@@ -96,7 +93,7 @@ class AppState extends State<App>{
           onTap: onTap,
           //底部导航栏
           items: navigationItem,
-        ) ,
+        ),
       ),
       onWillPop: () async {
         if (_currentIndex != 0) {

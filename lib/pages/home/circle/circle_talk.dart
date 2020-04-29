@@ -10,16 +10,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app2/common/Api.dart';
-import 'package:flutter_app2/common/entity/CircleEntity.dart';
+import 'package:flutter_app2/pages/wights/LittleWidgets.dart';
+import 'package:flutter_app2/services/model/Article.dart';
 import 'package:flutter_app2/common/pojos/AjaxResult.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
 import 'package:flutter_app2/pages/wights/ClickableImage.dart';
 import 'package:flutter_app2/pages/wights/avatar.dart';
 import 'package:flutter_app2/pages/wights/show_image.dart';
+import 'package:flutter_app2/services/model/viewModel/favourite_model.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:provider/provider.dart';
 
 import 'circle_show.dart';
 
@@ -28,16 +32,18 @@ import 'circle_show.dart';
  * @date 2020/4/19
  * @email 1284604307@qq.com
  */
-Widget talkWidget(context,count,CircleEntity circle){
+Widget talkWidget(context,count,Article circle){
 
+  /// 用于Hero动画的标记
+  UniqueKey uniqueKey = UniqueKey();
   return InkWell(
     onTap: (){
       Navigator.push(context,
-          MaterialPageRoute(
-              builder: (BuildContext context) {
-                return ShowCircle();
-              }
-          )
+        MaterialPageRoute(
+          builder: (BuildContext context) {
+            return ShowCircle();
+          }
+        )
       );
     },
     child: Container(
@@ -63,7 +69,7 @@ Widget talkWidget(context,count,CircleEntity circle){
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        " ${circle.createDate} ",
+                        " ${circle.createTime} ",
                         maxLines: 5,
                         overflow: TextOverflow.clip,
                         textAlign: TextAlign.left,
@@ -138,10 +144,24 @@ Widget talkWidget(context,count,CircleEntity circle){
                       child: Container(
                         padding: EdgeInsets.all(5.0),
                         child: InkWell(
+                          onTap: (){
+                            showToast("展示就对咯");
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Icon(Icons.favorite_border,color: Colors.pink,),
+                              Consumer<GlobalFavouriteStateModel>(
+                                builder: (context, model, child) {
+                                  //利用child局部刷新
+                                  if (model[circle.id] == null) {
+                                    return child;
+                                  }
+                                  return ArticleFavouriteWidget(
+                                      circle..collect = model[circle.id],
+                                      uniqueKey);
+                                },
+                                child: ArticleFavouriteWidget(circle, uniqueKey),
+                              ),
                               Text("  999",style: TextStyle(color: Theme.of(context).hintColor,),)
                             ],
                           ),
@@ -149,6 +169,7 @@ Widget talkWidget(context,count,CircleEntity circle){
                       ),
                       flex: 1,
                     ),
+
                   ],
                 ),
               )
@@ -340,7 +361,7 @@ class _State extends State<CreateCirclePage> with AutomaticKeepAliveClientMixin 
         url =  List<String>.from(ajaxResult.data);
       };
     }
-    var n = CircleEntity();
+    var n = Article();
     n.content = Api.newCircleEntity.content;
     n.url = url;
     BotToast.showText(text: "上传动态");

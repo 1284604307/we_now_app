@@ -1,5 +1,4 @@
 import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter_app2/common/entity/CircleEntity.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:flutter_app2/services/model/Article.dart';
 import 'package:flutter_app2/services/model/Banner.dart';
@@ -62,11 +61,23 @@ class RestfulApi {
 
     var response = await http.get('/public/user/circle/');
 
-    return response.data.map<CircleEntity>((item) => CircleEntity.fromJson(item)).toList();
+    return response.data.map<Article>((item) => Article.fromJson(item)).toList();
   }
 
   static Future fetchRecommendCircles(pageNum) async{
     var response = await http.get('/public/user/circle/');
-    return response.data.map<CircleEntity>((item) => CircleEntity.fromJson(item)).toList();
+    return response.data.map<Article>((item) => Article.fromJson(item)).toList();
+  }
+
+  static fetchCollectList(int pageNum) {
+
+  }
+
+  static unCollectCircle(id) {
+    throw Exception("你个鬼子！");
+  }
+
+  static collectCircle(id) {
+    throw Exception("也没干啥，就是想抛出个错误，告诉你你甭想收藏我，嘻嘻嘻");
   }
 }
