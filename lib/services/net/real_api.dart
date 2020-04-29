@@ -7,10 +7,13 @@ import 'api.dart';
 
 final Http http = Http();
 
+final host = "139.9.201.138";
+final port = "8888";
+
 class Http extends BaseHttp {
   @override
   void init() {
-    options.baseUrl = 'http://192.168.101.7:8888';
+    options.baseUrl = "http://$host:$port";//'http://192.168.101.7:8888';
     interceptors
       ..add(ApiInterceptor())
       // cookie持久化 异步
