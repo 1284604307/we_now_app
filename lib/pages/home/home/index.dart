@@ -30,6 +30,8 @@ class Home extends StatefulWidget {
   State createState() => _State();
 }
 
+
+
 class _State extends State<Home> with AutomaticKeepAliveClientMixin {
   //轮播图
   Widget _swiperWidget() {
@@ -55,9 +57,9 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child:  CachedNetworkImage(
-                    imageUrl: imgList[index]["url"],
-                    fit: BoxFit.fill,
-                  )
+                  imageUrl: imgList[index]["url"],
+                  fit: BoxFit.fill,
+                )
               ),
             );
           },

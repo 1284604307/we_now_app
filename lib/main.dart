@@ -14,6 +14,7 @@ import 'package:flutter_app2/services/model/viewModel/theme_model.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -25,35 +26,37 @@ main() async {
   await StorageManager.init();
 
   runApp(
-      BotToastInit(
+      OKToast(
+        child: BotToastInit(
           child: MultiProvider(
-            providers: providers,
-            child: Consumer2<ThemeModel, LocaleModel>(
-              builder: (context, themeModel, localeModel, child) {
-                return RefreshConfiguration(
-                  hideFooterWhenNotFull: true, //列表数据不满一页,不触发加载更多
-                  child:MaterialApp(
-                    title: '校园时光',
-                    debugShowCheckedModeBanner: false,
-                    theme: themeModel.themeData(),
-                    darkTheme: themeModel.themeData(platformDarkMode: true),
-                    navigatorObservers: [BotToastNavigatorObserver()],
-                    locale: localeModel.locale,
-                    localizationsDelegates: const [
-                      S.delegate,
-                      RefreshLocalizations.delegate, //下拉刷新
-                      GlobalCupertinoLocalizations.delegate,
-                      GlobalMaterialLocalizations.delegate,
-                      GlobalWidgetsLocalizations.delegate
-                    ],
-                    supportedLocales: S.delegate.supportedLocales,
-                    initialRoute: RouteName.loading,
-                    onGenerateRoute: Router.generateRoute,
-                  )
-                );
-              }
-            )
+              providers: providers,
+              child: Consumer2<ThemeModel, LocaleModel>(
+                  builder: (context, themeModel, localeModel, child) {
+                    return RefreshConfiguration(
+                        hideFooterWhenNotFull: true, //列表数据不满一页,不触发加载更多
+                        child:MaterialApp(
+                          title: '校园时光',
+                          debugShowCheckedModeBanner: false,
+                          theme: themeModel.themeData(),
+                          darkTheme: themeModel.themeData(platformDarkMode: true),
+                          navigatorObservers: [BotToastNavigatorObserver()],
+                          locale: localeModel.locale,
+                          localizationsDelegates: const [
+                            S.delegate,
+                            RefreshLocalizations.delegate, //下拉刷新
+                            GlobalCupertinoLocalizations.delegate,
+                            GlobalMaterialLocalizations.delegate,
+                            GlobalWidgetsLocalizations.delegate
+                          ],
+                          supportedLocales: S.delegate.supportedLocales,
+                          initialRoute: RouteName.loading,
+                          onGenerateRoute: Router.generateRoute,
+                        )
+                    );
+                  }
+              )
           ),
+        ),
       )
   );
 

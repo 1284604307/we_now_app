@@ -43,8 +43,11 @@ dependencies:
   # Your other regular dependencies here
   json_annotation: ^3.0.0
   flutter_custom_dialog: ^1.0.19
-  bot_toast: ^2.4.0
   dotted_border: 1.0.5
+
+  # TOAST
+  bot_toast: ^2.4.0
+  oktoast: 2.3.2
 
   # 选择图片
   image_picker: 0.6.5
@@ -77,6 +80,8 @@ dependencies:
 
   # desc 动画闪光效果
   shimmer: 1.1.1
+  # 矢量动画库
+  flare_flutter: ^1.5.9
 
   localstorage: 3.0.2+5
   # desc 如名所示
@@ -105,18 +110,12 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # To add assets to your application, add an assets section, like this:
+  # To add assets to your application, add an assets section, like this:、
+  # desc 可以直接导入一个文件夹
   assets:
-  - assets/images/loading.jpg
-  - assets/images/loading2.jpeg
-  - assets/images/banners/banner1.jpg
-  - assets/images/banners/banner2.jpg
-  - assets/images/banners/banner3.jpg
-  - assets/images/banners/banner4.jpg
-  - assets/images/app/we_now_icon.png
-  - assets/images/app/we_now_round.png
-  - assets/images/app/we_now_start.png
-#    - images/a_dot_ham.jpeg
+  - assets/images/banners/
+  - assets/images/app/
+  - assets/animations/
 
   fonts:
     - family: alibaba

@@ -1,5 +1,7 @@
+import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import 'Comment.dart';
 import 'TagsBean.dart';
 /**
  * @createDate  2020/4/26
@@ -9,49 +11,36 @@ part 'Article.g.dart';
 @JsonSerializable()
 class Article {
   int id;
-  String link;
-  // desc 类型分 本地 和 外链
-  int type;
-  String author;
-  int publishTime;
   String title;
-  String description;
+  // desc 内容简述
+  String prefix;
+  // desc 内容
+  String content;
+  DateTime createTime;
+  List<String> url;
+  List<Comment> comments;
+  // desc 类型分 本地 和 外链
+  String type;
+  String link;
   // desc 展示小图 如果有
   String envelopePic;
   // desc 标签 那些跟随的小件
   List<TagsBean> tags;
-  // desc 当前文章所属人
-  int userId;
-  // desc 是否可见
+  // desc 访问量
   int visible;
   // desc 点赞数量
-  int likeCount;
-  // desc 当前用户收藏标记
+  num likeCount;
+  num commentCount;
+  // desc 当前用户关联标记
   bool collect;
+  bool like;
   // desc 新文章 (权重++ )
   bool fresh;
-  // desc 文章简述
-  String prefix;
-  // desc 内容
-  String content;
+  // 置顶
+  bool top;
 
-
-  // desc 有该组值 表明 内容为转载内容
-  /// desc 分享人
-  String shareUser;
-  String origin;
-  int originId;
-
-
-  // desc 书 id 如果分章节
-  int courseId;
-  // desc 章节id  如果分章节
-  int chapterId;
-  // desc 章节名
-  String chapterName;
-  // desc 如果章节还细分了，则.....
-  int superChapterId;
-  String superChapterName;
+  num userId;
+  User user;
 
   Article();
 

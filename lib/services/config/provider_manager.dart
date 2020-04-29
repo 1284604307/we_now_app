@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app2/services/model/viewModel/favourite_model.dart';
 import 'package:flutter_app2/services/model/viewModel/locale_model.dart';
 import 'package:flutter_app2/services/model/viewModel/login_model.dart';
 import 'package:flutter_app2/services/model/viewModel/theme_model.dart';
@@ -22,6 +23,9 @@ List<SingleChildWidget> independentServices = [
   ),
   ChangeNotifierProvider<LocaleModel>(
     create: (context) => LocaleModel(),
+  ),
+  ChangeNotifierProvider<GlobalFavouriteStateModel>(
+    create: (context) => GlobalFavouriteStateModel(),
   ),
 ];
 

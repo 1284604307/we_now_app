@@ -64,14 +64,14 @@ class ArticleItemWidget extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(left: 5),
                         child: Text(
-                          isNotBlank(article.author) ? article.author : article.shareUser ?? '',
+                          article.user==null ? '匿名用户' : article.user.userName ?? '匿名用户',
                           style: Theme.of(context).textTheme.caption,
                         ),
                       ),
                       Expanded(
                         child: SizedBox.shrink(),
                       ),
-                      Text("${article.publishTime}",
+                      Text("${article.createTime}",
                           style: Theme.of(context).textTheme.caption),
                     ],
                   ),
@@ -93,7 +93,7 @@ class ArticleItemWidget extends StatelessWidget {
                                 height: 2,
                               ),
                               Text(
-                                article.description,
+                                article.prefix,
                                 style: Theme.of(context).textTheme.caption,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
@@ -112,10 +112,10 @@ class ArticleItemWidget extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 5),
                         child: Text(
-                          (article.superChapterName != null
-                                  ? article.superChapterName + ' · '
+                          (article.title != null
+                                  ? article.title + ' · '
                                   : '') +
-                              (article.chapterName ?? ''),
+                              (article.title ?? ''),
                           style: Theme.of(context).textTheme.overline,
                         ),
                       ),
