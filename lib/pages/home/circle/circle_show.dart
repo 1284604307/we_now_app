@@ -1,18 +1,26 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:decorated_flutter/decorated_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
+import 'package:flutter_app2/pages/wights/CommentListWight.dart';
+import 'package:flutter_app2/pages/wights/GridViewNithWight.dart';
 import 'package:flutter_app2/pages/wights/avatar.dart';
 import 'package:flutter_app2/services/config/resource_mananger.dart';
+import 'package:flutter_app2/services/model/Article.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class ShowCircle extends StatefulWidget{
 
+  Article _article;
+
+  ShowCircle(this._article);
+
   @override
   State<StatefulWidget> createState() {
-    return _state();
+    return _state(this._article);
   }
 
 }
@@ -20,8 +28,12 @@ class ShowCircle extends StatefulWidget{
 class _state extends State<ShowCircle>
     with SingleTickerProviderStateMixin {
 
+  Article _article;
   TabController tabController;
   PanelController panelController = PanelController();
+
+  _state(this._article);
+
 
   @override
   void initState() {
@@ -33,10 +45,6 @@ class _state extends State<ShowCircle>
   Widget build(BuildContext context) {
 
     var _tabs = ["评论","点赞"];
-
-    var content = "滑稽\n滑天下之大稽\n滑稽之天下滑稽，滑稽也\n有云，滑稽之大着，滑天下也！\n\n\n\n\n\n\n 是言滑稽者，大暨！";
-    var time = "2020/4/24 17:00";
-    var watch = 9999;
     return SlidingUpPanel(
       minHeight: 45,
       maxHeight: 600,
@@ -101,7 +109,7 @@ class _state extends State<ShowCircle>
                       SliverToBoxAdapter(
                         child: Column(
                           children: <Widget>[
-                            circleShow(),
+                            circleShow(_article),
                           ],
                         ),
                       ),
@@ -129,119 +137,11 @@ class _state extends State<ShowCircle>
                         bottom: false,
                         child: Builder(
                           builder: (BuildContext context) {
-                            return SmartRefresher(
-                                controller: RefreshController(),
-                              enablePullUp: true,
-                              enablePullDown: false,
-                              header: ClassicHeader(),
-                              footer: ClassicFooter(),
-                              onRefresh: (){BotToast.showText(text: "太难了");},
-                              onLoading: (){BotToast.showText(text: "头疼");},
-                              child:
-                              CustomScrollView(
-                              key: PageStorageKey<String>(name),
-                              slivers: <Widget>[
-                                SliverOverlapInjector(
-                                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                                ),
-                                SliverList(
-                                  delegate: SliverChildBuilderDelegate(
-                                        (BuildContext c, int i) {
-                                      return Container(
-                                        padding: EdgeInsets.all(15),
-                                        child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Padding(
-                                              padding: EdgeInsets.only(right: 10,top: 5,),
-                                              child: Avatar(null,width: 30,height: 30,),
-                                            ),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Container(
-                                                  child: Text(
-                                                    "回复人昵称",
-                                                    style: TextStyle(fontSize: 14,color: Theme.of(context).hintColor,fontWeight: FontWeight.w400),),
-                                                ),
-                                                Container(
-                                                  margin: EdgeInsets.only(top: 2),
-                                                  child: Text(
-                                                    "4-24",
-                                                    style: TextStyle(fontSize: 12,color: Theme.of(context).hintColor),),
-                                                ),
-                                                Container(
-                                                  margin: EdgeInsets.only(top: 5,bottom: 5),
-                                                  child: Text("放肆!",style: TextStyle(fontSize: 14),),
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: <Widget>[
-                                                    Padding(
-                                                      padding: EdgeInsets.only(right: 10),
-                                                      child: Row(
-                                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                                        children: <Widget>[
-                                                          Icon(IconFonts.thumbUp,size: 16,),
-                                                          t11("11",),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(right: 10),
-                                                      child:InkWell(
-                                                        child: Icon(IconFonts.share,size: 16,),
-                                                      ),
-                                                    ),
-                                                    InkWell(
-                                                      child: Icon(IconFonts.message,size: 16,),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Container(
-                                                  width: 340,
-                                                  color: Colors.black12,
-                                                  margin:EdgeInsets.only(top: 10),
-                                                  padding: EdgeInsets.all(10),
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      // desc 子评论
-                                                      RichText(
-                                                        maxLines: 3,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        text: TextSpan(
-                                                            text: "喵喵的鱼: ",
-                                                            style: TextStyle(color: Colors.blue,fontSize: 14.0),
-                                                            children: [
-                                                              TextSpan(
-                                                                text: "喵喵喜欢吃鱼鱼\n兄嘻嘻嘻嘻sadxxxxxxxxxxxxxxxxxxxasdxxxxxxxxxxxxxxxxxxxxxxxx ",
-                                                                style: TextStyle(color: Theme.of(context).textTheme.display1.color,fontSize: 14.0),
-                                                              )
-                                                            ]
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                        decoration: BoxDecoration(
-                                            border: Border(bottom: BorderSide(width: 0.15, color: Theme.of(context).hintColor))
-                                        ),
-                                      );
-                                    },
-                                    childCount: 10,
-                                  ),
-                                ),
-                                SliverToBoxAdapter(
-                                  child: Container(height: 50,),
-                                )
-                              ],
-                            )
-                            );
+                            switch(name){
+                              case "评论": return CommentListWight(name);
+                              case "点赞": return Container(child:Text("点赞啦"));
+                              default: return Container(child: Text("页面不存在！"),);
+                            }
                           },
                         ),
                       );
@@ -256,150 +156,6 @@ class _state extends State<ShowCircle>
   }
 
 
-  ok()=>CustomScrollView(
-    slivers: <Widget>[
-      SliverToBoxAdapter(
-        child: circleShow(),
-      ),
-      SliverList(
-        delegate: SliverChildBuilderDelegate(
-                (c,i){
-              return Container(
-                padding: EdgeInsets.all(15),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(right: 10,top: 5,),
-                      child: Avatar(null,width: 30,height: 30,),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          child: Text(
-                            "回复人昵称",
-                            style: TextStyle(fontSize: 14,color: Theme.of(context).hintColor,fontWeight: FontWeight.w400),),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 2),
-                          child: Text(
-                            "4-24",
-                            style: TextStyle(fontSize: 12,color: Theme.of(context).hintColor),),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 5,bottom: 5),
-                          child: Text("放肆!",style: TextStyle(fontSize: 14),),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(right: 10),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: <Widget>[
-                                  Icon(IconFonts.thumbUp,size: 16,),
-                                  t11("11",),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(right: 10),
-                              child:InkWell(
-                                child: Icon(IconFonts.share,size: 16,),
-                              ),
-                            ),
-                            InkWell(
-                              child: Icon(IconFonts.message,size: 16,),
-                            ),
-                          ],
-                        ),
-                        Container(
-                          width: 340,
-                          color: Colors.black12,
-                          margin:EdgeInsets.only(top: 10),
-                          padding: EdgeInsets.all(10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              // desc 子评论
-                              RichText(
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                                text: TextSpan(
-                                    text: "喵喵的鱼: ",
-                                    style: TextStyle(color: Colors.blue,fontSize: 14.0),
-                                    children: [
-                                      TextSpan(
-                                        text: "喵喵喜欢吃鱼鱼\n兄嘻嘻嘻嘻sadxxxxxxxxxxxxxxxxxxxasdxxxxxxxxxxxxxxxxxxxxxxxx ",
-                                        style: TextStyle(color: Theme.of(context).textTheme.display1.color,fontSize: 14.0),
-                                      )
-                                    ]
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-                decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(width: 0.15, color: Theme.of(context).hintColor))
-                ),
-              );
-            },
-            childCount: 5
-        ),
-
-      ),
-      SliverToBoxAdapter(
-        child: Container(height: 50,),
-      ),
-
-    ],
-  );
-
-  old2(){
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverAppBar(//SliverAppBar 作为头图控件
-          automaticallyImplyLeading: false,
-          floating: false,// 设置悬浮样式
-          snap: false,
-          pinned: false,
-          flexibleSpace: ListView(
-            children: <Widget>[circleShow()],
-          ),
-          forceElevated: false,
-          expandedHeight: 400,// 头图控件高度
-        ),
-        SliverPersistentHeader(	// 可以吸顶的TabBar
-          pinned: true,
-          delegate: StickyTabBarDelegate(
-            child: TabBar(
-              labelColor: Colors.black,
-              controller: this.tabController,
-              tabs: <Widget>[
-                Tab(text: 'Home'),
-                Tab(text: 'Profile'),
-              ],
-            ),
-          ),
-        ),
-        SliverFillRemaining(		// 剩余补充内容TabBarView
-          child: TabBarView(
-            controller: this.tabController,
-            children: <Widget>[
-              Center(child: commentListBuilder()),
-              Center(child: Text('Content of Profile')),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 
   bottomWidget(){
     return
@@ -474,109 +230,12 @@ class _state extends State<ShowCircle>
       );
   }
 
-  // desc 评论列表构造器
-  commentListBuilder(){
 
-    return ListView.builder(
 
-      itemCount: 30,
-      itemBuilder: ((c,i){
-          return Container(
-            padding: EdgeInsets.all(15),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(right: 10,top: 5,),
-                  child: Avatar(null,width: 30,height: 30,),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      child: Text(
-                        "回复人昵称",
-                        style: TextStyle(fontSize: 14,color: Theme.of(context).hintColor,fontWeight: FontWeight.w400),),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 2),
-                      child: Text(
-                        "4-24",
-                        style: TextStyle(fontSize: 12,color: Theme.of(context).hintColor),),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 5,bottom: 5),
-                      child: Text("放肆!",style: TextStyle(fontSize: 14),),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(right: 10),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
-                              Icon(IconFonts.thumbUp,size: 16,),
-                              t11("11",),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 10),
-                          child:InkWell(
-                            child: Icon(IconFonts.share,size: 16,),
-                          ),
-                        ),
-                        InkWell(
-                          child: Icon(IconFonts.message,size: 16,),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      width: 340,
-                      color: Colors.black12,
-                      margin:EdgeInsets.only(top: 10),
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          // desc 子评论
-                          RichText(
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                            text: TextSpan(
-                              text: "喵喵的鱼: ",
-                              style: TextStyle(color: Colors.blue,fontSize: 14.0),
-                                children: [
-                                TextSpan(
-                                  text: "喵喵喜欢吃鱼鱼\n兄嘻嘻嘻嘻sadxxxxxxxxxxxxxxxxxxxasdxxxxxxxxxxxxxxxxxxxxxxxx ",
-                                  style: TextStyle(color: Theme.of(context).textTheme.display1.color,fontSize: 14.0),
-                                )
-                              ]
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                )
-              ],
-            ),
-            decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(width: 0.15, color: Theme.of(context).hintColor))
-            ),
-          );
-        }
-      )
-    );
-  }
-
-  t11(str) => Text(str,style: TextStyle(fontSize: 12,),);
-
-  circleShow(){
-    var content = "滑稽\n滑天下之大稽\n滑稽之天下滑稽，滑稽也\n有云，滑稽之大着，滑天下也！\n\n\n\n\n\n\n 是言滑稽者，大暨！";
-    var time = "2020/4/24 17:00";
-    var watch = 9999;
+  circleShow(Article circle){
+    var content = circle.content;//"滑稽\n滑天下之大稽\n滑稽之天下滑稽，滑稽也\n有云，滑稽之大着，滑天下也！\n\n\n\n\n\n\n 是言滑稽者，大暨！";
+    var time = circle.createTime;
+    var watch = circle.visible;
     // desc 动态内容
     return Container(
         decoration: BoxDecoration(
@@ -591,14 +250,14 @@ class _state extends State<ShowCircle>
             Container(
                 child: Row(
                   children: <Widget>[
-                    Avatar(null),
+                    Avatar(CachedNetworkImage(imageUrl: circle.user.avatar,)),
                     Container(
                       margin: EdgeInsets.all(5),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
-                            child:Text("用户名",style: TextStyle(fontWeight: FontWeight.bold),),
+                            child:Text("${circle.user.userName}",style: TextStyle(fontWeight: FontWeight.bold),),
                           ),
                           Container(
                             child: Text("$time  ${watch}次浏览",style: TextStyle(
@@ -618,6 +277,7 @@ class _state extends State<ShowCircle>
               child: Text("$content",textAlign: TextAlign.left),
             ),
             // desc 九图展示
+            GridViewNithWight(circle.url),
           ],
         ),
       );

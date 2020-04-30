@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app2/common/Api.dart';
+import 'package:flutter_app2/pages/wights/GridViewNithWight.dart';
 import 'package:flutter_app2/pages/wights/LittleWidgets.dart';
 import 'package:flutter_app2/services/model/Article.dart';
 import 'package:flutter_app2/common/pojos/AjaxResult.dart';
@@ -41,7 +42,7 @@ Widget talkWidget(context,count,Article circle){
       Navigator.push(context,
         MaterialPageRoute(
           builder: (BuildContext context) {
-            return ShowCircle();
+            return ShowCircle(circle);
           }
         )
       );
@@ -92,7 +93,7 @@ Widget talkWidget(context,count,Article circle){
                   alignment: Alignment.topLeft
               ),
               // desc 九图组件
-              circle.url!=null?gridViewNithWight(circle.url,context):Container(),
+              circle.url!=null?GridViewNithWight(circle.url):Container(),
               Container(
                 margin: EdgeInsets.only(top: 20),
                 child: Row(
@@ -122,7 +123,7 @@ Widget talkWidget(context,count,Article circle){
                               Navigator.push(context,
                                   MaterialPageRoute(
                                       builder: (BuildContext context) {
-                                        return ShowCircle();
+                                        return ShowCircle(circle);
                                       }
                                   )
                               );
@@ -178,41 +179,6 @@ Widget talkWidget(context,count,Article circle){
         ],
       ),
     ),
-  );
-}
-
-// desc 九图展示
-gridViewNithWight(List<String> urls,BuildContext context){
-  if(urls.length==0) return Container();
-  return GridView.builder(
-    primary: false,
-    shrinkWrap: true,
-    itemCount: urls.length,
-    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3, //横轴三个子widget
-        crossAxisSpacing: 5,
-        mainAxisSpacing: 5 //分别是 x y 的间隔
-    ),
-    itemBuilder: (c,i){
-      ExtendedImage extendedImage = ExtendedImage.network(
-        urls[i],fit: BoxFit.cover,
-      );
-      return Container(
-        color: Colors.lightBlueAccent,
-        child: GestureDetector(
-          child: extendedImage,
-          onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
-              return ShowImagePage(extendedImage: ExtendedImage.network(
-                urls[i],fit: BoxFit.contain,width: double.infinity,height: double.infinity,
-                mode: ExtendedImageMode.gesture ,
-              ));
-            })
-            );
-          }
-        ),
-      );
-    },
   );
 }
 
