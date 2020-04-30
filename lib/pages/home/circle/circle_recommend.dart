@@ -54,7 +54,6 @@ class _State extends State<CircleRecommend> with AutomaticKeepAliveClientMixin {
               slivers: <Widget>[
                 SliverToBoxAdapter(
                     child: Card(
-                        elevation: 10.0,
                         color: Theme.of(context).cardColor,
                         child: Row(
                           children: <Widget>[
@@ -65,7 +64,6 @@ class _State extends State<CircleRecommend> with AutomaticKeepAliveClientMixin {
                                   splashColor: Colors.green[
                                       900], // give any splashColor you want
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(30),
                                     child: Image.asset(
                                       'assets/images/app/news_round.png',
                                       width: cardWidth / 5 - 10,

@@ -2,7 +2,9 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app2/services/config/resource_mananger.dart';
+import 'package:flutter_app2/services/net/restful_go.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:flutter_app2/services/model/Article.dart';
 
 import 'avatar.dart';
 
@@ -34,7 +36,10 @@ class _State extends State<CommentListWight> {
         header: ClassicHeader(),
         footer: ClassicFooter(),
         onRefresh: (){BotToast.showText(text: "太难了");},
-        onLoading: (){BotToast.showText(text: "头疼");},
+        onLoading: (){
+          RestfulApi.fetchfirstcomment(0);
+          BotToast.showText(text: "拉到底了！");
+        },
         child:
         CustomScrollView(
           key: PageStorageKey<String>(keyName),
@@ -59,7 +64,7 @@ class _State extends State<CommentListWight> {
                           children: <Widget>[
                             Container(
                               child: Text(
-                                "回复人昵称",
+                                "回复人",
                                 style: TextStyle(fontSize: 14,color: Theme.of(context).hintColor,fontWeight: FontWeight.w400),),
                             ),
                             Container(
@@ -70,7 +75,7 @@ class _State extends State<CommentListWight> {
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 5,bottom: 5),
-                              child: Text("放肆!",style: TextStyle(fontSize: 14),),
+                              child: Text("回复内容！",style: TextStyle(fontSize: 14),),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -109,11 +114,11 @@ class _State extends State<CommentListWight> {
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                     text: TextSpan(
-                                        text: "喵喵的鱼: ",
+                                        text: "二级回复人",
                                         style: TextStyle(color: Colors.blue,fontSize: 14.0),
                                         children: [
                                           TextSpan(
-                                            text: "喵喵喜欢吃鱼鱼\n兄嘻嘻嘻嘻sadxxxxxxxxxxxxxxxxxxxasdxxxxxxxxxxxxxxxxxxxxxxxx ",
+                                            text: "：二级回复内容",
                                             style: TextStyle(color: Theme.of(context).textTheme.display1.color,fontSize: 14.0),
                                           )
                                         ]
@@ -143,7 +148,7 @@ class _State extends State<CommentListWight> {
   }
 
 
-  commentListBuilder(){
+  commentListBuilder(Article circle){
 
     return ListView.builder(
 
@@ -163,7 +168,7 @@ class _State extends State<CommentListWight> {
                   children: <Widget>[
                     Container(
                       child: Text(
-                        "回复人昵称",
+                        "${circle.user.userName}",
                         style: TextStyle(fontSize: 14,color: Theme.of(context).hintColor,fontWeight: FontWeight.w400),),
                     ),
                     Container(
@@ -174,7 +179,7 @@ class _State extends State<CommentListWight> {
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 5,bottom: 5),
-                      child: Text("放肆!",style: TextStyle(fontSize: 14),),
+                      child: Text("${circle.content}",style: TextStyle(fontSize: 14),),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -158,8 +158,7 @@ class ViewStateEmptyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewStateWidget(
       onPressed: this.onPressed,
-      image: image ??
-          const Icon(IconFonts.pageEmpty, size: 100, color: Colors.grey),
+      image: image ??const Icon(IconFonts.pageEmpty, size: 100, color: Colors.grey),
       title: message ?? "空数据",//S.of(context).viewStateMessageEmpty,
       buttonText: buttonText,
       buttonTextData: "重载"//S.of(context).viewStateButtonRefresh,

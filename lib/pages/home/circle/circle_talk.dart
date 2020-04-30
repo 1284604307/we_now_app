@@ -33,19 +33,15 @@ import 'circle_show.dart';
  * @date 2020/4/19
  * @email 1284604307@qq.com
  */
-Widget talkWidget(context,count,Article circle){
-
+Widget talkWidget(context, count, Article circle) {
   /// 用于Hero动画的标记
   UniqueKey uniqueKey = UniqueKey();
   return InkWell(
-    onTap: (){
+    onTap: () {
       Navigator.push(context,
-        MaterialPageRoute(
-          builder: (BuildContext context) {
-            return ShowCircle(circle);
-          }
-        )
-      );
+          MaterialPageRoute(builder: (BuildContext context) {
+        return ShowCircle(circle);
+      }));
     },
     child: Container(
       color: Theme.of(context).cardColor,
@@ -62,7 +58,7 @@ Widget talkWidget(context,count,Article circle){
                 Container(
                   margin: EdgeInsets.only(left: 10),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,//垂直方向 向左靠齐
+                    crossAxisAlignment: CrossAxisAlignment.start, //垂直方向 向左靠齐
                     children: <Widget>[
                       Text(
                         " ${circle.user.userName} ",
@@ -90,10 +86,9 @@ Widget talkWidget(context,count,Article circle){
                     "${circle.content}",
                   ),
                   margin: new EdgeInsets.only(top: 6.0, bottom: 6.0),
-                  alignment: Alignment.topLeft
-              ),
+                  alignment: Alignment.topLeft),
               // desc 九图组件
-              circle.url!=null?GridViewNithWight(circle.url):Container(),
+              circle.url != null ? GridViewNithWight(circle.url) : Container(),
               Container(
                 margin: EdgeInsets.only(top: 20),
                 child: Row(
@@ -106,8 +101,16 @@ Widget talkWidget(context,count,Article circle){
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               // desc 收藏按钮
-                              Icon(Icons.share,color: Theme.of(context).primaryColorDark,),
-                              Text(" 转发",style: TextStyle(color: Theme.of(context).hintColor,),)
+                              Icon(
+                                Icons.share,
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                              Text(
+                                " 转发",
+                                style: TextStyle(
+                                  color: Theme.of(context).hintColor,
+                                ),
+                              )
                             ],
                           ),
                         ),
@@ -119,21 +122,26 @@ Widget talkWidget(context,count,Article circle){
                         padding: EdgeInsets.all(5.0),
                         child: InkWell(
                           child: InkWell(
-                            onTap: (){
-                              Navigator.push(context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) {
-                                        return ShowCircle(circle);
-                                      }
-                                  )
-                              );
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                return ShowCircle(circle);
+                              }));
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 // desc 评论
-                                Icon(Icons.image_aspect_ratio,color: Theme.of(context).primaryColorDark,),
-                                Text("  999",style: TextStyle(color: Theme.of(context).hintColor,),)
+                                Icon(
+                                  Icons.image_aspect_ratio,
+                                  color: Theme.of(context).primaryColorDark,
+                                ),
+                                Text(
+                                  "${circle.commentCount}",//likeCount
+                                  style: TextStyle(
+                                    color: Theme.of(context).hintColor,
+                                  ),
+                                )
                               ],
                             ),
                           ),
@@ -145,7 +153,7 @@ Widget talkWidget(context,count,Article circle){
                       child: Container(
                         padding: EdgeInsets.all(5.0),
                         child: InkWell(
-                          onTap: (){
+                          onTap: () {
                             showToast("展示就对咯");
                           },
                           child: Row(
@@ -161,16 +169,21 @@ Widget talkWidget(context,count,Article circle){
                                       circle..collect = model[circle.id],
                                       uniqueKey);
                                 },
-                                child: ArticleFavouriteWidget(circle, uniqueKey),
+                                child:
+                                    ArticleFavouriteWidget(circle, uniqueKey),
                               ),
-                              Text("  999",style: TextStyle(color: Theme.of(context).hintColor,),)
+                              Text(//likeCount
+                                "${circle.likeCount}",
+                                style: TextStyle(
+                                  color: Theme.of(context).hintColor,
+                                ),
+                              )
                             ],
                           ),
                         ),
                       ),
                       flex: 1,
                     ),
-
                   ],
                 ),
               )
@@ -182,19 +195,15 @@ Widget talkWidget(context,count,Article circle){
   );
 }
 
-class CreateCirclePage extends StatefulWidget{
-
+class CreateCirclePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _State();
   }
-
 }
 
-class _State extends State<CreateCirclePage> with AutomaticKeepAliveClientMixin   {
-
-
-
+class _State extends State<CreateCirclePage>
+    with AutomaticKeepAliveClientMixin {
   List<Widget> images = [];
   List<Asset> asserts = [];
   List<Uint8List> imageData = [];
@@ -202,26 +211,29 @@ class _State extends State<CreateCirclePage> with AutomaticKeepAliveClientMixin 
   @override
   Widget build(BuildContext context) {
     TextEditingController circleTextController = TextEditingController();
-    circleTextController.text = Api.newCircleEntity.content ;
+    circleTextController.text = Api.newCircleEntity.content;
     print(Api.newCircleEntity.content);
-    circleTextController.addListener((){
+    circleTextController.addListener(() {
       Api.newCircleEntity.content = circleTextController.text;
     });
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
-        title: Text("创作",style: TextStyle(fontWeight: FontWeight.normal,fontSize: 18,fontStyle: FontStyle.normal ),),
+        title: Text(
+          "创作",
+          style: TextStyle(
+              fontWeight: FontWeight.normal,
+              fontSize: 18,
+              fontStyle: FontStyle.normal),
+        ),
         actions: <Widget>[
           Container(
             margin: EdgeInsets.only(right: 20),
             alignment: Alignment.centerRight,
             child: InkWell(
-              child: Container(
-                  padding: EdgeInsets.all(10),
-                  child:Text("发布")
-              ),
-              onTap: (){
+              child: Container(padding: EdgeInsets.all(10), child: Text("发布")),
+              onTap: () {
                 print(circleTextController.toString());
                 print(images.toList().toString());
                 publish();
@@ -231,22 +243,22 @@ class _State extends State<CreateCirclePage> with AutomaticKeepAliveClientMixin 
         ],
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.only(bottom: 10,left: 15,right: 15),
+        padding: EdgeInsets.only(bottom: 10, left: 15, right: 15),
         child: Column(
           children: <Widget>[
             Container(
               padding: EdgeInsets.only(bottom: 30),
               // desc 动态内容文本框
               child: TextField(
-                controller:circleTextController,
+                controller: circleTextController,
                 autofocus: true,
                 minLines: 6,
                 maxLines: 1000,
                 focusNode: FocusNode(),
                 decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "发布新动态！就是现在~",
-                    labelStyle: null,
+                  border: InputBorder.none,
+                  hintText: "发布新动态！就是现在~",
+                  labelStyle: null,
                 ),
               ),
             ),
@@ -254,15 +266,15 @@ class _State extends State<CreateCirclePage> with AutomaticKeepAliveClientMixin 
               child: GridView.builder(
                 shrinkWrap: true,
                 primary: false,
-                itemCount: images.length+1,
+                itemCount: images.length + 1,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3, //横轴三个子widget
                     crossAxisSpacing: 5,
                     mainAxisSpacing: 5 //分别是 x y 的间隔
-                ),
-                itemBuilder: (context,index){
-                  if(index == images.length){
-                    if(index >= 9) return null;
+                    ),
+                itemBuilder: (context, index) {
+                  if (index == images.length) {
+                    if (index >= 9) return null;
                     return selectNewImage();
                   }
                   // desc 返回一个包装了删除键的栈
@@ -275,11 +287,16 @@ class _State extends State<CreateCirclePage> with AutomaticKeepAliveClientMixin 
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(40),
                           child: Container(
-                            width: 30, height: 30,
+                            width: 30,
+                            height: 30,
                             color: Color.fromRGBO(0, 0, 0, 0.25),
                             child: IconButton(
-                              icon: Icon(Icons.close,size: 15,color: Colors.white,),
-                              onPressed: (){
+                              icon: Icon(
+                                Icons.close,
+                                size: 15,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
                                 print(index);
                                 setState(() {
                                   images.removeAt(index);
@@ -301,16 +318,15 @@ class _State extends State<CreateCirclePage> with AutomaticKeepAliveClientMixin 
     );
   }
 
-  void publish() async{
+  void publish() async {
     List<String> url = [];
     // desc 有图片先上传
-    if(asserts.length>0){
+    if (asserts.length > 0) {
       BotToast.showText(text: "上传图片");
 
       FormData data = new FormData();
-      for(var i =0 ;i<asserts.length;i++){
-
-        MultipartFile multipartFile =await MultipartFile.fromBytes(
+      for (var i = 0; i < asserts.length; i++) {
+        MultipartFile multipartFile = await MultipartFile.fromBytes(
           imageData[i],
           // 文件名
           filename: '${asserts[i].name}.jpg',
@@ -318,82 +334,78 @@ class _State extends State<CreateCirclePage> with AutomaticKeepAliveClientMixin 
           contentType: MediaType("image", "jpg"),
         );
         print("第 $i 次 发送");
-        data.files.add(MapEntry("files",multipartFile));
+        data.files.add(MapEntry("files", multipartFile));
       }
-      var res = await Api.getDio().post("/user/upload/files",data:data);
+      var res = await Api.getDio().post("/user/upload/files", data: data);
       print(res);
       AjaxResult ajaxResult = AjaxResult.fromJson(res.data);
-      if (ajaxResult.code==0) {
-        url =  List<String>.from(ajaxResult.data);
-      };
+      if (ajaxResult.code == 0) {
+        url = List<String>.from(ajaxResult.data);
+      }
+      ;
     }
     var n = Article();
     n.content = Api.newCircleEntity.content;
     n.url = url;
     BotToast.showText(text: "上传动态");
-    var res = await Api.getDio().post("/public/user/circle/",data: n);
+    var res = await Api.getDio().post("/public/user/circle/", data: n);
     print(res);
   }
 
-  Widget selectNewImage(){
+  Widget selectNewImage() {
 //    var _width = (this.context.size.width -40)/3;
-    return Listener(
-        onPointerDown: (event) async {
-          //desc 每行单张图片大小 (this.context.size.width - 40)/3
+    return Listener(onPointerDown: (event) async {
+      //desc 每行单张图片大小 (this.context.size.width - 40)/3
 //          print((this.context.size.width - 40)/3);
-          List<Asset> package ;
-          try{
-            package = await MultiImagePicker.pickImages(
-                enableCamera: true,
-                maxImages: 9,
-                selectedAssets: asserts,
-                cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
-                materialOptions: MaterialOptions(
+      List<Asset> package;
+      try {
+        package = await MultiImagePicker.pickImages(
+            enableCamera: true,
+            maxImages: 9,
+            selectedAssets: asserts,
+            cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+            materialOptions: MaterialOptions(
 //                actionBarColor: GlobalConfig.titleColor,
-                  actionBarTitle: "选择图片",
-                  allViewTitle: "所有图片",
-                  selectCircleStrokeColor: "#000000",
-                )
-            );
-          } catch(e){
-            return;
-          }
-          print("------------${asserts.length}------------------");
-          List<Widget> newImages = [];
-          List<Uint8List> datas = [];
-          for(var i =0; i<package.length;i++){
-
-            ByteData memoryData = await package[i].getByteData(quality: 100);
-            Uint8List data =  memoryData.buffer.asUint8List();
-            datas.add(data);
-            print("  加载 -------------- ${package[i].name} ----------------------");
-            newImages.add(
-                ClickableImage(list:data)
-            );
-          }
-          await asserts.addAll(package);
-          setState(() {
-              asserts = package;
-              images = newImages;
-              imageData = datas;
-          });
-
-        },
-        child:LayoutBuilder(
-          builder: (context,con){
-            return DottedBorder(
-              strokeWidth: 2,
-              color: Color.fromRGBO(0, 0, 0, 0.1),
-              child: Container(
-                child: Icon(Icons.add,size:con.maxWidth,color: Color.fromRGBO(0, 0, 0, 0.12),),
-              ),
-            );
-        },
-        )
-    );
+              actionBarTitle: "选择图片",
+              allViewTitle: "所有图片",
+              selectCircleStrokeColor: "#000000",
+            ));
+      } catch (e) {
+        return;
+      }
+      print("------------${asserts.length}------------------");
+      List<Widget> newImages = [];
+      List<Uint8List> datas = [];
+      for (var i = 0; i < package.length; i++) {
+        ByteData memoryData = await package[i].getByteData(quality: 100);
+        Uint8List data = memoryData.buffer.asUint8List();
+        datas.add(data);
+        print("  加载 -------------- ${package[i].name} ----------------------");
+        newImages.add(ClickableImage(list: data));
+      }
+      await asserts.addAll(package);
+      setState(() {
+        asserts = package;
+        images = newImages;
+        imageData = datas;
+      });
+    }, child: LayoutBuilder(
+      builder: (context, con) {
+        return DottedBorder(
+          strokeWidth: 2,
+          color: Color.fromRGBO(0, 0, 0, 0.1),
+          child: Container(
+            child: Icon(
+              Icons.add,
+              size: con.maxWidth,
+              color: Color.fromRGBO(0, 0, 0, 0.12),
+            ),
+          ),
+        );
+      },
+    ));
   }
 
   @override
   bool get wantKeepAlive => true;
-
 }

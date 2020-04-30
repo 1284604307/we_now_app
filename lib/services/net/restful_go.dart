@@ -59,15 +59,28 @@ class RestfulApi {
 
   static Future fetchSchoolCircles(pageNum) async{
 
-    var response = await http.get('/public/user/circle/');
+    var response = await http.get('/public/circle/school');
 
     return response.data.map<Article>((item) => Article.fromJson(item)).toList();
   }
 
   static Future fetchRecommendCircles(pageNum) async{
-    var response = await http.get('/public/user/circle/');
+    var response = await http.get('/public/circle/school');
     return response.data.map<Article>((item) => Article.fromJson(item)).toList();
   }
+
+
+  static Future fetchfirstcomment(pageNum) async{
+    var response = await http.get('/public/circle/comments/1/1');
+    return response.data.map<Article>((item) => Article.fromJson(item)).toList();
+  }
+
+  
+  static Future fetchsecondcomment(pageNum) async{
+    var response = await http.get('/public/circle/commentChildren/1/1');
+    return response.data.map<Article>((item) => Article.fromJson(item)).toList();
+  }
+
 
   static fetchCollectList(int pageNum) {
 
