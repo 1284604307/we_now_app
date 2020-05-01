@@ -30,7 +30,6 @@ class _State extends State<CircleRecommend> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    var cardWidth = MediaQuery.of(context).size.width - 50;
     return ProviderWidget<CircleRecommendModel>(
       onModelReady: (model) {
         print("model 准备好了");
@@ -55,47 +54,76 @@ class _State extends State<CircleRecommend> with AutomaticKeepAliveClientMixin {
                 SliverToBoxAdapter(
                     child: Card(
                         color: Theme.of(context).cardColor,
-                        child: Row(
+                        child: Stack(
                           children: <Widget>[
-                            Column(
+                            Row(
                               children: <Widget>[
+                                Column(
+                                  children: <Widget>[
+                                    Container(
+                                        child: InkWell(
+                                          splashColor: Colors.green[
+                                          900], // give any splashColor you want
+                                          child: ClipRRect(
+                                            child: Image.asset(
+                                              'assets/images/app/news_round.png',
+                                              width: 60,
+                                              height: 60,
+                                            ),
+                                          ),
+                                          onTap: () {
+                                            //添加刷新
+                                          },
+                                        )),
+                                    Container(
+                                        alignment: Alignment.center,
+                                        width: 60,
+                                        child: Column(
+                                          children: <Widget>[Text("最新更新")],
+                                        )),
+                                  ],
+                                ),
                                 Container(
-                                    child: InkWell(
-                                  splashColor: Colors.green[
-                                      900], // give any splashColor you want
-                                  child: ClipRRect(
-                                    child: Image.asset(
-                                      'assets/images/app/news_round.png',
-                                      width: cardWidth / 5 - 10,
-                                      height: 60,
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    //添加刷新
-                                  },
-                                )),
-                                Container(
-                                    alignment: Alignment.center,
-                                    width: cardWidth / 5 - 10,
-                                    child: Column(
-                                      children: <Widget>[Text("最新更新")],
-                                    )),
+                                  //绘制一条分割线
+                                    width: 10,
+                                    height: 60,
+                                    child: VerticalDivider(color: Colors.grey)),
                               ],
                             ),
-                            Container(
-                                //绘制一条分割线
-                                width: 10,
-                                height: 60,
-                                child: VerticalDivider(color: Colors.grey)),
                             /***
                              * desc 多个 动态
                              * */
                             Container(
                               height: 82,
-                              width: cardWidth - (cardWidth / 5) - 10 ,
+                              margin: EdgeInsets.only(left: 70),
                               child: new ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemBuilder: (BuildContext context, int index) {
+                                  if(index == (7))
+                                    return Column(
+                                      children: <Widget>[
+                                        Container(
+                                            margin: EdgeInsets.only(right: 10),
+                                            child: InkWell(
+                                              splashColor: Colors.green[
+                                              900], // give any splashColor you want
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                BorderRadius.circular(30),
+                                              ),
+                                              onTap: () {
+                                                print("我被点击了！啊~~~~好疼");
+                                              },
+                                            )),
+                                        Container(
+                                            margin: EdgeInsets.only(right: 10),
+                                            alignment: Alignment.center,
+                                            width: 60,
+                                            child: Column(
+                                              children: <Widget>[Text("查看更多")],
+                                            )),
+                                      ],
+                                    );
                                   return Column(
                                     children: <Widget>[
                                       Container(
@@ -108,7 +136,7 @@ class _State extends State<CircleRecommend> with AutomaticKeepAliveClientMixin {
                                               BorderRadius.circular(30),
                                               child: Image.asset(
                                                 'assets/images/app/news_round.png',
-                                                width: cardWidth / 5 - 10,
+                                                width: 60,
                                                 height: 60,
                                               ),
                                             ),
@@ -119,14 +147,14 @@ class _State extends State<CircleRecommend> with AutomaticKeepAliveClientMixin {
                                       Container(
                                           margin: EdgeInsets.only(right: 10),
                                           alignment: Alignment.center,
-                                          width: cardWidth / 5 - 1,
+                                          width: 60,
                                           child: Column(
                                             children: <Widget>[Text("最新更新")],
                                           )),
                                     ],
                                   );
                                 },
-                                itemCount: 5,
+                                itemCount: 7+1,
                               ),
                             ),
                           ],
