@@ -1,8 +1,14 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
+import 'package:flutter_app2/services/config/router_manger.dart';
+import 'package:flutter_app2/services/helper/dialog_helper.dart';
 import 'package:flutter_app2/services/model/Article.dart';
 import 'package:flutter_app2/services/model/Banner.dart';
 import 'package:flutter_app2/services/model/Comment.dart';
+import 'package:flutter_app2/services/net/api.dart';
+import 'package:flutter_app2/services/provider/view_state.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:flutter/cupertino.dart' show Navigator;
 
 import 'real_api.dart';
 
@@ -104,5 +110,22 @@ class RestfulApi {
   static likeCircle(articleId) async {
     var response = await http.put('/article/like/$articleId');
     return response.data;
+  }
+
+  static comment(context,articleId,content,{pid=0,toId=0}) async{
+      var res = await http.post(
+          '/comment/${articleId}/${pid}/${toId}',
+          queryParameters:{
+            "content":content
+          }
+      ).catchError((e) async {
+        if(e is DioError && e.error is UnAuthorizedException){
+          if(await DialogHelper.showLoginDialog(context)){
+            Navigator.pushNamed(context, RouteName.login);
+          };
+        }else
+          throw e;
+      });
+      return res;
   }
 }

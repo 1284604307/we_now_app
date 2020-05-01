@@ -4,14 +4,19 @@ import 'package:decorated_flutter/decorated_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
+import 'package:flutter_app2/pages/home/circle/comment_page.dart';
 import 'package:flutter_app2/pages/wights/CommentListWight.dart';
 import 'package:flutter_app2/pages/wights/GridViewNithWight.dart';
 import 'package:flutter_app2/pages/wights/LittleWidgets.dart';
 import 'package:flutter_app2/pages/wights/avatar.dart';
 import 'package:flutter_app2/services/config/resource_mananger.dart';
+import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/model/Article.dart';
 import 'package:flutter_app2/services/model/viewModel/comment_model.dart';
+import 'package:flutter_app2/services/net/api.dart';
+import 'package:flutter_app2/services/net/restful_go.dart';
 import 'package:flutter_app2/services/provider/provider_widget.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -47,121 +52,132 @@ class _state extends State<ShowCircle>
   @override
   Widget build(BuildContext context) {
 
+    TextEditingController tController = new TextEditingController();
+
     var _tabs = ["评论","点赞"];
-    return SlidingUpPanel(
-      minHeight: 45,
-      maxHeight: 600,
-      backdropEnabled: true,
-      controller: panelController,
-      header: Container(
-        width: 400,
-        height: 45,
-        color: Colors.black12,
-        child:Material(
-          child:  bottomWidget(),
+    return WillPopScope(
+      child: SlidingUpPanel(
+        minHeight: 45,
+        maxHeight: 600,
+        backdropEnabled: true,
+        controller: panelController,
+        header: Container(
+          width: 400,
+          height: 45,
+          color: Colors.black12,
+          child:Material(
+            child:  bottomWidget(),
+          ),
         ),
-      ),
-      panel: Material(
-        // desc 底部三大件， 上拉
-        child: Container(
-          padding: EdgeInsets.only(top: 50,left: 5,right: 5),
-          alignment: Alignment.topCenter,
+        panel: Material(
+          // desc 底部三大件， 上拉
+          child: Container(
+            padding: EdgeInsets.only(top: 50,left: 5,right: 5),
+            alignment: Alignment.topCenter,
 //          color: Colors.white,
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Container(
-                  padding: EdgeInsets.only(left: 10,right: 10),
-                  child: TextField(
-                    maxLength: 255,
-                    minLines: 1,
-                    maxLines: 10,
-                    decoration: new InputDecoration(
-                      hintText: "写点评论吧~",
-                      filled: true,
-                      contentPadding: EdgeInsets.all(15.0),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(15.0),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.only(left: 10,right: 10),
+                    child: TextField(
+                      controller: tController,
+                      maxLength: 255,
+                      minLines: 1,
+                      maxLines: 10,
+                      decoration: new InputDecoration(
+                        hintText: "写点评论吧~",
+                        filled: true,
+                        contentPadding: EdgeInsets.all(15.0),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              InkWell(
-                onTap: (){print("阿布");},
-                child: Text("发布",style: TextStyle(color: Colors.blue),),
-              )
-            ],
+                InkWell(
+                  onTap: (){
+                    if(tController.text.trim().length==0){
+                      showToast("内容太少了吧~");
+                    }else{
+                      RestfulApi.comment(context,_article.id,tController.text);
+                    }
+                  },
+                  child: Text("发布",style: TextStyle(color: Colors.blue),),
+                )
+              ],
+            ),
           ),
         ),
-      ),
-      body: Scaffold(
+        body: Scaffold(
           appBar: AppBar(
             title: Text("详情"),
           ),
           body: DefaultTabController(
-              length: _tabs.length, // This is the number of tabs.
-              child: NestedScrollView(
-                headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-                  // These are the slivers that show up in the "outer" scroll view.
-                  return <Widget>[
-                    SliverOverlapAbsorber(
-                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                      child:
-                      SliverToBoxAdapter(
-                        child: Column(
-                          children: <Widget>[
-                            circleShow(_article),
-                          ],
-                        ),
+            length: _tabs.length, // This is the number of tabs.
+            child: NestedScrollView(
+              headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                // These are the slivers that show up in the "outer" scroll view.
+                return <Widget>[
+                  SliverOverlapAbsorber(
+                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                    child:
+                    SliverToBoxAdapter(
+                      child: Column(
+                        children: <Widget>[
+                          circleShow(_article),
+                        ],
                       ),
                     ),
-                    SliverPersistentHeader(	// 可以吸顶的TabBar
-                      pinned: true,
-                      delegate: StickyTabBarDelegate(
-                        color: Theme.of(context).cardColor,
-                        child: TabBar(
-                          labelColor: Theme.of(context).textTheme.subtitle.color,
-                          unselectedLabelColor: Theme.of(context).hintColor,
-                          indicatorColor: Theme.of(context).primaryColor,
-                          tabs: _tabs.map((String name) => Tab(text: name)).toList(),
-                        ),
-                      ),
-                    )
-                  ];
-                },
-                body: Material(
-                  child: TabBarView(
-                    // These are the contents of the tab views, below the tabs.
-                    children: _tabs.map((String name) {
-                      return SafeArea(
-                        top: false,
-                        bottom: false,
-                        child: Builder(
-                          builder: (BuildContext context) {
-                            switch(name){
-                              case "评论":
-                                return ProviderWidget<CommentListModel>(
-                                  model: CommentListModel(_article.id),
-                                  builder: (BuildContext context, CommentListModel model, Widget child) {
-                                    return CommentListWight(name,model);
-                                  },
-                                  onModelReady: (model){model.loadMore();},
-                              );
-                              case "点赞": return Container(child:Text("点赞啦"));
-                              default: return Container(child: Text("页面不存在！"),);
-                            }
-                          },
-                        ),
-                      );
-                    }).toList(),
                   ),
+                  SliverPersistentHeader(	// 可以吸顶的TabBar
+                    pinned: true,
+                    delegate: StickyTabBarDelegate(
+                      color: Theme.of(context).cardColor,
+                      child: TabBar(
+                        labelColor: Theme.of(context).textTheme.subtitle.color,
+                        unselectedLabelColor: Theme.of(context).hintColor,
+                        indicatorColor: Theme.of(context).primaryColor,
+                        tabs: _tabs.map((String name) => Tab(text: name)).toList(),
+                      ),
+                    ),
+                  )
+                ];
+              },
+              body: Material(
+                child: TabBarView(
+                  // These are the contents of the tab views, below the tabs.
+                  children: _tabs.map((String name) {
+                    return SafeArea(
+                      top: false,
+                      bottom: false,
+                      child: Builder(
+                        builder: (BuildContext context) {
+                          switch(name){
+                            case "评论":
+                              return CommentPage(name,_article.id);
+                            case "点赞": return Container(child:Text("点赞啦"));
+                            default: return Container(child: Text("页面不存在！"),);
+                          }
+                        },
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
             ),
+          ),
 
+        ),
       ),
+      onWillPop: () {
+        if(panelController.isPanelOpen){
+          panelController.close();
+        }else
+          Navigator.pop(context);
+      },
     );
   }
 

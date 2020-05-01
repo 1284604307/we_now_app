@@ -39,14 +39,14 @@ class FavouriteModel extends ViewStateModel {
     try {
       // article.collect 字段为null,代表是从我的收藏页面进入的 需要调用特殊的取消接口
       if (circle.like == null) {
-        await RestfulApi.likeCircle(circle.id);
+        await RestfulApi.collectCircle(circle.id);
         globalFavouriteModel.removeFavourite(circle.id);
       } else {
         if (circle.like) {
-          await RestfulApi.unLikeCircle(circle.id);
+          await RestfulApi.unCollectCircle(circle.id);
           globalFavouriteModel.removeFavourite(circle.id);
         } else {
-          await RestfulApi.likeCircle(circle.id);
+          await RestfulApi.collectCircle(circle.id);
           globalFavouriteModel.addFavourite(circle.id);
         }
       }

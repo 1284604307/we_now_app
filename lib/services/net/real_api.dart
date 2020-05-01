@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_app2/services/config/storage_manager.dart';
+import 'package:oktoast/oktoast.dart';
 import 'api.dart';
 
 final Http http = Http();

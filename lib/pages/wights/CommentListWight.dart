@@ -2,6 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app2/services/config/resource_mananger.dart';
+import 'package:flutter_app2/services/model/Comment.dart';
 import 'package:flutter_app2/services/model/viewModel/comment_model.dart';
 import 'package:flutter_app2/services/net/restful_go.dart';
 import 'package:oktoast/oktoast.dart';
@@ -14,7 +15,7 @@ import 'avatar.dart';
  * @createDate  2020/4/30
  */
 // desc 评论列表构造器
-class CommentListWight extends StatefulWidget {
+class CommentListWight extends StatefulWidget  {
 
   String keyName;
   CommentListModel commentListModel;
@@ -76,7 +77,7 @@ class _State extends State<CommentListWight> {
                             Container(
                               margin: EdgeInsets.only(top: 2),
                               child: Text(
-                                "${commentListModel.list[i].user.createTime}",
+                                "${commentListModel.list[i].createTime}",
                                 style: TextStyle(fontSize: 12,color: Theme.of(context).hintColor),),
                             ),
                             Container(
@@ -92,7 +93,7 @@ class _State extends State<CommentListWight> {
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: <Widget>[
                                       Icon(IconFonts.thumbUp,size: 16,),
-                                      t11("11",),
+//                                      t11("11",),
                                     ],
                                   ),
                                 ),
@@ -107,33 +108,9 @@ class _State extends State<CommentListWight> {
                                 ),
                               ],
                             ),
-
                             // desc 子评论容器
-                            Container(
-                              width: 340,
-                              color: Colors.black12,
-                              margin:EdgeInsets.only(top: 10),
-                              padding: EdgeInsets.all(10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  RichText(
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                    text: TextSpan(
-                                        text: "二级回复人",
-                                        style: TextStyle(color: Colors.blue,fontSize: 14.0),
-                                        children: [
-                                          TextSpan(
-                                            text: "：二级回复内容",
-                                            style: TextStyle(color: Theme.of(context).textTheme.display1.color,fontSize: 14.0),
-                                          )
-                                        ]
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
+                            if(commentListModel.list[i].children.length>0)
+                              chidrenComment(commentListModel.list[i])
                           ],
                         )
                       ],
@@ -154,6 +131,29 @@ class _State extends State<CommentListWight> {
     );
   }
 
+  childComment(Comment comment){
+    return RichText(
+      maxLines: 3,
+      overflow: TextOverflow.ellipsis,
+      text: TextSpan(
+          text: "${comment.user.userName}",
+          style: TextStyle(color: Colors.blue,fontSize: 14.0),
+          children: [
+            if(comment.toId > 0)
+              TextSpan(text: " 回复 ",
+                style: TextStyle(color: Theme.of(context).textTheme.display1.color,fontSize: 14.0),
+                children: [
+                  TextSpan(text: "${comment.toId}",style: TextStyle(color: Colors.blue,fontSize: 14.0),)
+                ]
+              ),
+            TextSpan(
+              text: "：${comment.content}",
+              style: TextStyle(color: Theme.of(context).textTheme.display1.color,fontSize: 14.0),
+            )
+          ]
+      ),
+    );
+  }
 
   commentListBuilder(Article circle){
 
@@ -252,4 +252,35 @@ class _State extends State<CommentListWight> {
   }
 
   t11(str) => Text(str,style: TextStyle(fontSize: 12,),);
+
+  chidrenComment(Comment comment) {
+    return InkWell(
+      onTap: (){
+        showToast("应跳转到二级评论详情页");
+      },
+      child: Container(
+        width: 340,
+        color: Colors.black12,
+        margin:EdgeInsets.only(top: 10),
+        padding: EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ...comment.children.map((comment){
+              return childComment(comment);
+            }),
+            if(comment.children.length>3)
+              Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: InkWell(
+                  onTap: (){ showToast(comment.cid.toString()); },
+                  child: Text("更多回复",
+                    style: TextStyle(color: Colors.blue,fontSize: 14.0),),
+                ),
+              )
+          ],
+        ),
+      ),
+    );
+  }
 }

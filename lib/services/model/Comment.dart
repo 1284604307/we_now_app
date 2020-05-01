@@ -12,10 +12,11 @@ class Comment{
   int pid;
   int circleId;
   String content;
-  DateTime createDate;
+  DateTime createTime;
   int fromId;
   int toId;
   int likeCount;
+  List<Comment> children;
   User user;
 
   Comment();
