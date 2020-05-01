@@ -137,7 +137,7 @@ Widget talkWidget(context, count, Article circle) {
                                   color: Theme.of(context).primaryColorDark,
                                 ),
                                 Text(
-                                  "${circle.commentCount}",//likeCount
+                                  " ${circle.commentCount}",//likeCount
                                   style: TextStyle(
                                     color: Theme.of(context).hintColor,
                                   ),
@@ -154,7 +154,6 @@ Widget talkWidget(context, count, Article circle) {
                         padding: EdgeInsets.all(5.0),
                         child: InkWell(
                           onTap: () {
-                            showToast("展示就对咯");
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -173,7 +172,7 @@ Widget talkWidget(context, count, Article circle) {
                                     ArticleFavouriteWidget(circle, uniqueKey),
                               ),
                               Text(//likeCount
-                                "${circle.likeCount}",
+                                " ${circle.likeCount}",
                                 style: TextStyle(
                                   color: Theme.of(context).hintColor,
                                 ),

@@ -2,7 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:flutter_app2/services/model/Article.dart';
 import 'package:flutter_app2/services/model/Banner.dart';
-import 'package:flutter_app2/services/net/api.dart';
+import 'package:flutter_app2/services/model/Comment.dart';
 
 import 'real_api.dart';
 
@@ -70,15 +70,15 @@ class RestfulApi {
   }
 
 
-  static Future fetchfirstcomment(pageNum) async{
-    var response = await http.get('/public/circle/comments/1/1');
-    return response.data.map<Article>((item) => Article.fromJson(item)).toList();
+  static Future fetchArticleComment(articleId,{pageNum=0}) async{
+    var response = await http.get('/public/circle/comments/$articleId/$pageNum');
+    return response.data.map<Comment>((item) => Comment.fromJson(item)).toList();
   }
 
-  
-  static Future fetchsecondcomment(pageNum) async{
-    var response = await http.get('/public/circle/commentChildren/1/1');
-    return response.data.map<Article>((item) => Article.fromJson(item)).toList();
+
+  static Future fetchChildrenComment(commentId,{pageNum=0}) async{
+    var response = await http.get('/public/circle/commentChildren/$commentId/$pageNum');
+    return response.data.map<Comment>((item) => Comment.fromJson(item)).toList();
   }
 
 

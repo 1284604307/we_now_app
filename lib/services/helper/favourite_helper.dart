@@ -28,7 +28,7 @@ addFavourites(BuildContext context,
         var success = await Navigator.pushNamed(context, RouteName.login);
         print(success);
         if (success ?? false) {
-          //登录后,判断是否已经收藏
+//          登录后,判断是否已经收藏
 //          if (!Provider.of<UserModel>(context, listen: false)
 //              .user
 //              .collectIds

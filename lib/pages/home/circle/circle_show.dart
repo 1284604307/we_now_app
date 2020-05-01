@@ -9,6 +9,8 @@ import 'package:flutter_app2/pages/wights/GridViewNithWight.dart';
 import 'package:flutter_app2/pages/wights/avatar.dart';
 import 'package:flutter_app2/services/config/resource_mananger.dart';
 import 'package:flutter_app2/services/model/Article.dart';
+import 'package:flutter_app2/services/model/viewModel/comment_model.dart';
+import 'package:flutter_app2/services/provider/provider_widget.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -138,7 +140,14 @@ class _state extends State<ShowCircle>
                         child: Builder(
                           builder: (BuildContext context) {
                             switch(name){
-                              case "评论": return CommentListWight(name);
+                              case "评论":
+                                return ProviderWidget<CommentListModel>(
+                                  model: CommentListModel(_article.id),
+                                  builder: (BuildContext context, CommentListModel model, Widget child) {
+                                    return CommentListWight(name,model);
+                                  },
+                                  onModelReady: (model){model.loadMore();},
+                              );
                               case "点赞": return Container(child:Text("点赞啦"));
                               default: return Container(child: Text("页面不存在！"),);
                             }

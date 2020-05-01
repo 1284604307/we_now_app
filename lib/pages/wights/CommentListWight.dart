@@ -2,7 +2,9 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app2/services/config/resource_mananger.dart';
+import 'package:flutter_app2/services/model/viewModel/comment_model.dart';
 import 'package:flutter_app2/services/net/restful_go.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_app2/services/model/Article.dart';
 
@@ -15,17 +17,20 @@ import 'avatar.dart';
 class CommentListWight extends StatefulWidget {
 
   String keyName;
-  CommentListWight(this.keyName);
+  CommentListModel commentListModel;
+  CommentListWight(this.keyName,this.commentListModel);
 
   @override
-  _State createState() => _State(keyName);
+  _State createState() => _State(keyName,commentListModel);
 
 }
 
 class _State extends State<CommentListWight> {
 
   String keyName;
-  _State(this.keyName);
+  CommentListModel commentListModel;
+  _State(this.keyName, this.commentListModel);
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +42,7 @@ class _State extends State<CommentListWight> {
         footer: ClassicFooter(),
         onRefresh: (){BotToast.showText(text: "太难了");},
         onLoading: (){
-          RestfulApi.fetchfirstcomment(0);
+          commentListModel.loadMore();
           BotToast.showText(text: "拉到底了！");
         },
         child:
@@ -62,20 +67,21 @@ class _State extends State<CommentListWight> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
+                            // desc 当前评论部分
                             Container(
                               child: Text(
-                                "回复人",
+                                "${commentListModel.list[i].user.userName}",
                                 style: TextStyle(fontSize: 14,color: Theme.of(context).hintColor,fontWeight: FontWeight.w400),),
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 2),
                               child: Text(
-                                "4-24",
+                                "${commentListModel.list[i].user.createTime}",
                                 style: TextStyle(fontSize: 12,color: Theme.of(context).hintColor),),
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 5,bottom: 5),
-                              child: Text("回复内容！",style: TextStyle(fontSize: 14),),
+                              child: Text("${commentListModel.list[i].content}",style: TextStyle(fontSize: 14),),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -101,6 +107,8 @@ class _State extends State<CommentListWight> {
                                 ),
                               ],
                             ),
+
+                            // desc 子评论容器
                             Container(
                               width: 340,
                               color: Colors.black12,
@@ -109,7 +117,6 @@ class _State extends State<CommentListWight> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  // desc 子评论
                                   RichText(
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
@@ -123,7 +130,7 @@ class _State extends State<CommentListWight> {
                                           )
                                         ]
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             )
@@ -136,7 +143,7 @@ class _State extends State<CommentListWight> {
                     ),
                   );
                 },
-                childCount: 10,
+                childCount: commentListModel.list.length,
               ),
             ),
             SliverToBoxAdapter(
