@@ -56,3 +56,46 @@ addFavourites(BuildContext context,
     }
   }
 }
+
+
+addLike(BuildContext context,
+    {Article circle,
+      LikeModel model,
+      Object tag: 'addFavourite',
+      bool playAnim: true}) async {
+  Map res = await model.like(circle);
+  if (model.isError) {
+    if (model.viewStateError.isUnauthorized) {
+      if (await DialogHelper.showLoginDialog(context)) {
+        var success = await Navigator.pushNamed(context, RouteName.login);
+        print(success);
+        if (success ?? false) {
+//          登录后,判断是否已经收藏
+//          if (!Provider.of<UserModel>(context, listen: false)
+//              .user
+//              .collectIds
+//              .contains(article.id)) {
+//            addFavourites(context, circle: circle, model: model, tag: tag);
+//          }
+
+        }
+      }
+    } else {
+      model.showErrorMessage(context);
+    }
+  } else {
+//    if (playAnim) {
+//      ///接口调用成功播放动画
+//      Navigator.push(
+//          context,
+//          HeroDialogRoute(
+//              builder: (_) => FavouriteAnimationWidget(
+//                tag: tag,
+//                add: circle.like,
+//              )
+//          )
+//      );
+//    }
+  }
+  return res;
+}

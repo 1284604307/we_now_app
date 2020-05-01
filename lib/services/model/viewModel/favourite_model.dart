@@ -28,7 +28,7 @@ class CollectCircleListModel extends ViewStateRefreshListModel<Article> {
 
 }
 
-/// 收藏/取消收藏
+/// 点赞/取消点赞
 class FavouriteModel extends ViewStateModel {
   GlobalFavouriteStateModel globalFavouriteModel;
 
@@ -38,15 +38,15 @@ class FavouriteModel extends ViewStateModel {
     setBusy();
     try {
       // article.collect 字段为null,代表是从我的收藏页面进入的 需要调用特殊的取消接口
-      if (circle.collect == null) {
-        await RestfulApi.unCollectCircle(circle.id);
+      if (circle.like == null) {
+        await RestfulApi.likeCircle(circle.id);
         globalFavouriteModel.removeFavourite(circle.id);
       } else {
-        if (circle.collect) {
-          await RestfulApi.unCollectCircle(circle.id);
+        if (circle.like) {
+          await RestfulApi.unLikeCircle(circle.id);
           globalFavouriteModel.removeFavourite(circle.id);
         } else {
-          await RestfulApi.collectCircle(circle.id);
+          await RestfulApi.likeCircle(circle.id);
           globalFavouriteModel.addFavourite(circle.id);
         }
       }
@@ -105,4 +105,30 @@ class GlobalFavouriteStateModel extends ChangeNotifier {
   operator [](int id) {
     return _map[id];
   }
+}
+
+/// 点赞/取消点赞
+class LikeModel extends ViewStateModel {
+
+  Article article;
+
+  LikeModel(this.article);
+
+  like(Article circle) async {
+    setBusy();
+    try {
+      var count;
+      if (circle.like) {
+        count = await RestfulApi.unLikeCircle(circle.id);
+      } else {
+        count = await RestfulApi.likeCircle(circle.id);
+      }
+      circle.likeCount = count;
+      circle.like = !(circle.like ?? true);
+      setIdle();
+    } catch (e, s) {
+      setError(e, s);
+    }
+  }
+
 }

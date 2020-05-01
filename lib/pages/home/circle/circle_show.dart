@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
 import 'package:flutter_app2/pages/wights/CommentListWight.dart';
 import 'package:flutter_app2/pages/wights/GridViewNithWight.dart';
+import 'package:flutter_app2/pages/wights/LittleWidgets.dart';
 import 'package:flutter_app2/pages/wights/avatar.dart';
 import 'package:flutter_app2/services/config/resource_mananger.dart';
 import 'package:flutter_app2/services/model/Article.dart';
@@ -167,6 +168,7 @@ class _state extends State<ShowCircle>
 
 
   bottomWidget(){
+    UniqueKey uniqueKey = UniqueKey();
     return
       Container(
         height: 40,
@@ -222,16 +224,10 @@ class _state extends State<ShowCircle>
             Expanded(
               child: Container(
                 alignment: Alignment.center,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(right: 12),
-                      child: Icon(Icons.thumb_up,color: Colors.black12,),
-                    ),
-                    Text("点赞")
-                  ],
-                ),
+                child:  ArticleLikeWidget(
+                          _article,
+                          uniqueKey
+                        ),
               ),
             ),
           ],

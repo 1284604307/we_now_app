@@ -86,11 +86,23 @@ class RestfulApi {
 
   }
 
-  static unCollectCircle(id) {
-    throw Exception("你个鬼子！");
+  static unCollectCircle(articleId) async {
+    var response = await http.put('/article/unCollect/$articleId');
+
   }
 
-  static collectCircle(id) {
-    throw Exception("也没干啥，就是想抛出个错误，告诉你你甭想收藏我，嘻嘻嘻");
+  static collectCircle(articleId) async {
+    var response = await http.put('/article/collect/$articleId');
+    print(response);
+  }
+
+  static unLikeCircle(articleId) async {
+    var response = await http.put('/article/unlike/$articleId');
+    return response.data;
+  }
+
+  static likeCircle(articleId) async {
+    var response = await http.put('/article/like/$articleId');
+    return response.data;
   }
 }

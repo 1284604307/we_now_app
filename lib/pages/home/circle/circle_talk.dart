@@ -152,34 +152,9 @@ Widget talkWidget(context, count, Article circle) {
                     Expanded(
                       child: Container(
                         padding: EdgeInsets.all(5.0),
-                        child: InkWell(
-                          onTap: () {
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Consumer<GlobalFavouriteStateModel>(
-                                builder: (context, model, child) {
-                                  //利用child局部刷新
-                                  if (model[circle.id] == null) {
-                                    return child;
-                                  }
-                                  return ArticleFavouriteWidget(
-                                      circle..collect = model[circle.id],
-                                      uniqueKey);
-                                },
-                                child:
-                                    ArticleFavouriteWidget(circle, uniqueKey),
-                              ),
-                              Text(//likeCount
-                                " ${circle.likeCount}",
-                                style: TextStyle(
-                                  color: Theme.of(context).hintColor,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                        child:  ArticleLikeWidget(
+                            circle,
+                            uniqueKey),
                       ),
                       flex: 1,
                     ),
