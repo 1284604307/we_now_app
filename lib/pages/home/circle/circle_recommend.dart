@@ -92,7 +92,7 @@ class _State extends State<CircleRecommend> with AutomaticKeepAliveClientMixin {
                              * */
                             Container(
                               height: 82,
-                              width: cardWidth - cardWidth / 10 ,
+                              width: cardWidth - (cardWidth / 5) - 10 ,
                               child: new ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemBuilder: (BuildContext context, int index) {

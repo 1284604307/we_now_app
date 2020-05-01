@@ -9,6 +9,7 @@ import 'home/circle/circle_page.dart';
 import 'home/home/index.dart';
 import 'home/index/home_page.dart';
 import 'home/my_page/my_page.dart';
+import 'package:flutter_app2/pages/maps/other.dart';
 
 class App extends StatefulWidget{
   @override
@@ -31,7 +32,7 @@ class AppState extends State<App>{
 
     final pageController = PageController();
     final pages = [Home(),HomePage(), CirclePage(), MessagePage(),MyPage()];
-
+//HomePage(测试页)/SelectLocationFromMapPage(导航测试页)
 
     void onTap(int index) {
       pageController.jumpToPage(index);
