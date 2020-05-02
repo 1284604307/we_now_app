@@ -32,6 +32,7 @@ class User with ChangeNotifier{
   var phonenumber;
   // 性别
   var sex;
+  var schoolId;
   User();
 
   static getUser(){

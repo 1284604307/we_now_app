@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'question.dart';
-import 'question_page.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
 
 class Hot extends StatefulWidget{
@@ -23,7 +21,7 @@ class HotState extends State<Hot>{
           onPressed: (){
             Navigator.of(context).push(new MaterialPageRoute(
                 builder: (context) {
-                  return new QuestionPage();
+                  return Container();
                 }
             ));
           },
@@ -113,14 +111,22 @@ class HotState extends State<Hot>{
             new Container(
               margin: const EdgeInsets.only(top: 5.0),
             ),
-            hotCard(questionList[0]),
-            hotCard(questionList[1]),
-            hotCard(questionList[2]),
-            hotCard(questionList[3]),
-            hotCard(questionList[4]),
+            hotCard(new Question()),
           ],
         ),
       )
     );
   }
+}
+
+class Question {
+  String order;
+
+  var rise;
+
+  String title;
+  var imgUrl;
+  var hotNum;
+  var mark;
+
 }

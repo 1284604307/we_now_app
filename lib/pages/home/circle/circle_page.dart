@@ -1,9 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
-import 'package:flutter_app2/pages/home/index/follow.dart';
 import 'package:flutter_app2/pages/home/index/hot.dart';
-import 'package:flutter_app2/pages/home/index/recommend.dart';
+import 'package:flutter_app2/services/config/router_manger.dart';
+import 'package:flutter_app2/services/helper/dialog_helper.dart';
+import 'package:flutter_app2/services/model/viewModel/user_model.dart';
 import 'package:provider/provider.dart';
 
 import 'circle_recommend.dart';
@@ -79,12 +80,17 @@ class CirclePageState extends State<CirclePage> with AutomaticKeepAliveClientMix
                       child: Center(
                         child: IconButton(
                           icon: Icon(Icons.add,size: 30,color: Colors.white,),
-                          onPressed: () {
-                            Navigator.push(context,new MaterialPageRoute(
-                                builder: (context) {
-                                  return new CreateCirclePage();
-                                }
-                            ));
+                          onPressed: () async {
+                            if(Provider.of<UserModel>(context,listen: false).hasUser){
+                              Navigator.push(context,new MaterialPageRoute(
+                                  builder: (context) {
+                                    return new CreateCirclePage();
+                                  }
+                              ));
+                            }else{
+                              if(await DialogHelper.showLoginDialog(context))
+                                Navigator.pushNamed(context, RouteName.login);
+                            }
                           },
                         ),
                       ),

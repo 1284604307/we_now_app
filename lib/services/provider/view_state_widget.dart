@@ -66,7 +66,7 @@ class ViewStateWidget extends StatelessWidget {
         Center(
           child: ViewStateButton(
             child: buttonText,
-            textData: buttonTextData,
+            textData: buttonText==null?buttonTextData:null,
             onPressed: onPressed,
           ),
         ),
@@ -169,7 +169,6 @@ class ViewStateEmptyWidget extends StatelessWidget {
   }
 }
 
-
 /// 页面未授权
 class ViewStateUnAuthWidget extends StatelessWidget {
   final String message;
@@ -214,6 +213,37 @@ class ViewStateUnAuthImage extends StatelessWidget {
     );
   }
 }
+
+
+/// 用户未绑定学校
+class ViewStateNoSchoolInfoWidget extends StatelessWidget {
+  final String message;
+  final Widget image;
+  final Widget buttonText;
+  final VoidCallback onPressed;
+
+  const ViewStateNoSchoolInfoWidget(
+      {Key key,
+        this.image,
+        this.message,
+        this.buttonText,
+        @required this.onPressed})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ViewStateWidget(
+      onPressed:this.onPressed,
+      image: image ?? Padding(
+        padding: EdgeInsets.only(right: 15),
+        child: const Icon(IconFonts.pageEmpty, size: 100, color: Colors.grey),
+      ),
+      title: message ?? S.of(context).viewStateMessageNoSchool,
+      buttonTextData: S.of(context).viewStateMessageNoSchool,
+    );
+  }
+}
+
 
 /// 公用Button
 class ViewStateButton extends StatelessWidget {

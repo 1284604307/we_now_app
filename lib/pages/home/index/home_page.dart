@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
-import 'follow.dart';
-import 'recommend.dart';
 import 'hot.dart';
 import 'search_page.dart';
-import 'ask_page.dart';
-
 class HomePage extends StatefulWidget{
 
 
@@ -59,7 +55,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                   onPressed: (){
                     Navigator.of(context).push(new MaterialPageRoute(
                         builder: (context) {
-                          return new AskPage();
+                          return null;//new AskPage();
                         }
                     ));
                   },
@@ -97,8 +93,8 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   ];
   /// 统一管理导航项目对应的组件列表。
   final _widgetOptions = [
-    new Follow(),
-    new Recommend(),
+    new Container(),
+    new Container(),
     new Hot()
   ];
 

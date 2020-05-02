@@ -83,6 +83,15 @@ class S {
     );
   }
 
+  String get viewStateMessageNoSchool {
+    return Intl.message(
+      'Unbound School',
+      name: 'viewStateMessageNoSchool',
+      desc: '',
+      args: [],
+    );
+  }
+
   String get viewStateMessageUnAuth {
     return Intl.message(
       'Not sign in yet',

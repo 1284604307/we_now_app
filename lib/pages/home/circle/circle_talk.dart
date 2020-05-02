@@ -19,6 +19,7 @@ import 'package:flutter_app2/pages/wights/ClickableImage.dart';
 import 'package:flutter_app2/pages/wights/avatar.dart';
 import 'package:flutter_app2/pages/wights/show_image.dart';
 import 'package:flutter_app2/services/model/viewModel/favourite_model.dart';
+import 'package:flutter_app2/services/net/restful_go.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
@@ -293,7 +294,7 @@ class _State extends State<CreateCirclePage>
   }
 
   void publish() async {
-    List<String> url = [];
+    List<String> urls = [];
     // desc 有图片先上传
     if (asserts.length > 0) {
       BotToast.showText(text: "上传图片");
@@ -310,20 +311,18 @@ class _State extends State<CreateCirclePage>
         print("第 $i 次 发送");
         data.files.add(MapEntry("files", multipartFile));
       }
-      var res = await Api.getDio().post("/user/upload/files", data: data);
-      print(res);
-      AjaxResult ajaxResult = AjaxResult.fromJson(res.data);
-      if (ajaxResult.code == 0) {
-        url = List<String>.from(ajaxResult.data);
-      }
-      ;
+      urls = await RestfulApi.uploadImages(data);
     }
     var n = Article();
     n.content = Api.newCircleEntity.content;
-    n.url = url;
+    n.url = urls;
     BotToast.showText(text: "上传动态");
-    var res = await Api.getDio().post("/public/user/circle/", data: n);
+    FormData data = new FormData();
+    data.fields.add(MapEntry("content",Api.newCircleEntity.content));
+    data.fields.add(MapEntry("url",urls.toString()));
+    var res = await RestfulApi.postNewCircle(data);
     print(res);
+
   }
 
   Widget selectNewImage() {

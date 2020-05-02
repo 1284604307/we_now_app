@@ -1,12 +1,10 @@
-import 'package:bot_toast/bot_toast.dart';
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app2/common/Api.dart';
-import 'package:flutter_app2/pages/app.dart';
-import 'package:flutter_app2/pages/global/global_config.dart';
 import 'package:flutter_app2/pages/home/circle/test.dart';
 import 'package:flutter_app2/pages/wights/article_list_Item.dart';
 import 'package:flutter_app2/pages/wights/article_skeleton.dart';
@@ -14,6 +12,7 @@ import 'package:flutter_app2/pages/wights/page_route_anim.dart';
 import 'package:flutter_app2/pages/wights/skeleton.dart';
 import 'package:flutter_app2/services/helper/refresh_helper.dart';
 import 'package:flutter_app2/services/model/Article.dart';
+import 'package:flutter_app2/services/model/Topic.dart';
 import 'package:flutter_app2/services/model/viewModel/home_model.dart';
 import 'package:flutter_app2/services/model/viewModel/scroll_controller_model.dart';
 import 'package:flutter_app2/services/provider/provider_widget.dart';
@@ -29,8 +28,6 @@ class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
   State createState() => _State();
 }
-
-
 
 class _State extends State<Home> with AutomaticKeepAliveClientMixin {
   //轮播图
@@ -93,14 +90,8 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  List<String> imgList = [
-    "https://www.itying.com/images/flutter/1.png",
-    "https://www.itying.com/images/flutter/2.png",
-    "https://www.itying.com/images/flutter/3.png",
-    "https://www.itying.com/images/flutter/4.png"
-  ];
-
-  Widget GoodArticleView(){
+  // desc 热门动态
+  Widget GoodArticleView(List<Article> circles){
     return Column(
       children: <Widget>[
         Container(
@@ -127,45 +118,47 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                 margin: EdgeInsets.all(10),
                 child: Stack(
                   children: <Widget>[
-                    ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      child: Container(
-                        width: 200,
-                        decoration: BoxDecoration(
-                          border: new Border.all(color: Color.fromRGBO(0, 0, 0, 0.08), width: 0.5), // 边色与边宽度
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              width: 200,
-                              height: 100,
-                              color: Colors.redAccent[100*index%200+100],
-                              child:  CachedNetworkImage(
-                                imageUrl: imgList[index%4],fit: BoxFit.fill,),
-                            ),
-                            Container(
-                              margin: EdgeInsets.all(5),
-                              child: Center(
-                                child: Text("穷尽一生，寻找一个梦的终点. 来吧，一起去寻找！",maxLines: 2,textAlign: TextAlign.center,),
-                              ),
-                            )
-                          ],
-                        ),
+                    Container(
+                      width: 200,
+                      decoration: BoxDecoration(
+                        border: new Border.all(color: Colors.grey, width: 0.5), // 边色与边宽度
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
                       ),
-                    ),
+                      child: Column(
+                        children: <Widget>[
+                          ClipRRect(
+                            borderRadius: BorderRadius.only(topLeft:Radius.circular(5),topRight:Radius.circular(5)),
+                            child: Container(
+                                width: 200,
+                                height: 100,
+                                color: Colors.grey[400],
+                                child:  CachedNetworkImage(
+                                  fit: BoxFit.fill,
+                                  imageUrl: "${circles[index].envelopePic}",
+                                )
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.all(5),
+                            child: Center(
+                              child: Text("${circles[index].content}",maxLines: 2,textAlign: TextAlign.center,),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
                   ],
                 ),
               );
             },
-            itemCount: imgList.length,
+            itemCount: circles.length,
           ),
         )
       ],
     );
   }
 
-  Widget NiceSayTop5(){
+  Widget NiceSayTop5(List<Topic> topics){
     return Column(
       children: <Widget>[
         Container(
@@ -189,7 +182,7 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
           ),
         ),
         Container(
-          height: 200,
+          height: 180,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
@@ -200,7 +193,6 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                     ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       child: Container(
-                        width: 150,
                         decoration: BoxDecoration(
                           border: new Border.all(color: Color.fromRGBO(0, 0, 0, 0.08), width: 0.5), // 边色与边宽度
                           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -208,10 +200,9 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                         child: Column(
                           children: <Widget>[
                             Container(
-                              width: 150,
-                              height: 150,
+                              height: 159,
                               color: Colors.redAccent[100*index%200+100],
-                              child: CachedNetworkImage(imageUrl: imgList[index%4],fit: BoxFit.fill,),
+                              child: CachedNetworkImage(imageUrl: topics[index].url,fit: BoxFit.cover,),
                             ),
                           ],
                         ),
@@ -221,7 +212,7 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                 ),
               );
             },
-            itemCount: imgList.length,
+            itemCount: topics.length,
           ),
         )
       ],
@@ -297,8 +288,9 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                           SliverToBoxAdapter(
                             child: Column(
                               children: <Widget>[
-                                GoodArticleView(),
-                                NiceSayTop5(),
+                                GoodArticleView(homeModel.hotsArticles),
+                                if(homeModel.topics!=null)
+                                NiceSayTop5(homeModel.topics),
                               ],
                             ),
                           ),

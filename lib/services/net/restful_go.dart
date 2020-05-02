@@ -5,6 +5,7 @@ import 'package:flutter_app2/services/helper/dialog_helper.dart';
 import 'package:flutter_app2/services/model/Article.dart';
 import 'package:flutter_app2/services/model/Banner.dart';
 import 'package:flutter_app2/services/model/Comment.dart';
+import 'package:flutter_app2/services/model/Topic.dart';
 import 'package:flutter_app2/services/net/api.dart';
 import 'package:flutter_app2/services/provider/view_state.dart';
 import 'package:oktoast/oktoast.dart';
@@ -39,6 +40,17 @@ class RestfulApi {
     return http.get("/logout");
   }
 
+  static Future uploadImages(FormData data) async{
+    await Future.delayed(Duration(seconds: 1)); //增加动效
+    var response =  await http.post("/user/upload/files", data: data);
+    return List<String>.from(response.data);
+  }
+
+  static Future postNewCircle(FormData data)async{
+    var res = await http.post("/public/circle/", data: data);
+    return res;
+  }
+
   // desc 获取首页轮播图
   static Future fetchBanners() async{
     var response = await http.get('/public/banner');
@@ -64,15 +76,13 @@ class RestfulApi {
     return response.data.map<Article>((item) => Article.fromJson(item)).toList();
   }
 
-  static Future fetchSchoolCircles(pageNum) async{
-
-    var response = await http.get('/public/circle/school');
-
+  static Future fetchRecommendCircles(pageNum) async{
+    var response = await http.get('/public/circle/hots/$pageNum');
     return response.data.map<Article>((item) => Article.fromJson(item)).toList();
   }
 
-  static Future fetchRecommendCircles(pageNum) async{
-    var response = await http.get('/public/circle/school');
+  static Future fetchSchoolCircles(pageNum) async{
+    var response = await http.get('/public/circle/school/$pageNum');
     return response.data.map<Article>((item) => Article.fromJson(item)).toList();
   }
 
@@ -100,7 +110,6 @@ class RestfulApi {
 
   static collectCircle(articleId) async {
     var response = await http.put('/article/collect/$articleId');
-    print(response);
   }
 
   static unLikeCircle(articleId) async {
@@ -130,5 +139,16 @@ class RestfulApi {
       return res;
   }
 
+  // desc 首页 每日话题
+  static Future fetchNiceTopics() async{
+    var response = await http.get('/public/topic/nice');
+    return response.data.map<Topic>((item) => Topic.fromJson(item)).toList();
+  }
+
+  // desc 首页 每日热门动态
+  static Future fetchPopularCircle() async{
+    var response = await http.get('/public/circle/popular');
+    return response.data.map<Article>((item) => Article.fromJson(item)).toList();
+  }
 
 }

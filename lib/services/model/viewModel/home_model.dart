@@ -1,4 +1,5 @@
 import 'package:flutter_app2/services/config/storage_manager.dart';
+import 'package:flutter_app2/services/model/Topic.dart';
 import 'package:flutter_app2/services/net/restful_go.dart';
 import 'package:flutter_app2/services/provider/view_state_refresh_list_model.dart';
 
@@ -10,18 +11,24 @@ class HomeModel extends ViewStateRefreshListModel {
 
   List<Banner> _banners;
   List<Article> _topArticles;
+  List<Article> _hotsArticles;
 
   // desc 热门状态
   List<Article> _circles;
   // desc 每日话题
-  List<Object> _topics;
+  List<Topic> _topics;
 
   List<Banner> get banners => _banners;
 
   List<Article> get topArticles => _topArticles;
 
+  List<Article> get hotsArticles => _hotsArticles;
+
+  List<Topic> get topics => _topics;
+
   HomeModel(){
     List banners = StorageManager.localStorage.getItem(we_now_banners);
+
 //    if(banners!=null){
 //      banners.forEach((banner){
 //        print(banner);
@@ -36,6 +43,8 @@ class HomeModel extends ViewStateRefreshListModel {
     if (pageNum == ViewStateRefreshListModel.pageNumFirst) {
       futures.add(RestfulApi.fetchBanners());
       futures.add(RestfulApi.fetchTopArticles());
+      futures.add(RestfulApi.fetchNiceTopics());
+      futures.add(RestfulApi.fetchPopularCircle());
     }
     futures.add(RestfulApi.fetchArticles(pageNum));
 
@@ -44,12 +53,10 @@ class HomeModel extends ViewStateRefreshListModel {
       List<Banner> banners = result[0];
       if(banners.length>0) StorageManager.localStorage.setItem(we_now_banners,banners);
       _banners = banners;
-      banners.forEach((banner){
-        print(banner.toJson());
-        print("\n\n\n");
-      });
       _topArticles = result[1];
-      return result[2];
+      _topics = result[2];
+      _hotsArticles = result[3];
+      return result[4];
     } else {
       return result[0];
     }
