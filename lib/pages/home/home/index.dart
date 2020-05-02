@@ -288,6 +288,7 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                           SliverToBoxAdapter(
                             child: Column(
                               children: <Widget>[
+                                if(homeModel.hotsArticles!=null)
                                 GoodArticleView(homeModel.hotsArticles),
                                 if(homeModel.topics!=null)
                                 NiceSayTop5(homeModel.topics),
