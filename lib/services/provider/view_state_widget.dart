@@ -157,11 +157,14 @@ class ViewStateEmptyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewStateWidget(
-      onPressed: this.onPressed,
-      image: image ??const Icon(IconFonts.pageEmpty, size: 100, color: Colors.grey),
-      title: message ?? "空数据",//S.of(context).viewStateMessageEmpty,
-      buttonText: buttonText,
-      buttonTextData: "重载"//S.of(context).viewStateButtonRefresh,
+          onPressed:this.onPressed,
+          image: image ?? Padding(
+            padding: EdgeInsets.only(right: 15),
+            child: const Icon(IconFonts.pageEmpty, size: 100, color: Colors.grey),
+          ),
+          title: message ?? S.of(context).viewStateMessageEmpty,
+          buttonText: buttonText,
+          buttonTextData: S.of(context).viewStateButtonRefresh,
     );
   }
 }

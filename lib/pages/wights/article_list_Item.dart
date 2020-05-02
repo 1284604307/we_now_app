@@ -7,6 +7,8 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:provider/provider.dart';
 import 'package:quiver/strings.dart';
 
+import 'image.dart';
+
 
 class ArticleItemWidget extends StatelessWidget {
   final Article article;
@@ -25,6 +27,7 @@ class ArticleItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(article.toJson());
     var backgroundColor = Theme.of(context).scaffoldBackgroundColor;
     /// 用于Hero动画的标记
     UniqueKey uniqueKey = UniqueKey();
@@ -54,17 +57,17 @@ class ArticleItemWidget extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       ClipOval(
-//                        child: WrapperImage(
-//                          imageType: ImageType.random,
-//                          url: article.author,
-//                          height: 20,
-//                          width: 20,
-//                        ),
+                        child: WrapperImage(
+                          imageType: ImageType.random,
+                          url: "article.user.avatar",
+                          height: 20,
+                          width: 20,
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 5),
                         child: Text(
-                          article.user==null ? '匿名用户' : article.user.userName ?? '匿名用户',
+                          article.user==null ? '迭名' : "${article.user.userName}" ?? '迭名',
                           style: Theme.of(context).textTheme.caption,
                         ),
                       ),
@@ -75,7 +78,7 @@ class ArticleItemWidget extends StatelessWidget {
                           style: Theme.of(context).textTheme.caption),
                     ],
                   ),
-                  if (article.envelopePic.isEmpty)
+                  if (article.envelopePic==null||article.envelopePic.isEmpty)
                     Padding(
                       padding: EdgeInsets.only(top: 7),
                       child: ArticleTitleWidget(article.title),
@@ -112,10 +115,7 @@ class ArticleItemWidget extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 5),
                         child: Text(
-                          (article.title != null
-                                  ? article.title + ' · '
-                                  : '') +
-                              (article.title ?? ''),
+                          '${article.type} · ${article.title}',
                           style: Theme.of(context).textTheme.overline,
                         ),
                       ),

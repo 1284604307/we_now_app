@@ -12,7 +12,7 @@ Banner _$BannerFromJson(Map<String, dynamic> json) {
     ..title = json['title'] as String
     ..content = json['content'] as String
     ..description = json['description'] as String
-    ..type = json['type'] as int
+    ..type = json['type'] as String
     ..url = json['url'] as String
     ..path = json['path'] as String
     ..articleId = json['articleId']

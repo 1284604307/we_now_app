@@ -13,7 +13,7 @@ class Banner  {
   String title;
   String content;
   String description;
-  int type;
+  String type;
   String url;
   String path;
   var articleId;

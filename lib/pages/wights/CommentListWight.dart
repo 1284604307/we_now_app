@@ -69,6 +69,7 @@ class _State extends State<CommentListWight> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             // desc 当前评论部分
+                            if(commentListModel.list[i].user!=null)
                             Container(
                               child: Text(
                                 "${commentListModel.list[i].user.userName}",
@@ -136,7 +137,7 @@ class _State extends State<CommentListWight> {
       maxLines: 3,
       overflow: TextOverflow.ellipsis,
       text: TextSpan(
-          text: "${comment.user.userName}",
+          text: comment.user!=null?"${comment.user.userName}":"匿名",
           style: TextStyle(color: Colors.blue,fontSize: 14.0),
           children: [
             if(comment.toId > 0)

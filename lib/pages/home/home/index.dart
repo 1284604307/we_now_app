@@ -34,38 +34,61 @@ class Home extends StatefulWidget {
 
 class _State extends State<Home> with AutomaticKeepAliveClientMixin {
   //轮播图
-  Widget _swiperWidget() {
-    List<Map> imgList = [
-      {"url": "https://www.itying.com/images/flutter/1.png"},
-      {"url": "https://www.itying.com/images/flutter/2.png"},
-      {"url": "https://www.itying.com/images/flutter/3.png"},
-      {"url": "https://www.itying.com/images/flutter/4.png"}
-    ];
+  Widget _swiperWidget(HomeModel model) {
+    if(model.banners==null) return Container();
     return Container(
       height: 180,
-      child: AspectRatio(
-        aspectRatio: 21 / 9,
-        child: Swiper(
-          autoplay: false,
-          autoplayDelay:6500,
-          autoplayDisableOnInteraction: true,
-          viewportFraction: 1,
-          scale: 0.8,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              margin: EdgeInsets.all(5),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child:  CachedNetworkImage(
-                  imageUrl: imgList[index]["url"],
-                  fit: BoxFit.fill,
-                )
-              ),
-            );
-          },
-          itemCount: imgList.length,
-          pagination: new SwiperPagination(),
-        ),
+      child: Stack(
+        children: <Widget>[
+          AspectRatio(
+            aspectRatio: 21 / 9,
+            child: Swiper(
+              autoplay: false,
+              autoplayDelay:6500,
+              autoplayDisableOnInteraction: true,
+              viewportFraction: 1,
+              scale: 0.8,
+              itemBuilder: (BuildContext context, int index) {
+                return
+                    Container(
+                      margin: EdgeInsets.all(5),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child:  Stack(
+                            children: <Widget>[
+                              CachedNetworkImage(
+                                width: double.infinity,
+                                imageUrl: model.banners[index].url,
+                                fit: BoxFit.fill,
+                              ),
+                              Positioned(
+                                top: 0,
+                                child: Container(
+                                  padding: EdgeInsets.only(left: 10,right: 10),
+                                  color: Colors.grey,
+                                  child: Text("${model.banners[index].title}"),
+                                ),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                child: Container(
+                                  padding: EdgeInsets.only(left: 10,right: 10),
+                                  color: Colors.grey,
+                                  child: Text(
+                                    "${model.banners[index].content}",
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                      ),
+                    );
+              },
+              itemCount: model.banners.length,
+              pagination: new SwiperPagination(),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -90,7 +113,7 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
               ),),
               Text("   优秀原创",style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.black12
+                color: Colors.grey
               ),)
             ],
           ),
@@ -153,12 +176,13 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                   fontWeight: FontWeight.bold,
                   fontSize: 20
               ),),
-              Text(" 原创  ",style: TextStyle(
+              Text(" 精选  ",style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.black12
+                  color: Colors.grey
               ),),
               Text("TOP 5",style: TextStyle(
                   fontWeight: FontWeight.bold,
+                  color: Colors.grey,
                   fontSize: 12
               ),),
             ],
@@ -266,25 +290,28 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                       child: CustomScrollView(
                         controller: tapToTopModel.scrollController,
                         slivers: <Widget>[
-                          if (homeModel.isEmpty)
-                            SliverToBoxAdapter(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 50),
-                                  child: ViewStateEmptyWidget(
-                                      onPressed: homeModel.initData),
-                                )
-                            ),
-                          if (homeModel.topArticles?.isNotEmpty ?? false)
-                            SliverToBoxAdapter(
+                          SliverToBoxAdapter(
+                            child: _swiperWidget(homeModel),
+                          ),
+//                          if (homeModel.topics?.isNotEmpty ?? false)
+                          SliverToBoxAdapter(
                             child: Column(
                               children: <Widget>[
-                                _swiperWidget(),
                                 GoodArticleView(),
                                 NiceSayTop5(),
                               ],
                             ),
                           ),
                           HomeTopArticleList(),
+                          if (homeModel.isEmpty)
+                            SliverToBoxAdapter(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 50),
+                                  child: ViewStateEmptyWidget(
+                                    message: "未获取到今日文章",
+                                      onPressed: homeModel.initData),
+                                )
+                            ),
                           HomeArticleList(),
                         ],
                       )),

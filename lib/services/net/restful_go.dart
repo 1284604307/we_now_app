@@ -39,6 +39,7 @@ class RestfulApi {
     return http.get("/logout");
   }
 
+  // desc 获取首页轮播图
   static Future fetchBanners() async{
     var response = await http.get('/public/banner');
     return response.data
@@ -128,4 +129,6 @@ class RestfulApi {
       });
       return res;
   }
+
+
 }
