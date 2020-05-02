@@ -62,6 +62,7 @@ class _SelectLocationFromMapPageState extends State<SelectLocationFromMapPage> {
 
   @override
   Widget build(BuildContext context) {
+    LatLng i;
     return Scaffold(
       resizeToAvoidBottomPadding: false, //防止底部布局被顶起
       appBar: AppBar(
@@ -168,6 +169,9 @@ class _SelectLocationFromMapPageState extends State<SelectLocationFromMapPage> {
                       _loadData(latLng);
                     }
                   },
+                  markers: <MarkerOption>[
+                    MarkerOption(latLng: new LatLng(2.5, 2.5))
+                  ],
                   onMapMoveEnd: (MapMove move) async {
                     _loadData(move.latLng);
                   },

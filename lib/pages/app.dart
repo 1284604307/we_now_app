@@ -31,7 +31,7 @@ class AppState extends State<App>{
     DateTime  _willPopTime ;
 
     final pageController = PageController();
-    final pages = [Home(),HomePage(), CirclePage(), MessagePage(),MyPage()];
+    final pages = [Home(),SelectLocationFromMapPage(), CirclePage(), MessagePage(),MyPage()];
 //HomePage(测试页)/SelectLocationFromMapPage(导航测试页)
 
     void onTap(int index) {
