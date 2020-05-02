@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:flutter_app2/services/config/router_manger.dart';
@@ -46,8 +48,9 @@ class RestfulApi {
     return List<String>.from(response.data);
   }
 
-  static Future postNewCircle(FormData data)async{
-    var res = await http.post("/public/circle/", data: data);
+  static Future postNewCircle(data)async{
+    var res = await http.post("/public/circle/", data: json.encode(data));
+
     return res;
   }
 

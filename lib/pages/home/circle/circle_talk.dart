@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -313,14 +314,13 @@ class _State extends State<CreateCirclePage>
       }
       urls = await RestfulApi.uploadImages(data);
     }
-    var n = Article();
-    n.content = Api.newCircleEntity.content;
-    n.url = urls;
-    BotToast.showText(text: "上传动态");
-    FormData data = new FormData();
-    data.fields.add(MapEntry("content",Api.newCircleEntity.content));
-    data.fields.add(MapEntry("url",urls.toString()));
-    var res = await RestfulApi.postNewCircle(data);
+    BotToast.showLoading();
+    BotToast.closeAllLoading();
+    var res = await RestfulApi.postNewCircle({
+      "content": Api.newCircleEntity.content,
+      "urls":urls
+    });
+
     print(res);
 
   }
