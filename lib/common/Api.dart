@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_app2/services/model/Article.dart';
 import 'package:jmessage_flutter/jmessage_flutter.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
+import 'package:sqflite/sqflite.dart';
 
 
 /**
@@ -16,4 +17,5 @@ class Api{
   static Article newCircleEntity = Article();
   static JPush jpush ;
   static JmessageFlutter jMessage;
+  static Database db;
 }

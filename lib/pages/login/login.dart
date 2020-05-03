@@ -74,75 +74,70 @@ class LoginPageState extends State<LoginPage>{
       keyboardType: TextInputType.visiblePassword,
       obscureText: !_showPass,
     );
-    return WillPopScope(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          resizeToAvoidBottomPadding:false,
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text("登录"),
+    return ProviderWidget<LoginModel>(
+      model: LoginModel(Provider.of(context)),
+      builder: (c,model,child){
+        return WillPopScope(
+          child: Scaffold(
+//              resizeToAvoidBottomPadding:false,
+              appBar: AppBar(
+                centerTitle: true,
+                title: Text("登录"),
+              ),
+              body: Container(
+                alignment: Alignment.center,
+                child: new Container(
+                    height: 400,
+                    child: Container(
+                        margin: EdgeInsets.all(20),
+                          child:Column(
+                            children: <Widget>[
+                              TextFormField(
+                                controller: userController,
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(10.0),
+                                    icon: Icon(Icons.perm_contact_calendar,color: Colors.black54,),
+                                    labelText: '请输入你的用户名 )',
+                                    helperText: '',
+                                    suffix:  IconButton(
+                                      icon: Icon(Icons.close),
+                                      onPressed: (){
+                                        setState(() {
+                                          userController.clear();
+                                        });
+                                      },
+                                    )
+                                ),
+                                autofocus: true,
+                              ),
+                              passwordText,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  InkWell(
+                                    splashColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    onTap: (){
+                                      Navigator.pushNamed(context, RouteName.register);
+                                    },
+                                    child: Text("没有账户? 点我注册",style: TextStyle(color: Theme.of(context).primaryColor),),
+                                  )
+                                ],
+                              ),
+                              LoginButton(userController,passController),
+                            ],
+                        )
+                    )
+                ),
+              )
           ),
-          body: Container(
-            alignment: Alignment.center,
-            child: new Container(
-                height: 400,
-                child: Container(
-                  margin: EdgeInsets.all(20),
-                  child: ProviderWidget<LoginModel>(
-                    model: LoginModel(Provider.of(context)),
-                    child:Column(
-                      children: <Widget>[
-                        TextFormField(
-                          controller: userController,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(10.0),
-                            icon: Icon(Icons.perm_contact_calendar,color: Colors.black54,),
-                            labelText: '请输入你的用户名 )',
-                            helperText: '',
-                            suffix:  IconButton(
-                              icon: Icon(Icons.close),
-                              onPressed: (){
-                                setState(() {
-                                  userController.clear();
-                                });
-                              },
-                            )
-                          ),
-                          autofocus: true,
-                        ),
-                        passwordText,
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            InkWell(
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              focusColor: Colors.transparent,
-                              onTap: (){
-                                Navigator.pushNamed(context, RouteName.register);
-                              },
-                              child: Text("没有账户? 点我注册",style: TextStyle(color: Theme.of(context).primaryColor),),
-                            )
-                          ],
-                        ),
-                        LoginButton(userController,passController),
-                      ],
-                    ),
-                    builder: (context, model, child) {
-                      return Form(
-                        onWillPop: () async {
-                          return !model.isBusy;
-                        },
-                        child: child,
-                      );
-                    },
-                  )
-                )
-            ),
-          )
-      ), onWillPop: () {
-          print("退出登录页");
-          Navigator.pop(context);
+          onWillPop: () {
+            if(!model.isBusy)
+              Navigator.pop(context);
+            return;
+          },
+        );
       },
     );
   }
@@ -151,8 +146,8 @@ class LoginPageState extends State<LoginPage>{
 }
 
 class LoginButton extends StatelessWidget {
-  final nameController;
-  final passwordController;
+  TextEditingController nameController;
+  TextEditingController passwordController;
 
   LoginButton(this.nameController, this.passwordController);
 
@@ -172,10 +167,9 @@ class LoginButton extends StatelessWidget {
                 .copyWith(wordSpacing: 6),
         ),
         onPressed: model.isBusy
-            ? null
-            : () {
-          var formState = Form.of(context);
-          if (formState.validate()) {
+          ? null
+          : () {
+            if(nameController.text.isEmpty || passwordController.text.isEmpty) return;
             model
                 .login(nameController.text, passwordController.text)
                 .then((value) {
@@ -185,7 +179,6 @@ class LoginButton extends StatelessWidget {
                 model.showErrorMessage(context);
               }
             });
-          }
         },
       ),
     );

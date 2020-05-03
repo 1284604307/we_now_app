@@ -18,6 +18,7 @@ import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sqflite/sqflite.dart';
 
 import 'common/Api.dart';
 main() async {
@@ -25,7 +26,7 @@ main() async {
   // desc runApp前进行耗时操作必须执行该静态方法
   WidgetsFlutterBinding.ensureInitialized();
   await StorageManager.init();
-
+  Api.db = await openDatabase('we_now_sqlite.db');
   runApp(
       OKToast(
         child: BotToastInit(

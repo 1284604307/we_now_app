@@ -1,7 +1,7 @@
+import 'package:flutter_app2/common/Api.dart';
+import 'package:flutter_app2/services/config/storage_manager.dart';
 import 'package:flutter_app2/services/model/Message.dart';
 import 'package:flutter_app2/services/model/viewModel/user_model.dart';
-import 'package:flutter_app2/services/net/restful_go.dart';
-import 'package:flutter_app2/services/provider/view_state_list_model.dart';
 import 'package:flutter_app2/services/provider/view_state_refresh_list_model.dart';
 
 /**
@@ -11,9 +11,21 @@ class MessageViewModel extends ViewStateRefreshListModel {
 
   UserModel userModel;
   MessageViewModel(this.userModel);
+  String we_now_message_header = "WE_NOW_MESSAGE";
+  String message_target;
+  @override
+  initData() {
+    if(userModel.hasUser){
+      Api.db.execute("CREATE TABLE IF NOT EXISTS messages (id INTEGER,);");
+    }else{
+
+    }
+    return super.initData();
+  }
 
   @override
   Future<List<Message>> loadData({int pageNum}) async {
+
 //    List<Future> futures = [];
 //    if (pageNum == ViewStateRefreshListModel.pageNumFirst) {
 //
@@ -27,13 +39,6 @@ class MessageViewModel extends ViewStateRefreshListModel {
 //    } else {
 //      return result[0];
 //    }
-    List<Message> messages = [Message(),Message(),Message()];
-    messages.forEach((m){
-      m.content="画了个妲己";
-      m.senderId=1;
-      m.senderAvatar="https://i0.hdslb.com/bfs/face/5a6808606bf1f7a2390b77e14df8d0d1d04680d9.jpg@36w_36h_1c_100q.webp";
-      m.createTime = DateTime.now();
-    });
     return messages;
 
   }
