@@ -1,8 +1,11 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_app2/common/Api.dart';
+import 'package:flutter_app2/common/pojos/AjaxResult.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:flutter_app2/services/config/storage_manager.dart';
 import 'package:flutter_app2/services/model/viewModel/user_model.dart';
+import 'package:flutter_app2/services/net/api.dart';
 import 'package:flutter_app2/services/net/restful_go.dart';
 import 'package:flutter_app2/services/provider/view_state_model.dart';
 
@@ -24,6 +27,20 @@ class LoginModel extends ViewStateModel {
       userModel.saveUser(user);
       StorageManager.sharedPreferences
           .setString(WeNow_LoginName, userModel.user.loginName);
+      setIdle();
+      return true;
+    } catch (e, s) {
+      setError(e,s);
+      return false;
+    }
+  }
+
+  Future<bool> register(loginName, password) async {
+    setBusy();
+    try {
+      await RestfulApi.register(loginName, password);
+      StorageManager.sharedPreferences
+          .setString(WeNow_LoginName, loginName);
       setIdle();
       return true;
     } catch (e, s) {

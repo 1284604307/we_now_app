@@ -7,6 +7,7 @@ import 'package:flutter_app2/pages/home/me/me_page.dart';
 import 'package:flutter_app2/pages/home/my_page/setting_page.dart';
 import 'package:flutter_app2/pages/loading.dart';
 import 'package:flutter_app2/pages/login/login.dart';
+import 'package:flutter_app2/pages/login/register.dart';
 import 'package:flutter_app2/pages/wights/page_route_anim.dart';
 import 'package:flutter_app2/services/config/storage_manager.dart';
 import 'package:flutter_app2/services/model/Article.dart';
@@ -44,8 +45,8 @@ class Router {
       case RouteName.login:
         return CupertinoPageRoute(
             fullscreenDialog: true, builder: (_) => LoginPage());
-//      case RouteName.register:
-//        return CupertinoPageRoute(builder: (_) => RegisterPage());
+      case RouteName.register:
+        return CupertinoPageRoute(builder: (_) => RegisterPage());
         //desc 主页二楼神秘屋
       case RouteName.homeSecondFloor:
         return SlideTopRouteBuilder(Test());

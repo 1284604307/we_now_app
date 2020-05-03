@@ -49,7 +49,7 @@ class MySelfCard extends StatelessWidget{
                             child:InkWell(
                               splashColor: Colors.green[900], // give any splashColor you want
                               onTap: () {
-                                print("跳转到"+(Api.login?'me':"login"));
+                                print("跳转到"+(model.hasUser?'me':"login"));
                                 Navigator.of(context).pushNamed(model.hasUser?'me':"login");
                               },
                               child: ClipRRect(

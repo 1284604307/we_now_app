@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:flutter_app2/common/pojos/AjaxResult.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/helper/dialog_helper.dart';
@@ -152,6 +153,14 @@ class RestfulApi {
   static Future fetchPopularCircle() async{
     var response = await http.get('/public/circle/popular');
     return response.data.map<Article>((item) => Article.fromJson(item)).toList();
+  }
+
+  static register(loginName, password) async {
+    await http.post('/user/register', queryParameters: {
+      'username': loginName,
+      'password': password,
+    });
+    BotToast.showText(text: "注册成功");
   }
 
 }

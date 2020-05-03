@@ -84,5 +84,4 @@ main() async {
   );
 
   Api.jMessage = JmessageFlutter();
-
 }

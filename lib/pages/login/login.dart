@@ -12,11 +12,13 @@ import 'package:flutter_app2/common/Global.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:flutter_app2/pages/wights/button_progress_indicator.dart';
 import 'package:flutter_app2/pages/wights/login_widget.dart';
+import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/generated/l10n.dart';
 import 'package:flutter_app2/services/model/viewModel/login_model.dart';
 import 'package:flutter_app2/services/net/restful_go.dart';
 import 'package:flutter_app2/services/provider/provider_widget.dart';
 import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 
 /**
@@ -109,6 +111,20 @@ class LoginPageState extends State<LoginPage>{
                           autofocus: true,
                         ),
                         passwordText,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            InkWell(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              onTap: (){
+                                Navigator.pushNamed(context, RouteName.register);
+                              },
+                              child: Text("没有账户? 点我注册",style: TextStyle(color: Theme.of(context).primaryColor),),
+                            )
+                          ],
+                        ),
                         LoginButton(userController,passController),
                       ],
                     ),
@@ -149,7 +165,7 @@ class LoginButton extends StatelessWidget {
         child: model.isBusy
             ? ButtonProgressIndicator()
             : Text(
-              "登录",//S.of(context).signIn
+              S.of(context).signIn,
               style: Theme.of(context)
                 .accentTextTheme
                 .title
