@@ -13,6 +13,7 @@ import 'package:flutter_app2/services/model/viewModel/locale_model.dart';
 import 'package:flutter_app2/services/model/viewModel/theme_model.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:jmessage_flutter/jmessage_flutter.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
@@ -82,7 +83,6 @@ main() async {
     },
   );
 
-//  SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor:Colors.transparent);
-//  SystemChrome.setSystemUIOverlayStyle(dark);
-//  SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  Api.jMessage = JmessageFlutter();
+
 }

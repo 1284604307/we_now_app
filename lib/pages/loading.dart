@@ -21,19 +21,9 @@ class _LoadingState extends State<LoadingPage>{
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    getApplicationDocumentsDirectory().then((onValue){
-      print(onValue.path);
-      Api.appDocPath = onValue.path;
-      Api.cookieJar = PersistCookieJar(dir:Api.appDocPath+"/.cookies/");
-    });
-
-    Api.init();
-
     // 加载页面停顿3秒后回到App页
     Future.delayed(Duration(seconds: 3),(){
       print("应用启动");
-      Api.user.initInfo();
       Navigator.of(context).pushReplacementNamed('app');
     });
   }
