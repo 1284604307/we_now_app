@@ -43,7 +43,7 @@ class _State extends State<MeInfoPage> {
             ],
           ),
           body: Container(
-            child: Column(
+            child: ListView(
               children: <Widget>[
                 RowItem(left: "头像",action: [
                   Avatar(CachedNetworkImage(imageUrl: "${user.avatar}",)),
@@ -51,8 +51,10 @@ class _State extends State<MeInfoPage> {
                 ],),
                 RowItem(left: "个性签名",other: Text("滑稽滑稽滑稽稽"),
                   action: <Widget>[Icon(Icons.chevron_right)],),
-                RowItem(left: "性别",other: Text("男🚹难顶哦"),
-                  action: <Widget>[Icon(Icons.chevron_right)],),
+                RowItem(left: "性别",other: Text("男:女"),
+                  action: <Widget>[Icon(Icons.chevron_right)],
+                  
+                  ),
                 RowItem(left: "生日",),
 
                 // desc 校园相关
