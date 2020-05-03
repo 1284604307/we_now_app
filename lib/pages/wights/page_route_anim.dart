@@ -48,6 +48,41 @@ class SlideTopRouteBuilder extends PageRouteBuilder {
                     ));
 }
 
+class SlideBaseRouteBuilder extends PageRouteBuilder {
+  final Widget page;
+  final Offset direction;
+
+  static top(Widget page){
+    return SlideBaseRouteBuilder(page,direction: Offset(0,-1));
+  }
+
+  static bottom(Widget page){
+    return SlideBaseRouteBuilder(page,direction: Offset(0,1));
+  }
+
+  static left(Widget page){
+    return SlideBaseRouteBuilder(page,direction: Offset(-1,0));
+  }
+
+  static right(Widget page){
+    return SlideBaseRouteBuilder(page,direction: Offset(1,0));
+  }
+
+  SlideBaseRouteBuilder(this.page,{this.direction})
+      : super(
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+      transitionDuration: Duration(milliseconds: 800),
+      transitionsBuilder:
+          (context, animation, secondaryAnimation, child) =>
+          SlideTransition(
+            position: Tween<Offset>(
+                begin: direction??Offset(1,0), end: Offset.zero)
+                .animate(CurvedAnimation(
+                parent: animation, curve: Curves.fastOutSlowIn)),
+            child: child,
+          ));
+}
+
 class SizeRoute extends PageRouteBuilder {
   final Widget page;
 

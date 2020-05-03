@@ -497,6 +497,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.4"
+  jmessage_flutter:
+    dependency: "direct main"
+    description:
+      name: jmessage_flutter
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.6.3"
   jpush_flutter:
     dependency: "direct main"
     description:

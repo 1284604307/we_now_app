@@ -24,6 +24,8 @@ class RouteName {
   static const String setting = 'setting';
   static const String articleDetail = 'articleDetail';
   static const String coinRankingList = 'coinRankingList';
+
+  static const String rightTo = 'rightTo';
 }
 
 class Router {
@@ -47,6 +49,9 @@ class Router {
         //desc 主页二楼神秘屋
       case RouteName.homeSecondFloor:
         return SlideTopRouteBuilder(Test());
+    //desc 主页二楼神秘屋
+      case RouteName.rightTo:
+        return SlideBaseRouteBuilder.left(Test());
       case RouteName.setting:
         return CupertinoPageRoute(builder: (_) => SettingPage());
       case RouteName.articleDetail:

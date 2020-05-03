@@ -13,7 +13,7 @@ class MessageViewModel extends ViewStateRefreshListModel {
   MessageViewModel(this.userModel);
 
   @override
-  Future<List> loadData({int pageNum}) async {
+  Future<List<Message>> loadData({int pageNum}) async {
 //    List<Future> futures = [];
 //    if (pageNum == ViewStateRefreshListModel.pageNumFirst) {
 //
@@ -27,7 +27,14 @@ class MessageViewModel extends ViewStateRefreshListModel {
 //    } else {
 //      return result[0];
 //    }
-    return [Message(),Message(),Message(),];
+    List<Message> messages = [Message(),Message(),Message()];
+    messages.forEach((m){
+      m.content="画了个妲己";
+      m.senderId=1;
+      m.senderAvatar="https://i0.hdslb.com/bfs/face/5a6808606bf1f7a2390b77e14df8d0d1d04680d9.jpg@36w_36h_1c_100q.webp";
+      m.createTime = DateTime.now();
+    });
+    return messages;
 
   }
 

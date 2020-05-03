@@ -74,6 +74,8 @@ dependencies:
   # key 5d08b4cb651701bd1647eb34093cb703
   # desc 极光推送  IOS ANDROID 分端依赖配置 < 官方库 >
   jpush_flutter: 0.5.3
+    # desc JMessage 集成
+  jmessage_flutter: 0.6.3
 
   # desc 上下划栏
   sliding_up_panel: 1.0.2
