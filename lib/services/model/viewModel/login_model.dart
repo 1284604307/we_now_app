@@ -27,6 +27,11 @@ class LoginModel extends ViewStateModel {
       userModel.saveUser(user);
       StorageManager.sharedPreferences
           .setString(WeNow_LoginName, userModel.user.loginName);
+
+      await Api.jMessage.login(
+        username: loginName,
+        password: password
+      );
       setIdle();
       return true;
     } catch (e, s) {
@@ -58,6 +63,7 @@ class LoginModel extends ViewStateModel {
     try {
       await RestfulApi.logout();
       userModel.clearUser();
+      Api.jMessage.logout();
       setIdle();
       return true;
     } catch (e, s) {
