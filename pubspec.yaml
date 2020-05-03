@@ -124,6 +124,8 @@ flutter:
   - assets/images/app/we_now_start.png
   - assets/images/app/news_round.png
   - assets/images/home_second_floor_builder.png
+  - assets/images/gender/icon_type_boy.png
+  - assets/images/gender/icon_type_girl.png
 #    - images/a_dot_ham.jpeg
   - assets/images/banners/
   - assets/images/app/
