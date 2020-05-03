@@ -5,7 +5,9 @@ import 'package:flutter_app2/pages/home/circle/test.dart';
 import 'package:flutter_app2/pages/maps/other.dart';
 import 'package:flutter_app2/services/helper/refresh_helper.dart';
 import 'package:flutter_app2/services/model/viewModel/message_model.dart';
+import 'package:flutter_app2/services/model/viewModel/user_model.dart';
 import 'package:flutter_app2/services/provider/provider_widget.dart';
+import 'package:flutter_app2/services/provider/view_state_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -27,8 +29,16 @@ class MessagePageState extends State<MessagePage>{
             ),
           ),
           body: ProviderWidget<MessageViewModel>(
-            model: MessageViewModel(),
+            model: MessageViewModel(Provider.of<UserModel>(context)),
             builder: (BuildContext context, messageModel, Widget child) {
+              if(!messageModel.userModel.hasUser)
+                return ViewStateEmptyWidget(
+                  onPressed: () {
+                    Navigator.pushNamed(context, "login");
+                  },
+                  message: "用户未登录",
+                  buttonText: Text("去登陆"),
+                );
               return SmartRefresher(
                 controller: messageModel.refreshController,
                 footer: RefresherFooter(),

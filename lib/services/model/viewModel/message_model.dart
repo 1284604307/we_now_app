@@ -1,4 +1,5 @@
 import 'package:flutter_app2/services/model/Message.dart';
+import 'package:flutter_app2/services/model/viewModel/user_model.dart';
 import 'package:flutter_app2/services/net/restful_go.dart';
 import 'package:flutter_app2/services/provider/view_state_list_model.dart';
 import 'package:flutter_app2/services/provider/view_state_refresh_list_model.dart';
@@ -7,6 +8,9 @@ import 'package:flutter_app2/services/provider/view_state_refresh_list_model.dar
  * @createDate  2020/4/27
  */
 class MessageViewModel extends ViewStateRefreshListModel {
+
+  UserModel userModel;
+  MessageViewModel(this.userModel);
 
   @override
   Future<List> loadData({int pageNum}) async {
@@ -23,7 +27,7 @@ class MessageViewModel extends ViewStateRefreshListModel {
 //    } else {
 //      return result[0];
 //    }
-    return [Message(),Message(),Message(),Message(),Message(),Message(),Message(),Message(),Message(),Message(),];
+    return [Message(),Message(),Message(),];
 
   }
 
