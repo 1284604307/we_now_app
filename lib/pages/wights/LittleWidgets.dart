@@ -118,3 +118,51 @@ class ArticleLikeWidget extends StatelessWidget {
   }
 }
 
+class RowItem extends StatelessWidget{
+
+  List<Widget> action;
+  String left;
+  Widget other;
+  double height;
+
+  RowItem({this.left,this.other,this.action,this.height=60});
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return  Container(
+      height: height,
+      padding: EdgeInsets.all(10),
+      color: Theme.of(context).cardColor,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              if(left!=null)
+                Container(
+                  width: 80,
+                  child: Text(
+                    "${left}",
+                    style: TextStyle(
+//                  color: Colors.grey
+                    ),
+                  ),
+                ),
+              if(other!=null)
+                other,
+            ],
+          ),
+          Container(
+            child: Row(
+              children: <Widget>[
+                if(action!=null)
+                  ...action
+              ],
+            ),
+          ),
+
+        ],
+      ),
+    );
+  }}

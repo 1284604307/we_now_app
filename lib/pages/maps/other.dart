@@ -3,6 +3,7 @@ import 'package:amap_all_fluttify/amap_all_fluttify.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 //import 'package:amap_map_fluttify/amap_map_fluttify.dart';
@@ -244,9 +245,10 @@ class _SelectLocationFromMapPageState extends State<SelectLocationFromMapPage> {
                         await _controller.setCenterCoordinate(
                             item.latLng.latitude, item.latLng.longitude,
                             zoomLevel: 16);
-                        Navigator.pop(context, {
-                          'address': item.address,
-                        });
+                        showToast(item.address);
+//                        Navigator.pop(context, {
+//                          'address': item.address,
+//                        });
                       },
                     );
                   }),

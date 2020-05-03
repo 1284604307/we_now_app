@@ -31,11 +31,11 @@ class _State extends State<CircleSchool> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
-    bool hasUser = Provider.of<UserModel>(context).hasUser;
+    bool hasSchoolId = Provider.of<UserModel>(context).hasUser&&Provider.of<UserModel>(context).user.schoolId!=null;
     super.build(context);
     return ProviderWidget<CircleSchoolModel>(
       onModelReady: (model) {
-        if(hasUser&&Provider.of<UserModel>(context).user.schoolId>=0){
+        if(hasSchoolId){
           model.initData();
         }
       },
@@ -55,118 +55,8 @@ class _State extends State<CircleSchool> with AutomaticKeepAliveClientMixin {
             onLoading: cRecommendModel.loadMore,
             child: CustomScrollView(
               slivers: <Widget>[
-//                SliverToBoxAdapter(
-//                    child: Card(
-//                        color: Theme.of(context).cardColor,
-//                        child: Stack(
-//                          children: <Widget>[
-//                            Row(
-//                              children: <Widget>[
-//                                Column(
-//                                  children: <Widget>[
-//                                    Container(
-//                                        child: InkWell(
-//                                          splashColor: Colors.green[
-//                                          900], // give any splashColor you want
-//                                          child: ClipRRect(
-//                                            child: Image.asset(
-//                                              'assets/images/app/news_round.png',
-//                                              width: 60,
-//                                              height: 60,
-//                                            ),
-//                                          ),
-//                                          onTap: () {
-//                                            //添加刷新
-//                                          },
-//                                        )),
-//                                    Container(
-//                                        alignment: Alignment.center,
-//                                        width: 60,
-//                                        child: Column(
-//                                          children: <Widget>[Text("最新更新")],
-//                                        )),
-//                                  ],
-//                                ),
-//                                Container(
-//                                  //绘制一条分割线
-//                                    width: 10,
-//                                    height: 60,
-//                                    child: VerticalDivider(color: Colors.grey)),
-//                              ],
-//                            ),
-//                            /***
-//                             * desc 多个 动态
-//                             * */
-//                            Container(
-//                              height: 82,
-//                              margin: EdgeInsets.only(left: 70),
-//                              child: new ListView.builder(
-//                                scrollDirection: Axis.horizontal,
-//                                itemBuilder: (BuildContext context, int index) {
-//                                  if(index == (7))
-//                                    return Column(
-//                                      children: <Widget>[
-//                                        Container(
-//                                            margin: EdgeInsets.only(right: 10),
-//                                            child: InkWell(
-//                                              splashColor: Colors.green[
-//                                              900], // give any splashColor you want
-//                                              child: ClipRRect(
-//                                                borderRadius:
-//                                                BorderRadius.circular(30),
-//                                              ),
-//                                              onTap: () {
-//                                                print("我被点击了！啊~~~~好疼");
-//                                              },
-//                                            )),
-//                                        Container(
-//                                            margin: EdgeInsets.only(right: 10),
-//                                            alignment: Alignment.center,
-//                                            width: 60,
-//                                            child: Column(
-//                                              children: <Widget>[Text("查看更多")],
-//                                            )),
-//                                      ],
-//                                    );
-//                                  return Column(
-//                                    children: <Widget>[
-//                                      Container(
-//                                          margin: EdgeInsets.only(right: 10),
-//                                          child: InkWell(
-//                                            splashColor: Colors.green[
-//                                            900], // give any splashColor you want
-//                                            child: ClipRRect(
-//                                              borderRadius:
-//                                              BorderRadius.circular(30),
-//                                              child: Image.asset(
-//                                                'assets/images/app/news_round.png',
-//                                                width: 60,
-//                                                height: 60,
-//                                              ),
-//                                            ),
-//                                            onTap: () {
-//                                              print("我被点击了！啊~~~~好疼");
-//                                            },
-//                                          )),
-//                                      Container(
-//                                          margin: EdgeInsets.only(right: 10),
-//                                          alignment: Alignment.center,
-//                                          width: 60,
-//                                          child: Column(
-//                                            children: <Widget>[Text("最新更新")],
-//                                          )),
-//                                    ],
-//                                  );
-//                                },
-//                                itemCount: 7+1,
-//                              ),
-//                            ),
-//                          ],
-//                        )
-//                    )
-//                ),
                 /// desc 未登录或用户没有绑定学校时展示
-                if(!hasUser||(hasUser&&Provider.of<UserModel>(context).user.schoolId<=0))
+                if(!hasSchoolId)
                   SliverToBoxAdapter(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 50),
@@ -177,7 +67,7 @@ class _State extends State<CircleSchool> with AutomaticKeepAliveClientMixin {
                       )
                   ),
                 /// desc 已绑定学校且无数据时展示
-                if (hasUser&&cRecommendModel.list.isEmpty)
+                if (hasSchoolId&&cRecommendModel.list.isEmpty)
                   SliverToBoxAdapter(
                       child: Padding(
                         padding: const EdgeInsets.only(top: 50),

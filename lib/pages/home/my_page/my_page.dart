@@ -4,8 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app2/pages/home/my_page/setting_page.dart';
 import 'package:flutter_app2/pages/wights/bottom_clipper.dart';
 import 'package:flutter_app2/services/config/resource_mananger.dart';
+import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/generated/l10n.dart';
 import 'package:flutter_app2/services/model/viewModel/theme_model.dart';
+import 'package:flutter_app2/services/model/viewModel/user_model.dart';
+import 'package:flutter_app2/services/provider/provider_widget.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 
 import 'my_page_card_item.dart';
@@ -52,29 +56,39 @@ class MyPageState extends State<MyPage>{
                         ),
                         // desc 头部按钮排列
                         Container(
-                          width: width,
-                          margin: EdgeInsets.only(top: 30,left: 10,right: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              IconButton(
-                                icon: Icon(Icons.settings),
-                                onPressed: (){
-                                  Navigator.push(context, MaterialPageRoute(
-                                      builder: (BuildContext context) {
-                                        return SettingPage();
-                                      }
-                                  ));
-                                },
-                              )
-                            ],
-                          )
+                            width: width,
+                            margin: EdgeInsets.only(top: 30,left: 10,right: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                IconButton(
+                                  icon: Icon(Icons.settings),
+                                  onPressed: (){
+                                    Navigator.push(context, MaterialPageRoute(
+                                        builder: (BuildContext context) {
+                                          return SettingPage();
+                                        }
+                                    ));
+                                  },
+                                )
+                              ],
+                            )
                         ),
                         // desc 个人信息卡片
                         Positioned(
                           width: width,
                           top: 80,
-                          child: MySelfCard(width),
+                          child: InkWell(
+                            highlightColor : Colors.transparent,//点击时，水波纹的底色颜色
+                            splashColor:Colors.transparent,// 点击时，水波纹扩展的颜色
+                            onTap: (){
+                              if(!Provider.of<UserModel>(context,listen: false).hasUser)
+                                Navigator.pushNamed(context, RouteName.login);
+                              else
+                                Navigator.pushNamed(context, RouteName.me);
+                            },
+                            child: MySelfCard(width),
+                          ),
                         )
                       ],
                     ),
@@ -87,53 +101,13 @@ class MyPageState extends State<MyPage>{
                         CardItem(
                           width/4,
                           icon: Theme.of(context).brightness == Brightness.light?
-                            Icon(IconFonts.moon,color: Colors.blue,):Icon(Icons.wb_sunny,color: Colors.amber,),
+                          Icon(IconFonts.moon,color: Colors.blue,):Icon(Icons.wb_sunny,color: Colors.amber,),
                           text: Theme.of(context).brightness == Brightness.light?"夜间模式":"日间模式",
                           taped: (){
                             switchDarkMode(context);
                             print("事件发生");
                           },
                         ),
-                        CardItem(width/4),
-                        CardItem(width/4),
-                        CardItem(width/4),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    color: Theme.of(context).cardColor,
-                    margin: EdgeInsets.only(top: 10),
-                    child: Wrap(
-                      children: <Widget>[
-                        CardItem(width/4),
-                        CardItem(width/4),
-                        CardItem(width/4),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    color: Theme.of(context).cardColor,
-                    margin: EdgeInsets.only(top: 10),
-                    child: Wrap(
-                      children: <Widget>[
-                        CardItem(width/4),
-                        CardItem(width/4),
-                        CardItem(width/4),
-                        CardItem(width/4),
-                        CardItem(width/4),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    color: Theme.of(context).cardColor,
-                    margin: EdgeInsets.only(top: 10),
-                    child: Wrap(
-                      children: <Widget>[
-                        CardItem(width/4),
-                        CardItem(width/4),
                         CardItem(width/4),
                         CardItem(width/4),
                         CardItem(width/4),
