@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app2/common/Api.dart';
 import 'package:flutter_app2/common/pojos/AjaxResult.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
+import 'package:flutter_app2/pages/home/me/me_info_page.dart';
 import 'package:flutter_app2/pages/wights/article_skeleton.dart';
 import 'package:flutter_app2/pages/wights/skeleton.dart';
 import 'package:flutter_app2/services/helper/refresh_helper.dart';
@@ -63,7 +64,10 @@ class _State extends State<CircleSchool> with AutomaticKeepAliveClientMixin {
                         child: ViewStateEmptyWidget(
                             buttonText: Text("去绑定"),
                             message: "未绑定学校",
-                            onPressed: (){showToast("应跳转到用户信息页");}),
+                            onPressed: (){
+                              showToast("应跳转到用户信息页");
+                              return MeInfoPage();
+                            }),
                       )
                   ),
                 /// desc 已绑定学校且无数据时展示

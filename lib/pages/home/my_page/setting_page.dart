@@ -1,6 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app2/pages/home/me/me_info_page.dart';
 import 'package:flutter_app2/pages/wights/LittleWidgets.dart';
 import 'package:flutter_app2/services/generated/l10n.dart';
 import 'package:flutter_app2/services/model/viewModel/login_model.dart';
@@ -29,7 +30,7 @@ class _State extends State<SettingPage> {
       ProviderWidget<LoginModel>(
         model: LoginModel(Provider.of(context)),
         builder: (BuildContext context, LoginModel model, Widget child) {
-          return Column(
+          return ListView(
               children: <Widget>[
                 if (model.isBusy)
                   Padding(
@@ -37,7 +38,17 @@ class _State extends State<SettingPage> {
                   ),
                 if(model.userModel.hasUser)
                   ...[
-                    RowItem(left:"个人资料"),
+                    InkWell(
+                      onTap: (){
+                       Navigator.push(context, MaterialPageRoute(
+                          builder: (c){
+                            return MeInfoPage();
+                          }
+                        ));
+                      },
+                      child: 
+                        RowItem(left:"个人资料"),
+                    ),
                     RowItem(left:"消息通知"),
                     RowItem(left:"账号绑定"),
                   ],
