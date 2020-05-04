@@ -52,7 +52,7 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
 //                  var s = await Api.db.insert("wenow_message", nM.toJson());
 //                  print("插入 serverMessageId $s 数据成功--------------------------------");
 //                  Provider.of<MessageModel>(context,listen: false).receiverMessage(nM);
-                  mM.receiverMessage(nM);
+                  Provider.of<MessageModel>(context,listen: false).receiverMessage(nM);
                 },
                 child: Text("消息"),
               ),
@@ -96,7 +96,7 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
 //                enablePullUp: messageModel.list.isNotEmpty,
                 onLoading: messageModel.loadMore,
                 child: ListView.builder(itemBuilder: (c,i){
-                    return MessageItem(messageModel.list[i]);
+                    return MessageItem(Provider.of<MessageModel>(context,listen: true).messages[i]);
                   },
                   itemCount: Provider.of<MessageModel>(context,listen: true).messages==null?0:Provider.of<MessageModel>(context,listen: true).messages.length,
                 ),

@@ -25,7 +25,7 @@ class MessageViewModel extends ViewStateRefreshListModel {
   @override
   initData() async{
     if(messageModel.userModel.hasUser){
-
+      await messageModel.loadData();
     }else{
       showToast("未登录");
     }
@@ -79,6 +79,10 @@ class MessageModel extends ChangeNotifier{
 
   logout(){
     _messages = [];
+  }
+
+  updateUser(UserModel userModel) {
+    print("---------------用户信息改变");
   }
 
 

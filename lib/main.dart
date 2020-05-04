@@ -120,7 +120,7 @@ main() async {
         nM.senderAvatar = message.from.avatarThumbPath;
         var s = await Api.db.insert("wenow_message", nM.toJson());
         print("插入 serverMessageId $s 数据成功--------------------------------");
-        Provider.of<MessageModel>(_context,listen: false).receiverMessage(message);
+        Provider.of<MessageModel>(_context,listen: false).receiverMessage(nM);
         break;
       case "JMUserInfo":
         showToast("是我JMUserInfo");

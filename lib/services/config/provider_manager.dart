@@ -46,11 +46,11 @@ List<SingleChildWidget> dependentServices = [
   ChangeNotifierProxyProvider<UserModel , MessageModel>(
     create: (context){
       print("---------------------------创建消息桶");
-      return MessageModel(Provider.of<UserModel>(context));
+      return MessageModel(Provider.of<UserModel>(context, listen: false));
     },
     update: (context, userModel, messageModel) {
       print("---------------------------更新消息桶");
-      return MessageModel(userModel);
+      return messageModel..updateUser(userModel);
     },
   ),
 //  ChangeNotifierProxyProvider<BuddyModel, UserModel>(
