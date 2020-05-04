@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_app2/pages/app.dart';
 import 'package:flutter_app2/pages/home/chat/chat_page.dart';
+import 'package:flutter_app2/pages/home/chat/friend_application.dart';
 import 'package:flutter_app2/pages/home/chat/friend_page.dart';
 import 'package:flutter_app2/pages/home/circle/test.dart';
 import 'package:flutter_app2/pages/home/me/me_page.dart';

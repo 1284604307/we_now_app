@@ -16,7 +16,25 @@ class FriendPage extends StatefulWidget {                     //modified
 
 class FriendScreenState extends State<FriendPage>  with TickerProviderStateMixin {
   //用户列表
-  final List<JMUserInfo> _users = <JMUserInfo>[];
+  List<JMUserInfo> _users = <JMUserInfo>[];
+
+  @override
+  void initState(){
+    super.initState();
+    Api.jMessage.getFriends().then((list){
+      print(list);
+      print("-------------------------");
+      _users = list;
+      _users.add(JMUserInfo.fromJson({
+        "username":"111",
+        "nickname":"滑稽"
+      }));
+      setState(() {
+
+      });
+    });
+  }
+
   //输入控制器
   final TextEditingController _textController = new TextEditingController();
 
@@ -30,7 +48,13 @@ class FriendScreenState extends State<FriendPage>  with TickerProviderStateMixin
             child: new ListView.builder(
               padding: new EdgeInsets.all(8.0),
               reverse: true,
-              itemBuilder: (_, int index) => Container(),
+              itemBuilder: (_, int index) => Container(
+                child: Row(
+                  children: <Widget>[
+                    Text("${_users[index].username}")
+                  ],
+                ),
+              ),
               itemCount: _users.length,
             ),
           ),

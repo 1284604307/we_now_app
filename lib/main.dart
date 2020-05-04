@@ -85,4 +85,8 @@ main() async {
   );
 
   Api.jMessage = JmessageFlutter();
+  Api.jMessage.setDebugMode(enable: true);
+  Api.jMessage.addReceiveMessageListener((message){
+    print(message);
+  });
 }

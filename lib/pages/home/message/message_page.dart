@@ -39,7 +39,7 @@ class MessagePageState extends State<MessagePage>{
                 icon: Icon(IconFonts.buddy,size: 30,),
                 onPressed: ()  async {
                   if (Provider.of<UserModel>(context,listen: false).hasUser) {
-                    Navigator.pushNamed(context, RouteName.friend);
+                    Navigator.pushNamed(context, "test");
                   }else{
                     if(await DialogHelper.showLoginDialog("login")){
                       Navigator.pushNamed(context, RouteName.login);
