@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app2/common/Api.dart';
 import 'package:flutter_app2/services/config/storage_manager.dart';
@@ -35,7 +37,12 @@ class MessageViewModel extends ViewStateRefreshListModel {
   @override
   Future<List<Message>> loadData({int pageNum}) async {
     await messageModel.loadData();
-    return messageModel.messages;
+    List<Message> messages = [];
+    if(messageModel.messagesGroup!=null)
+      messageModel.messagesGroup.forEach((username,m){
+        messages.add(m.getLastMessage());
+      });
+    return messages;
   }
 
   @override
@@ -48,16 +55,42 @@ class MessageModel extends ChangeNotifier{
   UserModel userModel;
   MessageModel(this.userModel);
 
-  List<Message> _messages;
-  List<Message> get messages => this._messages;
+  Map<String,MessageGroupModel> _messages = {};
+  Map<String,MessageGroupModel> get messagesGroup => this._messages;
+
+  MessageGroupModel getMessages(String username) {
+    if(!_messages.containsKey(username))
+      _messages[username]=MessageGroupModel([]);
+    return _messages[username];
+  }
+
+  getMessageList(){
+    List<Message> messages = [];
+    if(_messages!=null)
+      _messages.forEach((username,m){
+        messages.add(m.getLastMessage());
+      });
+    return messages;
+  }
 
   loadData() async{
     if(userModel.hasUser){
-      print("${userModel.user.toJson()}");
-      List<Map<String, dynamic>> s = await Api.db.query("wenow_message where targetUsername = 'admin'");
-      _messages = s.map((m)=>Message.fromJson(m)).cast<Message>().toList();
-      print(_messages.length);
-      _messages.forEach(print);
+      print("${userModel.user.loginName}");
+      List<Map<String, dynamic>> s = await Api.db.query("wenow_message where targetUsername = '${userModel.user.loginName}'");
+      if(s==null){
+        showToast("用户历史消息为空");
+        debugPrint("用户历史消息为空");
+        s= [];
+      }
+      s.forEach((m){
+        Message message =Message.fromJson(m);
+        print(message.toJson());
+        getMessages(message.fromUsername).putMessage(message);
+      });
+//      _messages.forEach((username,model){
+//        print("${username} ------> ${model.getLastMessage()}");
+//      });
+      return s;
     }else{
       throw UnAuthorizedException();
     }
@@ -65,9 +98,8 @@ class MessageModel extends ChangeNotifier{
 
   receiverMessage(Message message) async {
     if(_messages==null) await loadData();
-    _messages.forEach(print);
     print(_messages.length);
-    _messages.add(message);
+    getMessages(message.fromUsername).putMessage(message);
     print("Model接收到一条新数据");
     print(message.toJson());
     notifyListeners();
@@ -78,13 +110,37 @@ class MessageModel extends ChangeNotifier{
   }
 
   logout(){
-    _messages = [];
+    _messages = {};
   }
 
   updateUser(UserModel userModel) {
     print("---------------用户信息改变");
   }
 
+
+}
+
+enum MessageGroupType{
+  USER,
+  GROUP,
+  NOTIFY
+}
+
+class MessageGroupModel extends ViewStateModel{
+
+  List<Message> _messages = [];
+  MessageGroupType type ;
+
+  MessageGroupModel(this._messages,{this.type =  MessageGroupType.USER});
+
+  getLastMessage(){
+    return _messages[_messages.length-1];
+  }
+
+
+  putMessage(Message m){
+    _messages.add(m);
+  }
 
 }
 

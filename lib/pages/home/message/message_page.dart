@@ -45,7 +45,7 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
                   nM.fromUsername = "测试";
                   nM.targetUsername = "admin";
                   nM.createTime = 1234567891111;
-                  nM.content = "测试";
+                  nM.content = "你看到我变化了，神奇的故事发送了";
                   nM.type = "测试";
                   nM.extras = "{}";
                   nM.senderAvatar = "";
@@ -86,6 +86,10 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
                   buttonText: Text("去登陆"),
                 );
               mM = messageModel.messageModel;
+              List<Message> messages = Provider.of<MessageModel>(context,listen: true).getMessageList();
+              messages.forEach((m){
+                print(m.toJson());
+              });
               return SmartRefresher(
                 controller: messageModel.refreshController,
                 header: HomeRefreshHeader(),
@@ -96,9 +100,9 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
 //                enablePullUp: messageModel.list.isNotEmpty,
                 onLoading: messageModel.loadMore,
                 child: ListView.builder(itemBuilder: (c,i){
-                    return MessageItem(Provider.of<MessageModel>(context,listen: true).messages[i]);
+                    return MessageItem(messages[i]);
                   },
-                  itemCount: Provider.of<MessageModel>(context,listen: true).messages==null?0:Provider.of<MessageModel>(context,listen: true).messages.length,
+                  itemCount: messages.length,
                 ),
               );
             }, model: MessageViewModel(Provider.of<MessageModel>(context,listen: true)),
@@ -127,7 +131,7 @@ class MessageItem extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPressed??(){Navigator.pushNamed(context, RouteName.rightTo);},
+      onTap: onPressed??(){Navigator.pushNamed(context, RouteName.chat);},
       child: Container(
         padding: EdgeInsets.all(10),
         child: Row(
