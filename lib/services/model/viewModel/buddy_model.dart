@@ -3,15 +3,16 @@ import 'package:flutter_app2/services/config/storage_manager.dart';
 import 'package:flutter_app2/services/model/Message.dart';
 import 'package:flutter_app2/services/model/viewModel/user_model.dart';
 import 'package:flutter_app2/services/provider/view_state_refresh_list_model.dart';
+import 'package:jmessage_flutter/jmessage_flutter.dart';
 import 'package:oktoast/oktoast.dart';
 
 /**
  * @createDate  2020/4/27
  */
-class MessageViewModel extends ViewStateRefreshListModel {
+class BuddyModel extends ViewStateRefreshListModel {
 
   UserModel userModel;
-  MessageViewModel(this.userModel);
+  BuddyModel(this.userModel);
 
   @override
   initData() {
@@ -25,23 +26,9 @@ class MessageViewModel extends ViewStateRefreshListModel {
   }
 
   @override
-  Future<List<Message>> loadData({int pageNum}) async {
-
-//    List<Future> futures = [];
-//    if (pageNum == ViewStateRefreshListModel.pageNumFirst) {
-//
-//      futures.add(null);
-//    }
-//    else
-//      futures.add(RestfulApi.fetchSchoolCircles(pageNum));
-//    var result = await Future.wait(futures);
-//    if (pageNum == ViewStateRefreshListModel.pageNumFirst) {
-//      return result[0];
-//    } else {
-//      return result[0];
-//    }
-    return null;
-
+  Future<List<JMUserInfo>> loadData({int pageNum}) async {
+    List<JMUserInfo> users  =[];
+    return users;
   }
 
   @override

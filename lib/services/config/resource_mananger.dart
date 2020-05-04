@@ -55,6 +55,11 @@ class IconFonts {
   static const IconData draw = IconData(0xe664, fontFamily: fontFamily);
   static const IconData pointer = IconData(0xe653, fontFamily: fontFamily);
 
+  static const IconData friend = IconData(0xe6a1, fontFamily: fontFamily);
+  static const IconData buddy = IconData(0xe610, fontFamily: fontFamily);
+
+  static const IconData messageDouble = IconData(0xe64e, fontFamily: fontFamily);
+
   static const IconData pageEmpty = IconData(0xe6b3, fontFamily: fontFamily);
   static const IconData pageError = IconData(0xe602, fontFamily: fontFamily);
   static const IconData pageNetworkError = IconData(0xe7f6, fontFamily: fontFamily);
@@ -63,6 +68,7 @@ class IconFonts {
   static const IconData theme2 = IconData(0xe61c, fontFamily: fontFamily);
 
   static const IconData moon = IconData(0xefa7, fontFamily: fontFamily);
+  static const IconData moonCloud = IconData(0xec70, fontFamily: fontFamily);
 
 
   static const IconData thumbUp = IconData(0xe9a7, fontFamily: fontFamily);

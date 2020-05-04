@@ -5,7 +5,9 @@ import 'package:flutter_app2/pages/global/global_config.dart';
 import 'package:flutter_app2/pages/home/circle/test.dart';
 import 'package:flutter_app2/pages/maps/other.dart';
 import 'package:flutter_app2/pages/wights/avatar.dart';
+import 'package:flutter_app2/services/config/resource_mananger.dart';
 import 'package:flutter_app2/services/config/router_manger.dart';
+import 'package:flutter_app2/services/helper/dialog_helper.dart';
 import 'package:flutter_app2/services/helper/refresh_helper.dart';
 import 'package:flutter_app2/services/model/Message.dart';
 import 'package:flutter_app2/services/model/viewModel/message_model.dart';
@@ -32,12 +34,26 @@ class MessagePageState extends State<MessagePage>{
             title: Container(
               child: Text("消息"),
             ),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(IconFonts.buddy,size: 30,),
+                onPressed: ()  async {
+                  if (Provider.of<UserModel>(context,listen: false).hasUser) {
+                    Navigator.pushNamed(context, RouteName.friend);
+                  }else{
+                    if(await DialogHelper.showLoginDialog("login")){
+                      Navigator.pushNamed(context, RouteName.login);
+                    };
+                  }
+                },
+              )
+            ],
           ),
-          body: ProviderWidget<MessageViewModel>(
-            model: MessageViewModel(Provider.of<UserModel>(context)),
-            onModelReady: (model){
-              model.initData();
-            },
+          body: Consumer<MessageViewModel>(
+//            model: MessageViewModel(Provider.of<UserModel>(context)),
+//            onModelReady: (model){
+//              model.initData();
+//            },
             builder: (BuildContext context, messageModel, Widget child) {
               if(!messageModel.userModel.hasUser)
                 return ViewStateEmptyWidget(

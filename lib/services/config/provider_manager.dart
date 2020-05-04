@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app2/services/model/viewModel/buddy_model.dart';
 import 'package:flutter_app2/services/model/viewModel/favourite_model.dart';
 import 'package:flutter_app2/services/model/viewModel/locale_model.dart';
 import 'package:flutter_app2/services/model/viewModel/login_model.dart';
+import 'package:flutter_app2/services/model/viewModel/message_model.dart';
 import 'package:flutter_app2/services/model/viewModel/theme_model.dart';
 import 'package:flutter_app2/services/model/viewModel/user_model.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +42,18 @@ List<SingleChildWidget> dependentServices = [
 //    userModel ??
 //        UserModel(),
 //  )
+  ChangeNotifierProxyProvider<UserModel , MessageViewModel>(
+    create: (c)=>MessageViewModel(UserModel()),
+    update: (context, messageModel, userModel) =>
+    userModel ??
+        UserModel(),
+  ),
+//  ChangeNotifierProxyProvider<BuddyModel, UserModel>(
+//    create: null,
+//    update: (context, buddyModel, userModel) =>
+//    userModel ??
+//        UserModel(),
+//  ),
 ];
 
 List<SingleChildWidget> uiConsumableProviders = [
