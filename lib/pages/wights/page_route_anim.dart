@@ -60,8 +60,8 @@ class SlideBaseRouteBuilder extends PageRouteBuilder {
     return SlideBaseRouteBuilder(page,direction: Offset(0,1));
   }
 
-  static left(Widget page){
-    return SlideBaseRouteBuilder(page,direction: Offset(-1,0));
+  static left(Widget page,{speed=1}){
+    return SlideBaseRouteBuilder(page,direction: Offset(-speed,0));
   }
 
   static right(Widget page){

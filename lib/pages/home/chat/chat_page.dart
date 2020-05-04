@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/common/Api.dart';
+import 'package:flutter_app2/services/model/Message.dart';
+import 'package:flutter_app2/services/model/viewModel/message_model.dart';
+import 'package:flutter_app2/services/model/viewModel/user_model.dart';
+import 'package:provider/provider.dart';
 
 /**
  * @author Ming
@@ -12,14 +16,17 @@ class FriendlychatApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: "Friendlychat",
-      home: new ChatScreen(),
+      home: new ChatScreen(""),
     );
   }
 }
 
-class ChatScreen extends StatefulWidget {                     //modified
+class ChatScreen extends StatefulWidget {
+
+  String fromUsername;
+  ChatScreen(this.fromUsername); //modified
   @override
-  State createState() => new ChatScreenState();
+  State createState() => new ChatScreenState(fromUsername);
 }
 
 class ChatScreenState extends State<ChatScreen>  with TickerProviderStateMixin {
@@ -28,18 +35,21 @@ class ChatScreenState extends State<ChatScreen>  with TickerProviderStateMixin {
   //输入控制器
   final TextEditingController _textController = new TextEditingController();
 
+  String friendUsername;
+  ChatScreenState(this.friendUsername); //modified
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(title: new Text("Friendlychat")),
+      appBar: new AppBar(title: new Text("${friendUsername}")),
       body: new Column(
         children: <Widget>[
           new Flexible(
             child: new ListView.builder(
               padding: new EdgeInsets.all(8.0),
               reverse: true,
-              itemBuilder: (_, int index) => _messages[index],
-              itemCount: _messages.length,
+              itemBuilder: (_, int index) => ChatMessage(Provider.of<MessageModel>(context).getMessagesList("${friendUsername}")[index]),//_messages[index],
+              itemCount: Provider.of<MessageModel>(context).getMessagesList("${friendUsername}").length,
             ),
           ),
           new Divider(height: 1.0),
@@ -55,16 +65,18 @@ class ChatScreenState extends State<ChatScreen>  with TickerProviderStateMixin {
 
   void _handleSubmitted(String text) {
     _textController.clear();
+    Message m = Message();
+    m.content = text;
+    m.fromUsername = Provider.of<UserModel>(context,listen: false).user.userName;
+    m.targetUsername = friendUsername;
     ChatMessage message = new ChatMessage(
-      text: text,
+      m,
       animationController: new AnimationController(
         duration: new Duration(milliseconds: 700),
         vsync: this,
       ),
     );
-    setState(() {
-      _messages.insert(0, message);
-    });
+      Provider.of<MessageModel>(context,listen: false).receiverMessage(m);
     message.animationController.forward();
   }
 
@@ -100,13 +112,13 @@ class ChatScreenState extends State<ChatScreen>  with TickerProviderStateMixin {
 
 
 
-String _name = "Api.user.userName";
 class ChatMessage extends StatelessWidget {
 
-  ChatMessage({this.text, this.animationController});
+  Message message;
+
+  ChatMessage(this.message,{ this.animationController});
 
   final AnimationController animationController;
-  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -117,16 +129,16 @@ class ChatMessage extends StatelessWidget {
         children: <Widget>[
           new Container(
             margin: const EdgeInsets.only(right: 16.0),
-            child: new CircleAvatar(child: new Text(_name[0])),
+            child: new CircleAvatar(child: new Text(message.fromUsername)),
           ),
           Expanded(
             child: new Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Text(_name, style: Theme.of(context).textTheme.subhead,softWrap: false,overflow:TextOverflow.clip),
+                new Text(message.fromUsername, style: Theme.of(context).textTheme.subhead,softWrap: false,overflow:TextOverflow.clip),
                 new Container(
                   margin: const EdgeInsets.only(top: 5.0),
-                  child: Text(text,
+                  child: Text(message.content,
                       softWrap: true,
                       overflow:TextOverflow.clip),
                 ),

@@ -42,7 +42,7 @@ class Router {
       case RouteName.me:
         return NoAnimRouteBuilder(MePage());
       case RouteName.chat:
-        return NoAnimRouteBuilder(ChatScreen());
+        return NoAnimRouteBuilder(FriendlychatApp());
       case RouteName.friend:
         return SizeRoute(FriendPage());
       case RouteName.loading:

@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/common/Api.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
+import 'package:flutter_app2/pages/home/chat/chat_page.dart';
 import 'package:flutter_app2/pages/home/circle/test.dart';
 import 'package:flutter_app2/pages/maps/other.dart';
 import 'package:flutter_app2/pages/wights/avatar.dart';
+import 'package:flutter_app2/pages/wights/page_route_anim.dart';
 import 'package:flutter_app2/services/config/resource_mananger.dart';
 import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/helper/dialog_helper.dart';
@@ -131,7 +133,7 @@ class MessageItem extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPressed??(){Navigator.pushNamed(context, RouteName.chat);},
+      onTap: onPressed??(){Navigator.push(context, SlideBaseRouteBuilder.left( ChatScreen( message.fromUsername) ,speed: 5.0));},
       child: Container(
         padding: EdgeInsets.all(10),
         child: Row(

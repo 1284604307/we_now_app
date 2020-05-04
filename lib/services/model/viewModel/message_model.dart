@@ -64,6 +64,12 @@ class MessageModel extends ChangeNotifier{
     return _messages[username];
   }
 
+  List<Message> getMessagesList(String username) {
+    if(!_messages.containsKey(username))
+      _messages[username]=MessageGroupModel([]);
+    return _messages[username].messages;
+  }
+
   getMessageList(){
     List<Message> messages = [];
     if(_messages!=null)
@@ -130,6 +136,9 @@ class MessageGroupModel extends ViewStateModel{
 
   List<Message> _messages = [];
   MessageGroupType type ;
+
+
+  List<Message> get messages => _messages;
 
   MessageGroupModel(this._messages,{this.type =  MessageGroupType.USER});
 
