@@ -8,15 +8,17 @@ part "Message.g.dart";
 @JsonSerializable()
 class Message{
   num id;
+  String serverMessageId;
   String type;
-  int targetId;
+  String targetUsername;
   String targetType;
-  int senderId;
+  String fromUsername;
   String senderType;
-  bool isRead;
+  bool isSend;
   String senderAvatar;
-  DateTime createTime;
+  int createTime;
   String action;
+  String extras;
   String content;
 
   Message();

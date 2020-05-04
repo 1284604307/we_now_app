@@ -9,6 +9,7 @@ import 'package:flutter_app2/services/config/provider_manager.dart';
 import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/config/storage_manager.dart';
 import 'package:flutter_app2/services/generated/l10n.dart';
+import 'package:flutter_app2/services/model/Message.dart';
 import 'package:flutter_app2/services/model/viewModel/locale_model.dart';
 import 'package:flutter_app2/services/model/viewModel/theme_model.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -21,7 +22,11 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'common/Api.dart';
+import 'services/model/viewModel/message_model.dart';
 main() async {
+
+  BuildContext _context;
+  MessageModel messageModel;
 
   // desc runApp前进行耗时操作必须执行该静态方法
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,6 +39,7 @@ main() async {
               providers: providers,
               child: Consumer2<ThemeModel, LocaleModel>(
                   builder: (context, themeModel, localeModel, child) {
+                    _context = context;
                     return RefreshConfiguration(
                         hideFooterWhenNotFull: true, //列表数据不满一页,不触发加载更多
                         child:MaterialApp(
@@ -63,11 +69,16 @@ main() async {
   );
 
 
+  // DESC 用户消息表
+  await Api.db.execute("Create table if not EXISTS  wenow_message "
+      "(id INTEGER,serverMessageId INTEGER PRIMARY KEY,fromUsername INTEGER,targetUsername INTEGER,content TEXT,type TEXT"
+      ",createTime INTEGER,extras text,senderAvatar text,targetType text,senderType text,isSend INTEGER,action text); ");
+
 
   Api.jpush = new JPush();
   Api.jpush.setup(
     production: false,
-    debug: false, // 设置是否打印 debug 日志
+    debug: true, // 设置是否打印 debug 日志
   );
   Api.jpush.addEventHandler(
     // 接收通知回调方法。
@@ -85,8 +96,58 @@ main() async {
   );
 
   Api.jMessage = JmessageFlutter();
+  Api.jMessage.init(isOpenMessageRoaming: true, appkey: "3ee80f9fe9855e97c89dd52a");
   Api.jMessage.setDebugMode(enable: true);
-  Api.jMessage.addReceiveMessageListener((message){
+  Api.jMessage.setBadge(badge: 1);
+
+  Api.jMessage.addReceiveMessageListener((message) async{
+
+    print("----------极光 IM 消息事件");
+    print(message.runtimeType);
+    print(message.toJson());
+
+    switch(message.runtimeType.toString()){
+      case "JMTextMessage":
+        Message nM = new Message();
+        showToast("是我JMTextMessage");
+        nM.serverMessageId = message.serverMessageId;
+        nM.fromUsername = message.from.username;
+        nM.targetUsername = message.target.username;
+        nM.createTime = message.createTime;
+        nM.content = message.text;
+        nM.type = message.type.toString();
+        nM.extras = message.extras.toString();
+        nM.senderAvatar = message.from.avatarThumbPath;
+        var s = await Api.db.insert("wenow_message", nM.toJson());
+        print("插入 serverMessageId $s 数据成功--------------------------------");
+        Provider.of<MessageModel>(_context,listen: false).receiverMessage(message);
+        break;
+      case "JMUserInfo":
+        showToast("是我JMUserInfo");
+        break;
+    };
+  });
+
+  Api.jMessage.addContactNotifyListener((message){
+    print("----------极光 IM 好友事件");
+    print(message);
+    print(message.toJson());
+  }); // 添加监听
+  Api.jMessage.addLoginStateChangedListener((message){
+    print("----------极光 IM 登陆状态改变事件");
+    print("被挤掉线了");
+  }) ;
+  Api.jMessage.addClickMessageNotificationListener((message){
+    switch(message.runtimeType.toString()){
+      case "JMTextMessage":
+        showToast("是我JMTextMessage");
+        break;
+      case "JMUserInfo":
+        showToast("是我JMUserInfo");
+        break;
+    };
+    print(message.runtimeType);
+    print("----------极光 IM 点击消息通知事件");
     print(message);
   });
 }

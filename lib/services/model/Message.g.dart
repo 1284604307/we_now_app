@@ -10,29 +10,29 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
   return Message()
     ..id = json['id'] as num
     ..type = json['type'] as String
-    ..targetId = json['targetId'] as int
+    ..targetUsername = json['targetUsername'] as String
     ..targetType = json['targetType'] as String
-    ..senderId = json['senderId'] as int
+    ..fromUsername = json['fromUsername'].toString()
     ..senderType = json['senderType'] as String
-    ..isRead = json['isRead'] as bool
+    ..isSend = json['isSend'] as bool
     ..senderAvatar = json['senderAvatar'] as String
-    ..createTime = json['createTime'] == null
-        ? null
-        : DateTime.parse(json['createTime'] as String)
+    ..createTime = json['createTime'] as num
+    ..serverMessageId = json['serverMessageId'].toString()
     ..action = json['action'] as String
     ..content = json['content'] as String;
 }
 
 Map<String, dynamic> _$MessageToJson(Message instance) => <String, dynamic>{
       'id': instance.id,
+      'serverMessageId': instance.serverMessageId,
       'type': instance.type,
-      'targetId': instance.targetId,
+      'targetUsername': instance.targetUsername,
       'targetType': instance.targetType,
-      'senderId': instance.senderId,
+      'fromUsername': instance.fromUsername,
       'senderType': instance.senderType,
-      'isRead': instance.isRead,
+      'isSend': instance.isSend,
       'senderAvatar': instance.senderAvatar,
-      'createTime': instance.createTime?.toIso8601String(),
+      'createTime': instance.createTime,
       'action': instance.action,
       'content': instance.content,
     };

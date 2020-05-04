@@ -35,9 +35,13 @@ class _State extends State<FriendApplication> {
             alignment: Alignment.center,
             child: InkWell(
               child: Text("发送"),
-              onTap: (){
+              onTap: () async {
                 BotToast.showLoading();
-                Api.jMessage.sendInvitationRequest(username: this.username, reason: reasonT.text);
+                try{
+                  await Api.jMessage.sendInvitationRequest(username: this.username, reason: reasonT.text);
+                }catch(e){
+                  print(e);
+                }
                 BotToast.closeAllLoading();
                 Navigator.pop(context);
               },

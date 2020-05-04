@@ -21,6 +21,10 @@ allprojects {
         google()
         jcenter()
         mavenCentral()
+        maven {
+            url 'http://www.idescout.com/maven/repo/'
+        }
+
     }
 }
 

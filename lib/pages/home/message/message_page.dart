@@ -15,30 +15,53 @@ import 'package:flutter_app2/services/model/viewModel/user_model.dart';
 import 'package:flutter_app2/services/provider/provider_widget.dart';
 import 'package:flutter_app2/services/provider/view_state_widget.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:jmessage_flutter/jmessage_flutter.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:sqflite/sqflite.dart';
 
 class MessagePage extends StatefulWidget{
   @override
   MessagePageState createState()=>MessagePageState();
 }
 
-class MessagePageState extends State<MessagePage>{
+class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientMixin{
+
+  MessageModel mM ;
 
   @override
   Widget build(BuildContext context) {
-
+    super.build(context);
     return WillPopScope(
       child: Scaffold(
           appBar: AppBar(
             title: Container(
-              child: Text("消息"),
+              child: InkWell(
+                onTap: ()async{
+                  Message nM = Message();
+                  showToast("是我JMTextMessage");
+                  nM.serverMessageId = "12";
+                  nM.fromUsername = "测试";
+                  nM.targetUsername = "admin";
+                  nM.createTime = 1234567891111;
+                  nM.content = "测试";
+                  nM.type = "测试";
+                  nM.extras = "{}";
+                  nM.senderAvatar = "";
+//                  var s = await Api.db.insert("wenow_message", nM.toJson());
+//                  print("插入 serverMessageId $s 数据成功--------------------------------");
+//                  Provider.of<MessageModel>(context,listen: false).receiverMessage(nM);
+                  mM.receiverMessage(nM);
+                },
+                child: Text("消息"),
+              ),
             ),
             actions: <Widget>[
               IconButton(
                 icon: Icon(IconFonts.buddy,size: 30,),
                 onPressed: ()  async {
-                  if (Provider.of<UserModel>(context,listen: false).hasUser) {
+                  if (Provider.of<UserModel>(context,listen: true).hasUser) {
                     Navigator.pushNamed(context, "test");
                   }else{
                     if(await DialogHelper.showLoginDialog("login")){
@@ -49,13 +72,12 @@ class MessagePageState extends State<MessagePage>{
               )
             ],
           ),
-          body: Consumer<MessageViewModel>(
-//            model: MessageViewModel(Provider.of<UserModel>(context)),
-//            onModelReady: (model){
-//              model.initData();
-//            },
+          body: ProviderWidget<MessageViewModel>(
+            onModelReady: (model){
+              model.loadData();
+            },
             builder: (BuildContext context, messageModel, Widget child) {
-              if(!messageModel.userModel.hasUser)
+              if(!messageModel.ok)
                 return ViewStateEmptyWidget(
                   onPressed: () {
                     Navigator.pushNamed(context, "login");
@@ -63,6 +85,7 @@ class MessagePageState extends State<MessagePage>{
                   message: "用户未登录",
                   buttonText: Text("去登陆"),
                 );
+              mM = messageModel.messageModel;
               return SmartRefresher(
                 controller: messageModel.refreshController,
                 header: HomeRefreshHeader(),
@@ -75,10 +98,10 @@ class MessagePageState extends State<MessagePage>{
                 child: ListView.builder(itemBuilder: (c,i){
                     return MessageItem(messageModel.list[i]);
                   },
-                  itemCount: messageModel.list.length,
+                  itemCount: Provider.of<MessageModel>(context,listen: true).messages==null?0:Provider.of<MessageModel>(context,listen: true).messages.length,
                 ),
               );
-            },
+            }, model: MessageViewModel(Provider.of<MessageModel>(context,listen: true)),
 
           )
       ),
@@ -87,6 +110,9 @@ class MessagePageState extends State<MessagePage>{
       },// 下边框
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
 
 }
@@ -123,7 +149,7 @@ class MessageItem extends StatelessWidget{
                       Container(
                           padding: EdgeInsets.only(bottom: 5),
                           child: new Text(
-                            "${message.senderId}",
+                            "${message.fromUsername}",
                             style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
                           ),
                           alignment: Alignment.topLeft

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:flutter_app2/services/model/viewModel/buddy_model.dart';
 import 'package:flutter_app2/services/model/viewModel/favourite_model.dart';
 import 'package:flutter_app2/services/model/viewModel/locale_model.dart';
@@ -42,11 +43,15 @@ List<SingleChildWidget> dependentServices = [
 //    userModel ??
 //        UserModel(),
 //  )
-  ChangeNotifierProxyProvider<UserModel , MessageViewModel>(
-    create: (c)=>MessageViewModel(UserModel()),
-    update: (context, messageModel, userModel) =>
-    userModel ??
-        UserModel(),
+  ChangeNotifierProxyProvider<UserModel , MessageModel>(
+    create: (context){
+      print("---------------------------创建消息桶");
+      return MessageModel(Provider.of<UserModel>(context));
+    },
+    update: (context, userModel, messageModel) {
+      print("---------------------------更新消息桶");
+      return MessageModel(userModel);
+    },
   ),
 //  ChangeNotifierProxyProvider<BuddyModel, UserModel>(
 //    create: null,
