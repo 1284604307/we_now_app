@@ -124,28 +124,6 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
                 onLoading: messageModel.loadMore,
                 child: CustomScrollView(
                   slivers: <Widget>[
-                    if(mM.userNotify.length>0)
-                    SliverToBoxAdapter(
-                      child: RowItem(leftWidget:
-                        RectAvatar(
-                          CachedNetworkImage(
-                            imageUrl: "",
-                          ),width: 50,height: 50,
-                        ),
-                        height: 70,
-                        other: Container(
-                          margin: EdgeInsets.only(left: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text("好友通知",style: TextStyle(fontWeight: FontWeight.bold),),
-                              if(mM.userNotify[0].type == JMContactNotifyType.invite_received)
-                              Text("${mM.userNotify[0].fromUserName} 请求添加您为好友")
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
 //                    SliverList(
 //                      delegate: SliverChildBuilderDelegate(
 //                              (c,i){
@@ -159,7 +137,8 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                           (c,i){
-                            return MessageItem(messageModel.list[i],messageModel.list[i]);
+                            JMConversationInfo conversation = messageModel.list[i];
+                            return ConversationItem(conversation);
                           },
                         childCount: messageModel.list.length
                       ),
@@ -183,18 +162,19 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
 
 }
 
-class MessageItem extends StatelessWidget{
+class ConversationItem extends StatelessWidget{
 
   Function onPressed;
-  Message message;
-  String username;
+//  JMTextMessage message;
+  JMConversationInfo conversation;
 
-  MessageItem(this.message,this.username,{this.onPressed});
+  ConversationItem(this.conversation,{this.onPressed});
 
   @override
   Widget build(BuildContext context) {
+    JMTextMessage message = conversation.latestMessage;
     return InkWell(
-      onTap: onPressed??(){Navigator.push(context, SlideBaseRouteBuilder.left( ChatScreen( username) ,speed: 5.0));},
+      onTap: onPressed??(){Navigator.push(context, SlideBaseRouteBuilder.left( ChatScreen(conversation) ,speed: 5.0));},
       child: Container(
         color: Theme.of(context).cardColor,
         padding: EdgeInsets.all(10),
@@ -205,7 +185,7 @@ class MessageItem extends StatelessWidget{
               children: <Widget>[
                 Avatar(CachedNetworkImage(
                   fit: BoxFit.cover,
-                  imageUrl: "${message.senderAvatar}",
+                  imageUrl: "${conversation.target}",
                 ),
                   width: 50,
                   height: 50,),
@@ -216,15 +196,16 @@ class MessageItem extends StatelessWidget{
                     children: <Widget>[
                       Container(
                           padding: EdgeInsets.only(bottom: 5),
+                          // desc 会话名
                           child: new Text(
-                            "${username}",
+                            "${conversation.title}",
                             style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
                           ),
                           alignment: Alignment.topLeft
                       ),
                       Container(
                           child: new Text(
-                            "${message.content}",
+                            "${message.text}",
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(fontSize: 14,color: Colors.grey),
                           ),

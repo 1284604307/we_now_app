@@ -16,7 +16,7 @@ import 'package:oktoast/oktoast.dart';
 /**
  * @createDate  2020/4/27
  */
-class MessageViewModel<JMConversationInfo> extends ViewStateRefreshListModel {
+class MessageViewModel extends ViewStateRefreshListModel<JMConversationInfo> {
 
   // desc 会话组
   List<JMConversationInfo> cs;
@@ -33,8 +33,8 @@ class MessageViewModel<JMConversationInfo> extends ViewStateRefreshListModel {
 
   @override
   Future<List<JMConversationInfo>> loadData({int pageNum})async{
-
-    return  Api.jMessage.getConversations();
+        cs = await Api.jMessage.getConversations();
+    return cs;
   }
 }
 

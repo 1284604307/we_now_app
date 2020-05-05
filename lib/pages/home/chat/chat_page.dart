@@ -6,6 +6,7 @@ import 'package:flutter_app2/services/model/viewModel/message_model.dart';
 import 'package:flutter_app2/services/model/viewModel/user_model.dart';
 import 'package:flutter_app2/services/net/restful_go.dart';
 import 'package:jmessage_flutter/jmessage_flutter.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 
 /**
@@ -18,17 +19,17 @@ class FriendlychatApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: "Friendlychat",
-      home: new ChatScreen(""),
+      home: new ChatScreen(null),
     );
   }
 }
 
 class ChatScreen extends StatefulWidget {
 
-  String fromUsername;
-  ChatScreen(this.fromUsername); //modified
+  JMConversationInfo conversation;
+  ChatScreen(this.conversation); //modified
   @override
-  State createState() => new ChatScreenState(fromUsername);
+  State createState() => new ChatScreenState(conversation);
 }
 
 class ChatScreenState extends State<ChatScreen>  with TickerProviderStateMixin {
@@ -37,13 +38,13 @@ class ChatScreenState extends State<ChatScreen>  with TickerProviderStateMixin {
   //输入控制器
   final TextEditingController _textController = new TextEditingController();
 
-  String friendUsername;
-  ChatScreenState(this.friendUsername); //modified
+  JMConversationInfo conversation;
+  ChatScreenState(this.conversation); //modified
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: new AppBar(title: new Text("${friendUsername}")),
+      appBar: new AppBar(title: new Text("${conversation.title}")),
       body: new Column(
         children: <Widget>[
           new Flexible(
@@ -51,12 +52,12 @@ class ChatScreenState extends State<ChatScreen>  with TickerProviderStateMixin {
               padding: new EdgeInsets.all(8.0),
               reverse: true,
               itemBuilder: (_, int index){
-                Message m = Provider.of<MessageModel>(context).getMessagesList("${friendUsername}")[index];
-                if(m.fromUsername == friendUsername){
+                Message m = Provider.of<MessageModel>(context).getMessagesList("${conversation.title}")[index];
+                if(m.fromUsername == conversation.title){
                   return ChatMessage(m);
                 }else return ChatMeMessage(m);
               },//_messages[index],
-              itemCount: Provider.of<MessageModel>(context).getMessagesList("${friendUsername}").length,
+              itemCount: Provider.of<MessageModel>(context).getMessagesList("${conversation.title}").length,
             ),
           ),
           new Divider(height: 1.0),
@@ -71,33 +72,14 @@ class ChatScreenState extends State<ChatScreen>  with TickerProviderStateMixin {
   }
 
   void _handleSubmitted(String text)async {
+    if(text.isEmpty){
+      showToast("消息不能为空");
+      return;
+    }
     _textController.clear();
-    Message m = Message();
-    m.content = text;
-    m.fromUsername = Provider.of<UserModel>(context,listen: false).user.userName;
-    m.targetUsername = friendUsername;
-    ChatMessage message = new ChatMessage(
-      m,
-      animationController: new AnimationController(
-        duration: new Duration(milliseconds: 700),
-        vsync: this,
-      ),
-    );
-    JMConversationInfo conversation = await Api.jMessage.createConversation(
-        target: JMSingle.fromJson({
-          "type": getStringFromEnum(JMMessageType.text),
-          "username": "admin",
-        }
-    ));
-    print(conversation.toJson());
-    JMTextMessage jm = await Api.jMessage.sendTextMessage(type: JMSingle.fromJson({
-      "type": getStringFromEnum(JMMessageType.text),
-      "username": "admin",
-    })
-        , text: "厉害了");
-    print(jm.toJson());
-//      Provider.of<MessageModel>(context,listen: false).receiverMessage(m);
-    message.animationController.forward();
+    showToast("发送消息 ${text}");
+    conversation.sendTextMessage(text: text);
+
   }
 
   Widget _buildTextComposer() {
