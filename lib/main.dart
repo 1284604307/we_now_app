@@ -28,7 +28,6 @@ import 'services/model/viewModel/message_model.dart';
 main() async {
 
   BuildContext _context;
-  MessageModel messageModel;
 
   // desc runApp前进行耗时操作必须执行该静态方法
   WidgetsFlutterBinding.ensureInitialized();
@@ -110,20 +109,10 @@ main() async {
     print("----------极光 IM 消息事件");
     print(message.runtimeType);
     print(message.toJson());
+    Provider.of<ConversationModel>(_context,listen: false).refreshConversations();
 
     switch(message.runtimeType.toString()){
       case "JMTextMessage":
-        Message nM = new Message();
-        showToast("是我JMTextMessage");
-        nM.serverMessageId = message.serverMessageId;
-        nM.fromUsername = message.from.username;
-        nM.targetUsername = message.target.username;
-        nM.createTime = message.createTime;
-        nM.content = message.text;
-        nM.type = message.type.toString();
-        nM.extras = message.extras.toString();
-        nM.senderAvatar = message.from.avatarThumbPath;
-        Provider.of<MessageModel>(_context,listen: false).receiverMessage(nM);
         break;
       case "JMUserInfo":
         showToast("是我JMUserInfo");
@@ -143,7 +132,7 @@ main() async {
     print(event.toJson());
     var s = await Api.db.insert("wenow_contact_event", event.toJson());
     print("插入 id $s 好友事件成功--------------------------------");
-    Provider.of<MessageModel>(_context,listen: false).receiverNotify(event);
+    Provider.of<ConversationModel>(_context,listen: false).refreshConversations();
   }); // 添加监听
 
   Api.jMessage.addLoginStateChangedListener((message)async{

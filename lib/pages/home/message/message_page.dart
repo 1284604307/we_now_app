@@ -31,8 +31,6 @@ class MessagePage extends StatefulWidget{
 
 class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientMixin{
 
-  MessageModel mM ;
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -102,7 +100,7 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
           ),
           body: ProviderWidget<MessageViewModel>(
             onModelReady: (model){
-              model.loadData();
+              model.refresh();
             },
             builder: (BuildContext context, messageModel, Widget child) {
               if(!Provider.of<UserModel>(context).hasUser)
@@ -113,6 +111,7 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
                   message: "用户未登录",
                   buttonText: Text("去登陆"),
                 );
+              ConversationModel mModel = Provider.of<ConversationModel>(context,listen: true);
               return SmartRefresher(
                 controller: messageModel.refreshController,
                 header: HomeRefreshHeader(),
@@ -120,8 +119,6 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
                   await messageModel.refresh();
                   messageModel.showErrorMessage(context);
                 },
-//                enablePullUp: messageModel.list.isNotEmpty,
-                onLoading: messageModel.loadMore,
                 child: CustomScrollView(
                   slivers: <Widget>[
 //                    SliverList(
@@ -137,16 +134,16 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                           (c,i){
-                            JMConversationInfo conversation = messageModel.list[i];
+                            JMConversationInfo conversation = mModel.cs[i];
                             return ConversationItem(conversation);
                           },
-                        childCount: messageModel.list.length
+                        childCount: mModel.cs.length
                       ),
                     ),
                   ],
                 ),
               );
-            }, model: MessageViewModel(),
+            }, model: MessageViewModel(Provider.of(context,listen: true)),
 
           )
       ),

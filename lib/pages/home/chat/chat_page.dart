@@ -34,9 +34,24 @@ class ChatScreen extends StatefulWidget {
 
 class ChatScreenState extends State<ChatScreen>  with TickerProviderStateMixin {
   //用户消息列表
-  final List<ChatMessage> _messages = <ChatMessage>[];
+  List<JMTextMessage> _messages = <JMTextMessage>[];
   //输入控制器
   final TextEditingController _textController = new TextEditingController();
+
+
+  @override
+  void initState(){
+    conversation.getHistoryMessages(from: 0, limit: 10).then((onValue){
+      onValue.forEach((m){
+        _messages.insert(0, m);
+      });
+//      _messages = onValue.map((f)=>JMTextMessage.fromJson(f) );
+    showToast("加载完毕");
+      setState(() {
+        _messages=_messages;
+      });
+    });
+  }
 
   JMConversationInfo conversation;
   ChatScreenState(this.conversation); //modified
@@ -52,12 +67,12 @@ class ChatScreenState extends State<ChatScreen>  with TickerProviderStateMixin {
               padding: new EdgeInsets.all(8.0),
               reverse: true,
               itemBuilder: (_, int index){
-                Message m = Provider.of<MessageModel>(context).getMessagesList("${conversation.title}")[index];
-                if(m.fromUsername == conversation.title){
+                JMTextMessage m = _messages[index];
+                if(m.from.username == conversation.title){
                   return ChatMessage(m);
                 }else return ChatMeMessage(m);
               },//_messages[index],
-              itemCount: Provider.of<MessageModel>(context).getMessagesList("${conversation.title}").length,
+              itemCount: _messages.length,
             ),
           ),
           new Divider(height: 1.0),
@@ -116,7 +131,7 @@ class ChatScreenState extends State<ChatScreen>  with TickerProviderStateMixin {
 
 class ChatMessage extends StatelessWidget {
 
-  Message message;
+  JMTextMessage message;
   ChatMessage(this.message,{ this.animationController});
 
   final AnimationController animationController;
@@ -132,16 +147,16 @@ class ChatMessage extends StatelessWidget {
         children: <Widget>[
           new Container(
             margin: const EdgeInsets.only(right: 16.0),
-            child: new CircleAvatar(child: new Text(message.fromUsername)),
+            child: new CircleAvatar(child: new Text(message.from.username)),
           ),
           Expanded(
             child: new Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Text(message.fromUsername, style: Theme.of(context).textTheme.subhead,softWrap: false,overflow:TextOverflow.clip),
+                new Text(message.from.username, style: Theme.of(context).textTheme.subhead,softWrap: false,overflow:TextOverflow.clip),
                 new Container(
                   margin: const EdgeInsets.only(top: 5.0),
-                  child: Text(message.content,
+                  child: Text(message.text,
                       softWrap: true,
                       overflow:TextOverflow.clip),
                 ),
@@ -158,7 +173,7 @@ class ChatMessage extends StatelessWidget {
 
 class ChatMeMessage extends StatelessWidget {
 
-  Message message;
+  JMTextMessage message;
   ChatMeMessage(this.message,{ this.animationController});
 
   final AnimationController animationController;
@@ -176,10 +191,10 @@ class ChatMeMessage extends StatelessWidget {
             child: new Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                new Text(message.fromUsername, style: Theme.of(context).textTheme.subhead,softWrap: false,overflow:TextOverflow.clip),
+                new Text(message.from.username, style: Theme.of(context).textTheme.subhead,softWrap: false,overflow:TextOverflow.clip),
                 new Container(
                   margin: const EdgeInsets.only(top: 5.0),
-                  child: Text(message.content,
+                  child: Text(message.text,
                       softWrap: true,
                       overflow:TextOverflow.clip),
                 ),
@@ -188,7 +203,7 @@ class ChatMeMessage extends StatelessWidget {
           ),
           new Container(
             margin: const EdgeInsets.only(left: 16.0),
-            child: new CircleAvatar(child: new Text(message.fromUsername)),
+            child: new CircleAvatar(child: new Text(message.from.username)),
           ),
         ],
       ),

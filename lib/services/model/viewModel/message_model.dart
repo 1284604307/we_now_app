@@ -18,114 +18,38 @@ import 'package:oktoast/oktoast.dart';
  */
 class MessageViewModel extends ViewStateRefreshListModel<JMConversationInfo> {
 
-  // desc 会话组
-  List<JMConversationInfo> cs;
+  ConversationModel messageModel;
+  MessageViewModel(this.messageModel);
 
   @override
   initData() async {
+    messageModel.refreshConversations();
     return super.initData();
   }
 
 
   @override
   onCompleted(List data) {
+
   }
 
   @override
   Future<List<JMConversationInfo>> loadData({int pageNum})async{
-        cs = await Api.jMessage.getConversations();
-    return cs;
+      await messageModel.refreshConversations();
+    return messageModel.cs;
   }
 }
 
-class MessageModel extends ChangeNotifier{
+class ConversationModel extends ChangeNotifier{
 
   UserModel userModel;
-  MessageModel(this.userModel);
+  ConversationModel(this.userModel);
 
-  Map<String,MessageGroupModel> _messages = {};
-  Map<String,MessageGroupModel> get messagesGroup => this._messages;
+  // desc 会话组
+  List<JMConversationInfo> cs;
 
-  List<UserNotifyMessage> userNotify = [];
-
-  MessageGroupModel getMessages(String username) {
-    if(!_messages.containsKey(username))
-      _messages[username]=MessageGroupModel([],username);
-    return _messages[username];
-  }
-
-  List<Message> getMessagesList(String username) {
-    if(!_messages.containsKey(username))
-      _messages[username]=MessageGroupModel([],username);
-    return _messages[username].messages;
-  }
-
-  getMessageList(){
-    List<Message> messages = [];
-    if(_messages!=null)
-      _messages.forEach((username,m){
-        messages.add(m.getLastMessage());
-      });
-    return messages;
-  }
-
-  loadData() async{
-    if(userModel.hasUser){
-      print("正在读取用户 ${userModel.user.loginName} 的本地数据......");
-      List<Map<String, dynamic>> s;
-      try{
-        s = await Api.db.query("wenow_message where targetUsername = '${userModel.user.loginName}' or fromUsername =  '${userModel.user.loginName}'");
-        if(s==null){
-          showToast("用户历史消息为空");
-          debugPrint("用户历史消息为空");
-          s= [];
-        }else _messages={};
-        s.forEach((m){
-          Message message =Message.fromJson(m);
-          print(message.toJson());
-          if(message.fromUsername == userModel.user.loginName){
-            getMessages(message.targetUsername).putMessage(message);
-          }else
-            getMessages(message.fromUsername).putMessage(message);
-        });
-      }catch(e){print(e);}
-
-      //desc 读取本地好友通知事件
-      List<Map<String, dynamic>> notifyL = await Api.db.query("wenow_contact_event where targetUsername = '${userModel.user.loginName}'");
-      notifyL.forEach((n){
-        UserNotifyMessage uNM = UserNotifyMessage.fromJson(n);
-        print(uNM);
-        userNotify.add(uNM);
-      });
-
-      return s;
-    }else{
-      throw UnAuthorizedException();
-    }
-  }
-
-  receiverMessage(Message message,{saveSql = true}) async {
-    if(_messages==null) await loadData();
-
-    if(saveSql){
-      var s = await Api.db.insert("wenow_message", message.toJson());
-      print("插入 serverMessageId $s 数据 到SQLITE成功--------------------------------");
-    }
-
-    print(_messages.length);
-
-    if(message.fromUsername == userModel.user.loginName){
-      getMessages(message.targetUsername).putMessage(message);
-    }else
-      getMessages(message.fromUsername).putMessage(message);
-
-    print("Model接收到一条新数据");
-    print(message.toJson());
-    notifyListeners();
-  }
-
-  receiverNotify(UserNotifyMessage event) async {
-    userNotify.add(event);
+  refreshConversations() async{
+    cs = await Api.jMessage.getConversations();
     notifyListeners();
   }
 
@@ -134,13 +58,17 @@ class MessageModel extends ChangeNotifier{
   }
 
   logout(){
-    _messages = {};
+
   }
 
   updateUser(UserModel userModel) {
     print("---------------用户信息改变");
   }
 
+
+}
+
+class SingleConversationModel extends ChangeNotifier{
 
 }
 

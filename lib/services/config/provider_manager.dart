@@ -47,10 +47,10 @@ List<SingleChildWidget> dependentServices = [
 //    userModel ??
 //        UserModel(),
 //  )
-  ChangeNotifierProxyProvider<UserModel , MessageModel>(
+  ChangeNotifierProxyProvider<UserModel , ConversationModel>(
     create: (context){
       print("---------------------------创建消息桶");
-      return MessageModel(Provider.of<UserModel>(context, listen: false));
+      return ConversationModel(Provider.of<UserModel>(context, listen: false));
     },
     update: (context, userModel, messageModel) {
       print("---------------------------更新消息桶");
