@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/common/Api.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
 import 'package:flutter_app2/pages/home/chat/chat_page.dart';
+import 'package:flutter_app2/pages/home/chat/single_chat_scene.dart';
 import 'package:flutter_app2/pages/home/circle/test.dart';
 import 'package:flutter_app2/pages/maps/other.dart';
 import 'package:flutter_app2/pages/wights/LittleWidgets.dart';
@@ -44,7 +46,7 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
                   var i =0;
                   cs.forEach((c)async{
                     print(i++);
-                    print((c.latestMessage as JMTextMessage).toJson());
+                    print((c.latestMessage as JMNormalMessage).toJson());
 //                    print(c.toJson());
 //                    JMTextMessage jm = await c.sendTextMessage(text: "厉害了");
 //                    print(jm.toJson());
@@ -169,9 +171,20 @@ class ConversationItem extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    JMTextMessage message = conversation.latestMessage;
+
+    JMNormalMessage message = conversation.latestMessage;
+    String msgTime;
+    String messageText;
+    if (conversation.latestMessage is JMTextMessage) {
+      var textMsg = JMTextMessage.fromJson(conversation.latestMessage.toJson());
+      messageText = textMsg.text;
+    } else if (conversation.latestMessage is JMImageMessage) {
+      messageText = '[图片]';
+    } else {
+      messageText = '欢迎加入群聊！';
+    }
     return InkWell(
-      onTap: onPressed??(){Navigator.push(context, SlideBaseRouteBuilder.left( ChatScreen(conversation) ,speed: 5.0));},
+      onTap: onPressed??(){Navigator.push(context, SlideBaseRouteBuilder.left( SingleChatScene(userInfo: conversation.target,) ,speed: 5.0));},
       child: Container(
         color: Theme.of(context).cardColor,
         padding: EdgeInsets.all(10),
@@ -202,8 +215,9 @@ class ConversationItem extends StatelessWidget{
                       ),
                       Container(
                           child: new Text(
-                            "${message.text}",
+                            "${messageText}",
                             overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                             style: TextStyle(fontSize: 14,color: Colors.grey),
                           ),
                           alignment: Alignment.topLeft
@@ -218,7 +232,7 @@ class ConversationItem extends StatelessWidget{
                 Container(
                     padding: EdgeInsets.only(bottom: 5),
                     child: new Text(
-                      "${DateTime.fromMillisecondsSinceEpoch(message.createTime??0)}",
+                      "${msgTime??""}",
                       style: TextStyle(fontSize: 12,color: Colors.grey),
                     ),
                     alignment: Alignment.topRight

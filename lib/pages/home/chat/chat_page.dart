@@ -1,3 +1,4 @@
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/common/Api.dart';
@@ -58,6 +59,7 @@ class ChatScreenState extends State<ChatScreen>  with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+
     return new Scaffold(
       appBar: new AppBar(title: new Text("${conversation.title}")),
       body: new Column(
