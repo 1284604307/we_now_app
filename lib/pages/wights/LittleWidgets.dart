@@ -122,11 +122,12 @@ class RowItem extends StatelessWidget{
 
   List<Widget> action;
   String left;
+  Widget leftWidget;
   Widget other;
   double height;
   Function onPressed;
 
-  RowItem({this.left,this.other,this.action,this.height=60,this.onPressed});
+  RowItem({this.left,this.leftWidget,this.other,this.action,this.height=60,this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -152,6 +153,7 @@ class RowItem extends StatelessWidget{
                       ),
                     ),
                   ),
+                if(leftWidget!=null)leftWidget,
                 if(other!=null)
                   other,
               ],

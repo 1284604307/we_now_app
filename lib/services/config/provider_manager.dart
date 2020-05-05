@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:flutter_app2/services/model/viewModel/buddy_model.dart';
 import 'package:flutter_app2/services/model/viewModel/favourite_model.dart';
+import 'package:flutter_app2/services/model/viewModel/friend_model.dart';
 import 'package:flutter_app2/services/model/viewModel/locale_model.dart';
 import 'package:flutter_app2/services/model/viewModel/login_model.dart';
 import 'package:flutter_app2/services/model/viewModel/message_model.dart';
@@ -29,6 +30,9 @@ List<SingleChildWidget> independentServices = [
   ),
   ChangeNotifierProvider<GlobalFavouriteStateModel>(
     create: (context) => GlobalFavouriteStateModel(),
+  ),
+  ChangeNotifierProvider<FriendModel>(
+    create: (context) => FriendModel(),
   ),
 ];
 

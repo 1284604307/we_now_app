@@ -10,7 +10,7 @@ Message _$MessageFromJson(Map<String, dynamic> json) {
   return Message()
     ..id = json['id'] as num
     ..type = json['type'] as String
-    ..targetUsername = json['targetUsername'] as String
+    ..targetUsername = json['targetUsername'].toString()
     ..targetType = json['targetType'] as String
     ..fromUsername = json['fromUsername'].toString()
     ..senderType = json['senderType'] as String

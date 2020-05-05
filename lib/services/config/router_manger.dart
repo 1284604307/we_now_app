@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_app2/pages/app.dart';
 import 'package:flutter_app2/pages/home/chat/chat_page.dart';
 import 'package:flutter_app2/pages/home/chat/friend_application.dart';
-import 'package:flutter_app2/pages/home/chat/friend_page.dart';
+import 'package:flutter_app2/pages/home/chat/frined_list_page.dart';
 import 'package:flutter_app2/pages/home/circle/test.dart';
 import 'package:flutter_app2/pages/home/me/me_page.dart';
 import 'package:flutter_app2/pages/home/my_page/setting_page.dart';
@@ -44,7 +44,7 @@ class Router {
       case RouteName.chat:
         return NoAnimRouteBuilder(FriendlychatApp());
       case RouteName.friend:
-        return SizeRoute(FriendPage());
+        return SizeRoute(FriendListPage());
       case RouteName.loading:
         return NoAnimRouteBuilder(LoadingPage());
       case RouteName.login:

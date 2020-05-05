@@ -11,7 +11,9 @@ import 'package:flutter_app2/services/config/storage_manager.dart';
 import 'package:flutter_app2/services/generated/l10n.dart';
 import 'package:flutter_app2/services/model/Message.dart';
 import 'package:flutter_app2/services/model/viewModel/locale_model.dart';
+import 'package:flutter_app2/services/model/viewModel/login_model.dart';
 import 'package:flutter_app2/services/model/viewModel/theme_model.dart';
+import 'package:flutter_app2/services/model/viewModel/user_model.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:jmessage_flutter/jmessage_flutter.dart';
@@ -71,9 +73,12 @@ main() async {
 
   // DESC 用户消息表
   await Api.db.execute("Create table if not EXISTS  wenow_message "
-      "(id INTEGER,serverMessageId INTEGER PRIMARY KEY,fromUsername INTEGER,targetUsername INTEGER,content TEXT,type TEXT"
+      "(id INTEGER,serverMessageId INTEGER PRIMARY KEY,fromUsername text,targetUsername text,content TEXT,type TEXT"
       ",createTime INTEGER,extras text,senderAvatar text,targetType text,senderType text,isSend INTEGER,action text); ");
-
+  // desc 用户事件表
+  await Api.db.execute("Create table if not EXISTS  wenow_contact_event "
+      "(reason text ,fromUsername text,targetUsername text,fromUserAppKey text,type TEXT"
+      "); ");
 
   Api.jpush = new JPush();
   Api.jpush.setup(
@@ -118,8 +123,6 @@ main() async {
         nM.type = message.type.toString();
         nM.extras = message.extras.toString();
         nM.senderAvatar = message.from.avatarThumbPath;
-        var s = await Api.db.insert("wenow_message", nM.toJson());
-        print("插入 serverMessageId $s 数据成功--------------------------------");
         Provider.of<MessageModel>(_context,listen: false).receiverMessage(nM);
         break;
       case "JMUserInfo":
@@ -128,15 +131,36 @@ main() async {
     };
   });
 
-  Api.jMessage.addContactNotifyListener((message){
+  Api.jMessage.addContactNotifyListener((message)async{
     print("----------极光 IM 好友事件");
-    print(message);
     print(message.toJson());
+    UserNotifyMessage event = UserNotifyMessage();
+    event.fromUserName = message.fromUserName;
+    event.type = message.type;
+    event.fromUserAppKey = message.fromUserAppKey;
+    event.reason = message.reason;
+    event.targetUserName = Provider.of<UserModel>(_context,listen: false).user.loginName;
+    print(event.toJson());
+    var s = await Api.db.insert("wenow_contact_event", event.toJson());
+    print("插入 id $s 好友事件成功--------------------------------");
+    Provider.of<MessageModel>(_context,listen: false).receiverNotify(event);
   }); // 添加监听
-  Api.jMessage.addLoginStateChangedListener((message){
+
+  Api.jMessage.addLoginStateChangedListener((message)async{
     print("----------极光 IM 登陆状态改变事件");
     print("被挤掉线了");
+    bool l = await LoginModel(Provider.of<UserModel>(_context,listen: false)).logout();
+    if(l){
+      showDialog(context: _context,child: Container(
+        child: Text("您的账号在其他终端登录，本机已离线"),
+      ));
+    }else{
+      showDialog(context: _context,child: Container(
+        child: Text("您的IM聊天系统已离线"),
+      ));
+    }
   }) ;
+
   Api.jMessage.addClickMessageNotificationListener((message){
     switch(message.runtimeType.toString()){
       case "JMTextMessage":

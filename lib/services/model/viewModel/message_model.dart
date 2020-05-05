@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:flutter/widgets.dart';
@@ -9,44 +10,31 @@ import 'package:flutter_app2/services/net/api.dart';
 import 'package:flutter_app2/services/provider/view_state.dart';
 import 'package:flutter_app2/services/provider/view_state_model.dart';
 import 'package:flutter_app2/services/provider/view_state_refresh_list_model.dart';
+import 'package:jmessage_flutter/jmessage_flutter.dart';
 import 'package:oktoast/oktoast.dart';
 
 /**
  * @createDate  2020/4/27
  */
-class MessageViewModel extends ViewStateRefreshListModel {
+class MessageViewModel<JMConversationInfo> extends ViewStateRefreshListModel {
 
-  MessageModel _messageModel;
-  MessageViewModel(this._messageModel);
-
-  MessageModel get messageModel => this._messageModel;
-
-
-  bool get ok => messageModel.userModel.hasUser;
+  // desc 会话组
+  List<JMConversationInfo> cs;
 
   @override
-  initData() async{
-    if(messageModel.userModel.hasUser){
-      await messageModel.loadData();
-    }else{
-      showToast("未登录");
-    }
+  initData() async {
     return super.initData();
   }
 
-  @override
-  Future<List<Message>> loadData({int pageNum}) async {
-    await messageModel.loadData();
-    List<Message> messages = [];
-    if(messageModel.messagesGroup!=null)
-      messageModel.messagesGroup.forEach((username,m){
-        messages.add(m.getLastMessage());
-      });
-    return messages;
-  }
 
   @override
   onCompleted(List data) {
+  }
+
+  @override
+  Future<List<JMConversationInfo>> loadData({int pageNum})async{
+
+    return  Api.jMessage.getConversations();
   }
 }
 
@@ -58,15 +46,17 @@ class MessageModel extends ChangeNotifier{
   Map<String,MessageGroupModel> _messages = {};
   Map<String,MessageGroupModel> get messagesGroup => this._messages;
 
+  List<UserNotifyMessage> userNotify = [];
+
   MessageGroupModel getMessages(String username) {
     if(!_messages.containsKey(username))
-      _messages[username]=MessageGroupModel([]);
+      _messages[username]=MessageGroupModel([],username);
     return _messages[username];
   }
 
   List<Message> getMessagesList(String username) {
     if(!_messages.containsKey(username))
-      _messages[username]=MessageGroupModel([]);
+      _messages[username]=MessageGroupModel([],username);
     return _messages[username].messages;
   }
 
@@ -81,33 +71,61 @@ class MessageModel extends ChangeNotifier{
 
   loadData() async{
     if(userModel.hasUser){
-      print("${userModel.user.loginName}");
-      List<Map<String, dynamic>> s = await Api.db.query("wenow_message where targetUsername = '${userModel.user.loginName}'");
-      if(s==null){
-        showToast("用户历史消息为空");
-        debugPrint("用户历史消息为空");
-        s= [];
-      }
-      s.forEach((m){
-        Message message =Message.fromJson(m);
-        print(message.toJson());
-        getMessages(message.fromUsername).putMessage(message);
+      print("正在读取用户 ${userModel.user.loginName} 的本地数据......");
+      List<Map<String, dynamic>> s;
+      try{
+        s = await Api.db.query("wenow_message where targetUsername = '${userModel.user.loginName}' or fromUsername =  '${userModel.user.loginName}'");
+        if(s==null){
+          showToast("用户历史消息为空");
+          debugPrint("用户历史消息为空");
+          s= [];
+        }else _messages={};
+        s.forEach((m){
+          Message message =Message.fromJson(m);
+          print(message.toJson());
+          if(message.fromUsername == userModel.user.loginName){
+            getMessages(message.targetUsername).putMessage(message);
+          }else
+            getMessages(message.fromUsername).putMessage(message);
+        });
+      }catch(e){print(e);}
+
+      //desc 读取本地好友通知事件
+      List<Map<String, dynamic>> notifyL = await Api.db.query("wenow_contact_event where targetUsername = '${userModel.user.loginName}'");
+      notifyL.forEach((n){
+        UserNotifyMessage uNM = UserNotifyMessage.fromJson(n);
+        print(uNM);
+        userNotify.add(uNM);
       });
-//      _messages.forEach((username,model){
-//        print("${username} ------> ${model.getLastMessage()}");
-//      });
+
       return s;
     }else{
       throw UnAuthorizedException();
     }
   }
 
-  receiverMessage(Message message) async {
+  receiverMessage(Message message,{saveSql = true}) async {
     if(_messages==null) await loadData();
+
+    if(saveSql){
+      var s = await Api.db.insert("wenow_message", message.toJson());
+      print("插入 serverMessageId $s 数据 到SQLITE成功--------------------------------");
+    }
+
     print(_messages.length);
-    getMessages(message.fromUsername).putMessage(message);
+
+    if(message.fromUsername == userModel.user.loginName){
+      getMessages(message.targetUsername).putMessage(message);
+    }else
+      getMessages(message.fromUsername).putMessage(message);
+
     print("Model接收到一条新数据");
     print(message.toJson());
+    notifyListeners();
+  }
+
+  receiverNotify(UserNotifyMessage event) async {
+    userNotify.add(event);
     notifyListeners();
   }
 
@@ -135,12 +153,13 @@ enum MessageGroupType{
 class MessageGroupModel extends ViewStateModel{
 
   List<Message> _messages = [];
+  String username;
   MessageGroupType type ;
 
 
   List<Message> get messages => _messages;
 
-  MessageGroupModel(this._messages,{this.type =  MessageGroupType.USER});
+  MessageGroupModel(this._messages,this.username,{this.type =  MessageGroupType.USER});
 
   getLastMessage(){
     return _messages[_messages.length-1];
@@ -153,3 +172,31 @@ class MessageGroupModel extends ViewStateModel{
 
 }
 
+
+class UserNotifyMessage {
+  JMContactNotifyType type;
+  String reason;
+  String fromUserName;
+  String targetUserName;
+  String fromUserAppKey;
+
+
+  UserNotifyMessage();
+
+  Map<String, dynamic> toJson() {
+    return {
+      'type': getStringFromEnum(type),
+      'reason': reason,
+      'fromUserName': fromUserName,
+      'targetUserName': targetUserName,
+      'fromUserAppKey': fromUserAppKey
+    };
+  }
+
+  UserNotifyMessage.fromJson(Map<dynamic, dynamic> json)
+      : type = getEnumFromString(JMContactNotifyType.values, json['type']),
+        reason = json['reason'],
+        fromUserName = json['fromUsername'],
+        targetUserName = json['targetUserName'],
+        fromUserAppKey = json['fromUserAppKey'];
+}
