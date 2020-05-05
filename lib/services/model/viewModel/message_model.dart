@@ -46,10 +46,16 @@ class ConversationModel extends ChangeNotifier{
   ConversationModel(this.userModel);
 
   // desc 会话组
-  List<JMConversationInfo> cs;
+  List<JMConversationInfo> cs = [];
+  List<UserNotifyMessage> notifies = [];
 
   refreshConversations() async{
     cs = await Api.jMessage.getConversations();
+    cs =cs==null?[]:cs;
+    notifies = (await Api.db.query("wenow_contact_event where fromUsername='${userModel.user.loginName}' "
+        "or targetUserName = '${userModel.user.loginName}' "))
+        .map((json){UserNotifyMessage u = UserNotifyMessage.fromJson(json);print(json);return u;}).toList();
+    showToast(notifies.length.toString());
     notifyListeners();
   }
 
@@ -58,17 +64,13 @@ class ConversationModel extends ChangeNotifier{
   }
 
   logout(){
-
+    cs=[];notifies=[];
   }
 
   updateUser(UserModel userModel) {
     print("---------------用户信息改变");
   }
 
-
-}
-
-class SingleConversationModel extends ChangeNotifier{
 
 }
 

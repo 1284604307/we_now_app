@@ -174,14 +174,18 @@ class SingleChatProvider with ChangeNotifier {
     Api.jMessage.resetUnreadMessageCount(target: jmSingle);
 
     await Api.jMessage.enterConversation(target: jmSingle);
-    Api.jMessage.addReceiveMessageListener((msg) async {
-      print('消息监听++++++++++++++++++++++++++++++++++++++++');
-      isLoading = false;
-      if (jSingleConver.isMyMessage(msg)) {
-        _parseMessage(msg, false);
-      }
-    });
+
+    Api.jMessage.addReceiveMessageListener(_receiverMessageListener);
+
     getHistoryMessages();
+  }
+
+  Future<Function> _receiverMessageListener(msg) async {
+    print('消息监听++++++++++++++++++++++++++++++++++++++++');
+    isLoading = false;
+    if (jSingleConver.isMyMessage(msg)) {
+      _parseMessage(msg, false);
+    }
   }
 
   /// 获取历史消息
@@ -428,7 +432,7 @@ class SingleChatProvider with ChangeNotifier {
     super.dispose();
     controller.dispose();
     Api.jMessage.exitConversation(target: jmSingle);
-    Api.jMessage.removeReceiveMessageListener((message) {});
+    Api.jMessage.removeReceiveMessageListener(_receiverMessageListener);
   }
 }
 

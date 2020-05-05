@@ -41,47 +41,6 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
           appBar: AppBar(
             title: Container(
               child: InkWell(
-                onTap: ()async{
-                  List<JMConversationInfo> cs =await Api.jMessage.getConversations();
-                  var i =0;
-                  cs.forEach((c)async{
-                    print(i++);
-                    print((c.latestMessage as JMNormalMessage).toJson());
-//                    print(c.toJson());
-//                    JMTextMessage jm = await c.sendTextMessage(text: "厉害了");
-//                    print(jm.toJson());
-                  });
-//                  l.forEach((m){
-//                    print( m.type.toString());
-//                    switch(m.type){
-//                      case JMMessageType.text:
-//                        print((m as JMTextMessage).from.username);
-//                        break;
-//                      case JMMessageType.image:
-//                        // TODO: Handle this case.
-//                        break;
-//                      case JMMessageType.voice:
-//                        // TODO: Handle this case.
-//                        break;
-//                      case JMMessageType.file:
-//                        // TODO: Handle this case.
-//                        break;
-//                      case JMMessageType.custom:
-//                        // TODO: Handle this case.
-//                        break;
-//                      case JMMessageType.location:
-//                        // TODO: Handle this case.
-//                        break;
-//                      case JMMessageType.event:
-//                        print((m as JMEventMessage).toString());
-//                        // TODO: Handle this case.
-//                        break;
-//                      case JMMessageType.prompt:
-//                        // TODO: Handle this case.
-//                        break;
-//                    }
-//                  });
-                },
                 child: Text("消息"),
               ),
             ),
@@ -114,6 +73,8 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
                   buttonText: Text("去登陆"),
                 );
               ConversationModel mModel = Provider.of<ConversationModel>(context,listen: true);
+
+              ConversationModel cM =  Provider.of<ConversationModel>(context,listen: true);
               return SmartRefresher(
                 controller: messageModel.refreshController,
                 header: HomeRefreshHeader(),
@@ -123,16 +84,22 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
                 },
                 child: CustomScrollView(
                   slivers: <Widget>[
-//                    SliverList(
-//                      delegate: SliverChildBuilderDelegate(
-//                              (c,i){
-//                            return Container(
-//                              child: Text("${mM.userNotify[i].fromUserName}"),
-//                            );
-//                          },
-//                          childCount: mM.userNotify.length
-//                      ),
-//                    ),
+                    if(cM.notifies.length>0)
+                    SliverToBoxAdapter(
+                      child: Container(
+                        color: Theme.of(context).cardColor,
+                        padding: EdgeInsets.all(10),
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(right: 10),
+                              child: RectAvatar(null,width: 50,height: 50,),
+                            ),
+                            _parseNotify(cM.notifies[cM.notifies.length-1])
+                          ],
+                        ),
+                      ),
+                    ),
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                           (c,i){
@@ -157,6 +124,22 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
 
   @override
   bool get wantKeepAlive => true;
+
+  _parseNotify(UserNotifyMessage notify) {
+    switch(notify.type){
+      case JMContactNotifyType.invite_received:
+        return Text("${notify.fromUserName}请求添加你为好友");
+      case JMContactNotifyType.invite_accepted:
+        return Text("${notify.fromUserName}同意了你的好友请求，快去xxx！");
+        break;
+      case JMContactNotifyType.invite_declined:
+        return Text("${notify.fromUserName}拒绝了你的好友请求!");
+        break;
+      case JMContactNotifyType.contact_deleted:
+        return Text("你被${notify.fromUserName}删除了！！笑死我啦哈哈哈哈");
+        break;
+    }
+  }
 
 
 }

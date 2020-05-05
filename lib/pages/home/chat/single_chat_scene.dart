@@ -7,7 +7,6 @@ import 'package:jmessage_flutter/jmessage_flutter.dart';
 
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-final ThemeColor = Color.fromRGBO(237, 237, 237, 1.0);
 
 class SingleChatScene extends StatelessWidget {
   final JMUserInfo userInfo;
@@ -27,12 +26,11 @@ class SingleChatScene extends StatelessWidget {
         child: Consumer<SingleChatProvider>(builder: (_, provider, widget) {
           return Scaffold(
             appBar: AppBar(title: Text('${userInfo.username}')),
-            backgroundColor: Colors.white,
             body: GestureDetector(
               behavior: HitTestBehavior.translucent,
                 onTap: () {// 触摸收起键盘
-//                  FocusScope.of(context).requestFocus(FocusNode());
-//                  provider.emojiOpen = false;
+                  FocusScope.of(context).requestFocus(FocusNode());
+                  provider.emojiOpen = false;
                 },
                 child: SafeArea(
                   child: GroupChatList(),
@@ -52,7 +50,6 @@ class GroupChatList extends StatelessWidget {
       
       provider.keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
       return Container(
-        color: ThemeColor,
         child: Column(
         children: <Widget>[
           Expanded(
@@ -126,7 +123,6 @@ class GroupChatInput extends StatelessWidget {
                       child: Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            color: ThemeColor,
                             borderRadius: BorderRadius.circular(15)),
                         child: ExtendedTextField(
                           specialTextSpanBuilder:
@@ -151,17 +147,19 @@ class GroupChatInput extends StatelessWidget {
                             provider.sendTextMessage(value);
                           },
                           onTap: () {
-                            provider.emojiOpen = false;
+                            if(provider.emojiOpen)
+                              provider.emojiOpen = false;
                           },
                         ),
                       ),
                     ),
                     IconButton(
-                      icon: Image.asset(
-                        'images/chat_emoji.png',
-                        height: 24,
-                        width: 24,
-                      ),
+                      icon: Icon(Icons.tag_faces,color: Theme.of(context).primaryColor,),
+//                      Image.asset(
+//                        'images/chat_emoji.png',
+//                        height: 24,
+//                        width: 24,
+//                      ),
                       onPressed: () {
                         provider.emojiOpen = !provider.emojiOpen;
                       },
@@ -171,11 +169,7 @@ class GroupChatInput extends StatelessWidget {
                           provider.textInputController.text.trim().length > 0 ||
                                   provider.emojiOpen
                               ? Text('发送')
-                              : Image.asset(
-                                  'images/chat_funcs.png',
-                                  height: 24,
-                                  width: 24,
-                                ),
+                              : Icon(Icons.add_circle_outline,color: Theme.of(context).primaryColor,),
                       onPressed: () {
                         if (provider.textInputController.text.trim().length >
                                 0 ||
