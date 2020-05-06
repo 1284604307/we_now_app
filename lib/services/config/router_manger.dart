@@ -4,6 +4,7 @@ import 'package:flutter_app2/pages/app.dart';
 import 'package:flutter_app2/pages/home/chat/chat_page.dart';
 import 'package:flutter_app2/pages/home/chat/friend_application.dart';
 import 'package:flutter_app2/pages/home/chat/frined_list_page.dart';
+import 'package:flutter_app2/pages/home/chat/frined_notify_page.dart';
 import 'package:flutter_app2/pages/home/circle/test.dart';
 import 'package:flutter_app2/pages/home/me/me_page.dart';
 import 'package:flutter_app2/pages/home/my_page/setting_page.dart';
@@ -30,6 +31,8 @@ class RouteName {
   static const String coinRankingList = 'coinRankingList';
 
   static const String rightTo = 'rightTo';
+
+  static const String friendNotify = "fN";
 }
 
 class Router {
@@ -45,6 +48,8 @@ class Router {
         return NoAnimRouteBuilder(FriendlychatApp());
       case RouteName.friend:
         return SizeRoute(FriendListPage());
+      case RouteName.friendNotify:
+        return SlideBaseRouteBuilder.right(FriendNotifyPage());
       case RouteName.loading:
         return NoAnimRouteBuilder(LoadingPage());
       case RouteName.login:

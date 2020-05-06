@@ -69,7 +69,15 @@ main() async {
       )
   );
 
-
+  String version = await StorageManager.localStorage.getItem("we_now_version")??"0.0.0";
+  if(version!="1.0.0"){
+    // desc 用户事件表
+    String t = "SELECT count(*) INTO @colName FROM information_schema.columns"+
+      "WHERE table_name = 'wenow_contact_event' AND column_name = 'status'; IF @colName = 0 THEN ";
+    await Api.db.execute("$t ALTER TABLE if EXISTS wenow_contact_event ADD "+
+        "(status text default null , done text default null); END IF;");
+    StorageManager.localStorage.setItem("we_now_version", "1.0.0");
+  }
   // DESC 用户消息表
   await Api.db.execute("Create table if not EXISTS  wenow_message "
       "(id INTEGER,serverMessageId INTEGER PRIMARY KEY,fromUsername text,targetUsername text,content TEXT,type TEXT"
@@ -77,7 +85,7 @@ main() async {
   // desc 用户事件表
   await Api.db.execute("Create table if not EXISTS  wenow_contact_event "
       "(reason text ,fromUsername text,targetUsername text,fromUserAppKey text,type TEXT"
-      "); ");
+      ",status text,done text); ");
 
   Api.jpush = new JPush();
   Api.jpush.setup(

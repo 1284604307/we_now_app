@@ -12,6 +12,7 @@ import 'package:flutter_app2/pages/wights/page_route_anim.dart';
 import 'package:flutter_app2/services/config/resource_mananger.dart';
 import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/model/viewModel/user_model.dart';
+import 'package:flutter_app2/services/provider/view_state_widget.dart';
 import 'package:jmessage_flutter/jmessage_flutter.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
@@ -38,6 +39,7 @@ class MePage extends StatefulWidget{
 
 class _State extends State<MePage>{
   String username;
+  bool netError = false;
   _State({this.username});
   ScrollController _scrollController = ScrollController();
 
@@ -46,14 +48,34 @@ class _State extends State<MePage>{
   @override
   void initState() {
     super.initState();
+    loadingData();
+  }
+
+  loadingData(){
     BotToast.showLoading();
-    Api.jMessage.getMyInfo().then((info){
+    try {
+      if (username == null) {
+        Api.jMessage.getMyInfo().then((info) {
+          BotToast.closeAllLoading();
+          print(userInfo);
+          setState(() {
+            userInfo = info;
+          });
+        });
+      }
+      else {
+        Api.jMessage.getUserInfo(username: username).then((info) {
+          print(userInfo);
+          BotToast.closeAllLoading();
+          setState(() {
+            userInfo = info;
+          });
+        });
+      }
+    }catch(e){
+      netError = true;
       BotToast.closeAllLoading();
-//      showToast(info.toJson().toString());
-      setState(() {
-        userInfo = info;
-      });
-    });
+    }
   }
 
   @override
@@ -72,6 +94,14 @@ class _State extends State<MePage>{
               controller: _scrollController,
               headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
                 return <Widget>[
+                  if(netError)
+                    ViewStateEmptyWidget(
+                      onPressed: () {
+                        loadingData();
+                      },
+                      message: "用户未登录",
+                      buttonText: Text("去登陆"),
+                    ),
                   SliverAppBar(
                     primary: true,// 预留状态栏
                     forceElevated: false, //展开flexibleSpace之后是否显示阴影
@@ -149,6 +179,7 @@ class _State extends State<MePage>{
           ,
         ),
         onWillPop: () {
+          BotToast.closeAllLoading();
           Navigator.pop(context);
         }
     );
@@ -187,7 +218,7 @@ _Header(JMUserInfo userInfo,context){
                     child: Avatar(
                       CachedNetworkImage(
                         fit: BoxFit.cover,
-                        imageUrl: "http://i2.hdslb.com/bfs/face/06a07dad46ecb426e26e3340b3ae4e6f308066ea.jpg@70w_70h_1c_100q.webp",
+                        imageUrl: "${userInfo.avatarThumbPath}",
                       ),
                       width: 60,
                       height: 60,
@@ -203,7 +234,7 @@ _Header(JMUserInfo userInfo,context){
                             fontSize: 18
                         ),
                       ),
-                      Text("个性签名",style: TextStyle(color: Colors.white),)
+                      Text("${userInfo.signature.isEmpty?"空空如也~":userInfo.signature}",style: TextStyle(color: Colors.grey[300]),)
                     ],
                   )
                 ],

@@ -32,6 +32,18 @@ class GenderChooseDialog extends Dialog {
                           ))),
                       margin: const EdgeInsets.all(12.0),
                       child: new Column(children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.all(10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              InkWell(
+                                onTap: (){Navigator.pop(context);},
+                                child: Text("关闭"),
+                              )
+                            ],
+                          ),
+                        ),
                         new Padding(
                             padding: const EdgeInsets.fromLTRB(
                                 10.0, 40.0, 10.0, 28.0),
@@ -49,7 +61,8 @@ class GenderChooseDialog extends Dialog {
                               _genderChooseItemWid(2)
                             ])
                       ]))
-                ])));
+                ])
+        ));
   }
 
   Widget _genderChooseItemWid(var gender) {

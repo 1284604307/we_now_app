@@ -15,7 +15,7 @@ final port = "8888";
 class Http extends BaseHttp {
   @override
   void init() {
-    options.baseUrl = "http://$host:$port";
+    options.baseUrl = "http://$localhost:$port";
     interceptors
       ..add(ApiInterceptor())
       // cookie持久化 异步

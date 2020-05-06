@@ -54,8 +54,8 @@ class ConversationModel extends ChangeNotifier{
     cs =cs==null?[]:cs;
     notifies = (await Api.db.query("wenow_contact_event where fromUsername='${userModel.user.loginName}' "
         "or targetUserName = '${userModel.user.loginName}' "))
-        .map((json){UserNotifyMessage u = UserNotifyMessage.fromJson(json);print(json);return u;}).toList();
-    showToast(notifies.length.toString());
+        .map((json){UserNotifyMessage u = UserNotifyMessage.fromJson(json);print(json);print(u.toJson());return u;}).toList();
+//    showToast(notifies.length.toString());
     notifyListeners();
   }
 
@@ -109,6 +109,8 @@ class UserNotifyMessage {
   String fromUserName;
   String targetUserName;
   String fromUserAppKey;
+  bool done = false;
+  String status;
 
 
   UserNotifyMessage();
@@ -119,7 +121,9 @@ class UserNotifyMessage {
       'reason': reason,
       'fromUserName': fromUserName,
       'targetUserName': targetUserName,
-      'fromUserAppKey': fromUserAppKey
+      'fromUserAppKey': fromUserAppKey,
+      'done': done,
+      'status': status
     };
   }
 
@@ -128,5 +132,7 @@ class UserNotifyMessage {
         reason = json['reason'],
         fromUserName = json['fromUsername'],
         targetUserName = json['targetUserName'],
+        done = "${json['done']}"=="true",
+        status = json['status'],
         fromUserAppKey = json['fromUserAppKey'];
 }

@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app2/pages/home/me/me_info_page.dart';
+import 'package:flutter_app2/pages/home/me/me_page.dart';
 import 'package:flutter_app2/pages/wights/LittleWidgets.dart';
 import 'package:flutter_app2/pages/wights/avatar.dart';
+import 'package:flutter_app2/pages/wights/page_route_anim.dart';
 import 'package:flutter_app2/services/model/viewModel/friend_model.dart';
 import 'package:flutter_app2/services/provider/provider_widget.dart';
 import 'package:jmessage_flutter/jmessage_flutter.dart';
@@ -21,6 +24,8 @@ class FriendListPage extends StatefulWidget {
 }
 
 class _State extends State<FriendListPage> {
+
+
 
   RefreshController rc = RefreshController();
   @override
@@ -61,6 +66,12 @@ class _State extends State<FriendListPage> {
 //      ),
     );
   }
+
+  @override
+  void initState() {
+    if(Provider.of<FriendModel>(context,listen: false).friends.length==0)
+      Provider.of<FriendModel>(context,listen: false).loadData();
+  }
 }
 
 class FriendItem extends StatelessWidget{
@@ -71,14 +82,19 @@ class FriendItem extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Container(
-      color: Theme.of(context).cardColor,
-      padding: EdgeInsets.all(10),
-      child: Row(
-        children: <Widget>[
-          Avatar(CachedNetworkImage(imageUrl: "${user.avatarThumbPath}",)),
-          Padding(padding: EdgeInsets.only(left: 10),child: Text("${user.nickname}(${user.username})"),),
-        ],
+    return InkWell(
+      onTap: (){
+        Navigator.of(context).push(SizeRoute(MePage(username: user.username,)));
+      },
+      child: Container(
+        color: Theme.of(context).cardColor,
+        padding: EdgeInsets.all(10),
+        child: Row(
+          children: <Widget>[
+            Avatar(CachedNetworkImage(imageUrl: "${user.avatarThumbPath}",)),
+            Padding(padding: EdgeInsets.only(left: 10),child: Text("${user.nickname}(${user.username})"),),
+          ],
+        ),
       ),
     );
   }

@@ -13,6 +13,7 @@ import 'package:flutter_app2/pages/wights/page_route_anim.dart';
 import 'package:flutter_app2/services/config/resource_mananger.dart';
 import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/helper/dialog_helper.dart';
+import 'package:flutter_app2/services/helper/jpush_helper.dart';
 import 'package:flutter_app2/services/helper/refresh_helper.dart';
 import 'package:flutter_app2/services/model/Message.dart';
 import 'package:flutter_app2/services/model/viewModel/message_model.dart';
@@ -89,14 +90,25 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
                       child: Container(
                         color: Theme.of(context).cardColor,
                         padding: EdgeInsets.all(10),
-                        child: Row(
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.only(right: 10),
-                              child: RectAvatar(null,width: 50,height: 50,),
-                            ),
-                            _parseNotify(cM.notifies[cM.notifies.length-1])
-                          ],
+                        child:InkWell(
+                          onTap: (){
+                            Navigator.of(context).pushNamed(RouteName.friendNotify);
+                          },
+                          child:  Row(
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(right: 10),
+                                child: RectAvatar(null,width: 50,height: 50,),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text("好友通知",style: TextStyle(fontWeight: FontWeight.bold),),
+                                  Text("${cM.notifies[cM.notifies.length-1].fromUserName}"+JpushHelper.parseNotify(cM.notifies[cM.notifies.length-1]))
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -125,21 +137,6 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
   @override
   bool get wantKeepAlive => true;
 
-  _parseNotify(UserNotifyMessage notify) {
-    switch(notify.type){
-      case JMContactNotifyType.invite_received:
-        return Text("${notify.fromUserName}请求添加你为好友");
-      case JMContactNotifyType.invite_accepted:
-        return Text("${notify.fromUserName}同意了你的好友请求，快去xxx！");
-        break;
-      case JMContactNotifyType.invite_declined:
-        return Text("${notify.fromUserName}拒绝了你的好友请求!");
-        break;
-      case JMContactNotifyType.contact_deleted:
-        return Text("你被${notify.fromUserName}删除了！！笑死我啦哈哈哈哈");
-        break;
-    }
-  }
 
 
 }
@@ -197,6 +194,7 @@ class ConversationItem extends StatelessWidget{
                           alignment: Alignment.topLeft
                       ),
                       Container(
+                          width: 240,
                           child: new Text(
                             "${messageText}",
                             overflow: TextOverflow.ellipsis,

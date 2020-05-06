@@ -2,11 +2,14 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app2/common/Api.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
+import 'package:flutter_app2/pages/home/me/update_avatar_page.dart';
 import 'package:flutter_app2/pages/wights/GenderChoosedialog.dart';
 import 'package:flutter_app2/pages/wights/LittleWidgets.dart';
 import 'package:flutter_app2/pages/wights/Signaturedialog.dart';
 import 'package:flutter_app2/pages/wights/avatar.dart';
+import 'package:flutter_app2/pages/wights/page_route_anim.dart';
 import 'package:flutter_app2/services/model/viewModel/user_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:oktoast/oktoast.dart';
@@ -20,12 +23,13 @@ class MeInfoPage extends StatefulWidget {
   _State createState() => _State();
 }
 
+
 /**
  * 个人详情页
  */
 class _State extends State<MeInfoPage> {
+  bool _showSchoolInfo = true;
   var gender = "男";
-
   @override
   Widget build(BuildContext context) {
     return Consumer<UserModel>(
@@ -96,10 +100,16 @@ class _State extends State<MeInfoPage> {
                               title: '小哥哥小姐姐请选择',
                               onBoyChooseEvent: () {
                                 gender = "男";
+                                setState(() {
+
+                                });
                                 Navigator.pop(context);
                               },
                               onGirlChooseEvent: () {
                                 gender = "女";
+                                setState(() {
+
+                                });
                                 Navigator.pop(context);
                               });
                         });
@@ -109,28 +119,53 @@ class _State extends State<MeInfoPage> {
                   left: "生日",
                 ),
 
-                // desc 校园相关
-                RowItem(
-                  left: "姓名",
-                  onPressed: () {},
-                ),
-                RowItem(
-                  left: "学校",
-                ),
-                RowItem(
-                  left: "学号",
-                ),
-                RowItem(
-                  left: "院系",
-                ),
-                RowItem(
-                  left: "专业",
-                ),
-                RowItem(
-                  left: "年级",
-                ),
-                RowItem(
-                  left: "班级",
+                ExpansionPanelList(
+                  expansionCallback: (index,isExpanded){
+                    setState(() {
+                      _showSchoolInfo=!_showSchoolInfo;
+                    });
+                  },
+                  children: [
+                    ExpansionPanel(
+                      isExpanded: _showSchoolInfo,
+                      canTapOnHeader: true,
+                        headerBuilder: (BuildContext context, bool isExpanded) {
+                        print(isExpanded);
+                            return InkWell(
+                              onTap: (){_showSchoolInfo=!_showSchoolInfo;setState(() {});},
+                              child: RowItem(left:"校园信息"),
+                            );
+                        },
+                        body: Column(
+                          children: <Widget>[
+                            // desc 校园相关
+                            RowItem(
+                              left: "姓名",
+                              onPressed: () {},
+                            ),
+                            RowItem(
+                              left: "学校",
+                            ),
+                            RowItem(
+                              left: "学号",
+                            ),
+                            RowItem(
+                              left: "院系",
+                            ),
+                            RowItem(
+                              left: "专业",
+                            ),
+                            RowItem(
+                              left: "年级",
+                            ),
+                            RowItem(
+                              left: "班级",
+                            ),
+                          ],
+                        )
+
+                    )
+                  ],
                 ),
               ],
             ),
@@ -141,7 +176,6 @@ class _State extends State<MeInfoPage> {
   }
 }
 
-class SignatureDiglog {}
 
 void showPub(context) {
   showModalBottomSheet(
@@ -157,11 +191,6 @@ Widget _shareWidget(context) {
     '相册',
   ];
 
-  List<String> urlItems = <String>[
-    'xz.png',
-    'xz.png',
-  ];
-
   return new Container(
     height: 100.0,
     child: new Column(
@@ -175,23 +204,24 @@ Widget _shareWidget(context) {
                   crossAxisCount: 2,
                   mainAxisSpacing: 5.0,
                   childAspectRatio: 1.0),
+              // ignore: missing_return
               itemBuilder: (BuildContext context, int index) {
                 if (index == 0) {
                   return new InkWell(
                     child: new Column(
                       children: <Widget>[
                         new Padding(
-                            padding: EdgeInsets.fromLTRB(0.0, 6.0, 0.0, 6.0),
-                            child: Icon(
-                              Icons.ac_unit,
-                              size: 50,
-                            )),
+                          padding: EdgeInsets.fromLTRB(0.0, 6.0, 0.0, 6.0),
+                          child: Icon(
+                            Icons.ac_unit,
+                            size: 50,
+                          )),
                         new Text(nameItems[index]),
                       ],
                     ),
-                    onTap: () {
-                      print("测试第一个按键");
-                      chooseImage(true);
+                    onTap: () async {
+                      await chooseImage(true,context);
+
                     },
                   );
                 }
@@ -208,9 +238,8 @@ Widget _shareWidget(context) {
                         new Text(nameItems[index]),
                       ],
                     ),
-                    onTap: () {
-                      print("测试第二个按键");
-                      chooseImage(false);
+                    onTap: () async{
+                      await chooseImage(false,context);
                     },
                   );
                 }
@@ -226,11 +255,16 @@ Widget _shareWidget(context) {
 /**
  * bool isCamer 是否为相机选取照片
  */
-Future chooseImage(bool isCamer) async {
-  var image;
+Future chooseImage(bool isCamer,context) async {
+  File image;
   if (isCamer) {
     image = await ImagePicker.pickImage(source: ImageSource.camera);
   } else {
     image = await ImagePicker.pickImage(source: ImageSource.gallery);
   }
+  if(image!=null){
+    await Navigator.push(context, SizeRoute(UpdateAvatarPage(image)));
+  }
+  Navigator.pop(context);
 }
+

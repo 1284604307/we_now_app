@@ -61,6 +61,7 @@ dependencies:
   extended_image: 0.7.2
   # desc 缓存图片
   cached_network_image: 2.1.0+1
+  image: 2.1.4
 
   photo_view: 0.9.2
 
