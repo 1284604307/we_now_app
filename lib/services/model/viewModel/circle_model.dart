@@ -43,11 +43,12 @@ class CircleRecommendModel extends ViewStateRefreshListModel {
   Future<List> loadData({int pageNum}) async {
     List<Future> futures = [];
     if (pageNum == ViewStateRefreshListModel.pageNumFirst) {
-      futures.add(RestfulApi.fetchRecommendCircles(0));
     }
-    else
-      futures.add(RestfulApi.fetchRecommendCircles(pageNum));
+    else{
 
+    }
+
+    futures.add(RestfulApi.fetchRecommendCircles(pageNum));
 
     var result = await Future.wait(futures);
     if (pageNum == ViewStateRefreshListModel.pageNumFirst) {
@@ -59,7 +60,6 @@ class CircleRecommendModel extends ViewStateRefreshListModel {
 
   @override
   onCompleted(List data) {
-//    GlobalFavouriteStateModel.refresh(data);
   }
 }
 

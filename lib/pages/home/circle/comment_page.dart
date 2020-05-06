@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/pages/wights/CommentListWight.dart';
+import 'package:flutter_app2/services/helper/refresh_helper.dart';
 import 'package:flutter_app2/services/model/viewModel/comment_model.dart';
 import 'package:flutter_app2/services/provider/provider_widget.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 /**
  * @createDate  2020/5/1
@@ -35,7 +37,7 @@ class _State extends State<CommentPage> with AutomaticKeepAliveClientMixin {
         builder: (BuildContext context, CommentListModel model, Widget child) {
           return CommentListWight(name,model);
         },
-        onModelReady: (model){model.loadMore();},
+        onModelReady: (model){model.initData();},
       ),
     );
   }

@@ -10,6 +10,7 @@ import 'package:flutter_app2/services/model/Article.dart';
 import 'package:flutter_app2/services/model/viewModel/favourite_model.dart';
 import 'package:flutter_app2/services/model/viewModel/user_model.dart';
 import 'package:flutter_app2/services/provider/provider_widget.dart';
+import 'package:jmessage_flutter/jmessage_flutter.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 
@@ -135,6 +136,7 @@ class RowItem extends StatelessWidget{
     return  InkWell(
       onTap: onPressed,
       child: Container(
+        width: MediaQuery.of(context).size.width,
         height: height,
         padding: EdgeInsets.all(10),
         color: Theme.of(context).cardColor,

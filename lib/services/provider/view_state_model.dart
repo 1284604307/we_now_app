@@ -54,6 +54,7 @@ class ViewStateModel with ChangeNotifier {
   /// set
   void setIdle() {
     viewState = ViewState.idle;
+    notifyListeners();
   }
 
   void setBusy() {

@@ -2,6 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app2/services/config/resource_mananger.dart';
+import 'package:flutter_app2/services/helper/refresh_helper.dart';
 import 'package:flutter_app2/services/model/Comment.dart';
 import 'package:flutter_app2/services/model/viewModel/comment_model.dart';
 import 'package:flutter_app2/services/net/restful_go.dart';
@@ -36,15 +37,14 @@ class _State extends State<CommentListWight> {
   @override
   Widget build(BuildContext context) {
     return SmartRefresher(
-        controller: RefreshController(),
-        enablePullUp: true,
+        controller: commentListModel.refreshController,
+        enablePullUp: commentListModel.list.isNotEmpty,
         enablePullDown: false,
-        header: ClassicHeader(),
-        footer: ClassicFooter(),
+        footer: RefresherFooter(),
+        header: HomeRefreshHeader(),
         onRefresh: (){BotToast.showText(text: "太难了");},
         onLoading: (){
           commentListModel.loadMore();
-          BotToast.showText(text: "拉到底了！");
         },
         child:
         CustomScrollView(

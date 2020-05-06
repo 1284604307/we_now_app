@@ -80,10 +80,18 @@ main() async {
           "(status text default null , done text default null); END IF;");
       StorageManager.localStorage.setItem("we_now_version", "1.0.0");
     }
+  }catch(e){
+    print(e);
+  }
+  try{
     // DESC 用户消息表
     await Api.db.execute("Create table if not EXISTS  wenow_message "
         "(id INTEGER,serverMessageId INTEGER PRIMARY KEY,fromUsername text,targetUsername text,content TEXT,type TEXT"
         ",createTime INTEGER,extras text,senderAvatar text,targetType text,senderType text,isSend INTEGER,action text); ");
+  }catch(e){
+    print(e);
+  }
+  try{
     // desc 用户事件表
     await Api.db.execute("Create table if not EXISTS  wenow_contact_event "
         "(reason text ,fromUsername text,targetUsername text,fromUserAppKey text,type TEXT"

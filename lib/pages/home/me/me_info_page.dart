@@ -62,16 +62,36 @@ class _State extends State<MeInfoPage> {
                     Avatar(CachedNetworkImage(
                       imageUrl: "${user.avatar}",
                     )),
-                    Icon(Icons.chevron_right)
+//                    Icon(Icons.chevron_right)
                   ],
                   onPressed: () {
                     showPub(context);
                   },
                 ),
                 RowItem(
+                  //头像
+                  left: "账号",
+                  other: Text("${user.userName}"),
+                  onPressed: () {showToast("账号不可编辑哦~~");},
+                ),
+                RowItem(
+                  //头像
+                  left: "昵称",
+                  other: Text("${user.userName}"),
+                  action: [
+                    Icon(Icons.chevron_right)
+                  ],
+                  onPressed: () {
+
+                  },
+                ),
+                RowItem(
                   //个性签名
                   left: "个性签名",
-                  other: Text("你的个性你来定义~d=====(￣▽￣*)b"),
+                  other: Text("你的个性你来定义~d=====(￣▽￣*)b",
+                    overflow: TextOverflow.ellipsis,maxLines: 1,
+//                    style: TextStyle(color:Colors.grey,),
+                  ),
                   action: <Widget>[Icon(Icons.chevron_right)],
                   onPressed: () {
                     showDialog(
@@ -80,7 +100,7 @@ class _State extends State<MeInfoPage> {
                         builder: (BuildContext context) {
                           return Signaturediglog(
                             SignatureText: () {
-                              //返回输入框字暂未写
+
                             },
                           );
                         });
@@ -118,7 +138,9 @@ class _State extends State<MeInfoPage> {
                 RowItem(
                   left: "生日",
                 ),
-
+                RowItem(
+                  left: "地址",
+                ),
                 ExpansionPanelList(
                   expansionCallback: (index,isExpanded){
                     setState(() {

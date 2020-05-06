@@ -33,13 +33,14 @@ class RestfulApi {
       'password': password,
       'rememberMe': true
     });
-    BotToast.showText(text: "登陆成功");
-    var response = await getInfo();
-    return User.fromJson(response.data);
+    print("登陆成功");
+    var user = await getInfo();
+    return user;
   }
 
   static Future getInfo() async{
-    return http.get("/user");
+    var response = await http.get("/user");
+    return User.fromJson(response.data);
   }
 
   static Future logout() async{

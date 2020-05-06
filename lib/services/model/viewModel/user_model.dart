@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:flutter_app2/services/config/storage_manager.dart';
+import 'package:flutter_app2/services/net/restful_go.dart';
 
 class UserModel extends ChangeNotifier {
   static const String we_now_user = 'WeNow_User';
@@ -14,6 +15,12 @@ class UserModel extends ChangeNotifier {
   UserModel() {
     var userMap = StorageManager.localStorage.getItem(we_now_user);
     _user = userMap != null ? User.fromJson(userMap) : null;
+  }
+
+  refreshInfo() async {
+    await RestfulApi.getInfo().then((user){
+      saveUser(user);
+    });
   }
 
   saveUser(User user) {

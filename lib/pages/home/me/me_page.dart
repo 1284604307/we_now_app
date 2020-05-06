@@ -58,6 +58,7 @@ class _State extends State<MePage>{
         Api.jMessage.getMyInfo().then((info) {
           BotToast.closeAllLoading();
           print(userInfo);
+          info.avatarThumbPath = Provider.of<UserModel>(context,listen: false).user.avatar;
           setState(() {
             userInfo = info;
           });

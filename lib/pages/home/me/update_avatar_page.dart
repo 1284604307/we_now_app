@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/pages/wights/page_route_anim.dart';
+import 'package:flutter_app2/services/model/viewModel/user_model.dart';
 import 'package:flutter_app2/services/net/restful_go.dart';
 import 'package:image/image.dart' as imageUtil;
 import 'package:extended_image/extended_image.dart';
 import 'package:image_editor/image_editor.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 
 /**
@@ -59,6 +61,7 @@ class _State extends State<UpdateAvatarPage>{
                 await RestfulApi.updateAvatar(f);
               }
               showToast("上传成功");
+              await Provider.of<UserModel>(context,listen: false).refreshInfo();
               Navigator.pop(context);
             },
           )

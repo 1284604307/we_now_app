@@ -11,13 +11,13 @@ class CommentModel extends ViewStateModel{
   // desc 评论信息不需要缓存，
   
   int commentId = -1;
-  Map<int,CommentModel> commentChildren = Map();
+//  Map<int,CommentModel> commentChildren = Map();
 
   CommentModel(this.commentId);
 
 }
 
-class CommentListModel extends ViewStateRefreshListModel<Comment>{
+class CommentListModel extends ViewStateRefreshListModel{
   int id;
   bool children;
 
@@ -34,5 +34,11 @@ class CommentListModel extends ViewStateRefreshListModel<Comment>{
     res.forEach(print);
     return res;
   }
+
+
+  @override
+  onCompleted(List data) {
+  }
+
   
 }

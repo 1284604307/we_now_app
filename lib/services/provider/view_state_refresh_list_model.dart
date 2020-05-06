@@ -47,7 +47,6 @@ abstract class ViewStateRefreshListModel<T> extends ViewStateListModel<T> {
           //防止上次上拉加载更多失败,需要重置状态
           refreshController.loadComplete();
         }
-
         setIdle();
       }
 
