@@ -8,6 +8,7 @@ import 'package:flutter_app2/services/model/viewModel/user_model.dart';
 import 'package:flutter_app2/services/net/api.dart';
 import 'package:flutter_app2/services/net/restful_go.dart';
 import 'package:flutter_app2/services/provider/view_state_model.dart';
+import 'package:oktoast/oktoast.dart';
 
 const String WeNow_LoginName = 'WeNow_LoginName';
 
@@ -28,10 +29,10 @@ class LoginModel extends ViewStateModel {
       StorageManager.sharedPreferences
           .setString(WeNow_LoginName, userModel.user.loginName);
 
-      await Api.jMessage.login(
-        username: loginName,
-        password: password
-      );
+        await Api.jMessage.login(
+            username: loginName,
+            password: password
+        );
       setIdle();
       return true;
     } catch (e, s) {

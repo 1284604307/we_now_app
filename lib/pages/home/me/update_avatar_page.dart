@@ -1,8 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image/image.dart' as image;
+import 'package:flutter_app2/pages/wights/page_route_anim.dart';
+import 'package:flutter_app2/services/net/restful_go.dart';
+import 'package:image/image.dart' as imageUtil;
 import 'package:extended_image/extended_image.dart';
+import 'package:image_editor/image_editor.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:path_provider/path_provider.dart';
 
 
 /**
@@ -15,7 +20,6 @@ class UpdateAvatarPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _State(file);
   }
 
@@ -25,6 +29,7 @@ class _State extends State<UpdateAvatarPage>{
 
   File file;
   _State(this.file);
+  bool croped = false;
 
   final GlobalKey<ExtendedImageEditorState> editorKey =GlobalKey<ExtendedImageEditorState>();
   @override
@@ -37,14 +42,23 @@ class _State extends State<UpdateAvatarPage>{
           IconButton(
             icon: Icon(Icons.image),
             onPressed: () async {
-//              Image src = await image.isolateDecodeImage(data);
-//              Image src = await lb.run<Image, List<int>>(decodeImage, data);
-
+              File f = await cropAndSave();
+              setState(() {
+                file = f;
+                croped = true;
+              });
             },
           ),
           IconButton(
             icon: Icon(Icons.done),
-            onPressed: () {
+            onPressed: () async{
+              if(croped)
+                await RestfulApi.updateAvatar(file);
+              else{
+                File f = await cropAndSave();
+                await RestfulApi.updateAvatar(f);
+              }
+              showToast("上传成功");
               Navigator.pop(context);
             },
           )
@@ -66,6 +80,31 @@ class _State extends State<UpdateAvatarPage>{
         },
       ),
     );
+  }
+
+  cropAndSave() async{
+    ExtendedImageEditorState state = editorKey.currentState;
+    var action= state.editAction;
+    final Rect cropRect = state.getCropRect();
+    final img = state.rawImageData;
+    final rotateAngle = action.rotateAngle.toInt();
+    final flipHorizontal = action.flipY;
+    final flipVertical = action.flipX;
+    ImageEditorOption option = ImageEditorOption();
+    if (action.needCrop) option.addOption(ClipOption.fromRect(cropRect));
+    if (action.needFlip)
+      option.addOption(
+          FlipOption(horizontal: flipHorizontal, vertical: flipVertical));
+    if (action.hasRotateAngle) option.addOption(RotateOption(rotateAngle));
+    final result = await ImageEditor.editImage(
+      image: img,
+      imageEditorOption: option,
+    );
+    var path = await getApplicationDocumentsDirectory();
+    File f = File("${path.path}/WE_NOW${DateTime.now().microsecondsSinceEpoch}.png");
+    await f.writeAsBytes(result);
+    croped = true;
+    return f;
   }
 
 }

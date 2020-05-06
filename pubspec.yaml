@@ -62,6 +62,7 @@ dependencies:
   # desc 缓存图片
   cached_network_image: 2.1.0+1
   image: 2.1.4
+  image_editor: any
 
   photo_view: 0.9.2
 

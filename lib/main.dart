@@ -32,6 +32,7 @@ main() async {
   // desc runApp前进行耗时操作必须执行该静态方法
   WidgetsFlutterBinding.ensureInitialized();
   await StorageManager.init();
+
   Api.db = await openDatabase('we_now_sqlite.db');
   runApp(
       OKToast(
@@ -69,23 +70,27 @@ main() async {
       )
   );
 
-  String version = await StorageManager.localStorage.getItem("we_now_version")??"0.0.0";
-  if(version!="1.0.0"){
+  try{
+    String version = await StorageManager.localStorage.getItem("we_now_version")??"0.0.0";
+    if(version!="1.0.0"){
+      // desc 用户事件表
+      String t = "SELECT count(*) INTO @colName FROM information_schema.columns"+
+          "WHERE table_name = 'wenow_contact_event' AND column_name = 'status'; IF @colName = 0 THEN ";
+      await Api.db.execute("$t ALTER TABLE if EXISTS wenow_contact_event ADD "+
+          "(status text default null , done text default null); END IF;");
+      StorageManager.localStorage.setItem("we_now_version", "1.0.0");
+    }
+    // DESC 用户消息表
+    await Api.db.execute("Create table if not EXISTS  wenow_message "
+        "(id INTEGER,serverMessageId INTEGER PRIMARY KEY,fromUsername text,targetUsername text,content TEXT,type TEXT"
+        ",createTime INTEGER,extras text,senderAvatar text,targetType text,senderType text,isSend INTEGER,action text); ");
     // desc 用户事件表
-    String t = "SELECT count(*) INTO @colName FROM information_schema.columns"+
-      "WHERE table_name = 'wenow_contact_event' AND column_name = 'status'; IF @colName = 0 THEN ";
-    await Api.db.execute("$t ALTER TABLE if EXISTS wenow_contact_event ADD "+
-        "(status text default null , done text default null); END IF;");
-    StorageManager.localStorage.setItem("we_now_version", "1.0.0");
+    await Api.db.execute("Create table if not EXISTS  wenow_contact_event "
+        "(reason text ,fromUsername text,targetUsername text,fromUserAppKey text,type TEXT"
+        ",status text,done text); ");
+  }catch(e){
+    print(e);
   }
-  // DESC 用户消息表
-  await Api.db.execute("Create table if not EXISTS  wenow_message "
-      "(id INTEGER,serverMessageId INTEGER PRIMARY KEY,fromUsername text,targetUsername text,content TEXT,type TEXT"
-      ",createTime INTEGER,extras text,senderAvatar text,targetType text,senderType text,isSend INTEGER,action text); ");
-  // desc 用户事件表
-  await Api.db.execute("Create table if not EXISTS  wenow_contact_event "
-      "(reason text ,fromUsername text,targetUsername text,fromUserAppKey text,type TEXT"
-      ",status text,done text); ");
 
   Api.jpush = new JPush();
   Api.jpush.setup(

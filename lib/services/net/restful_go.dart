@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter_app2/common/pojos/AjaxResult.dart';
@@ -11,6 +13,7 @@ import 'package:flutter_app2/services/model/Comment.dart';
 import 'package:flutter_app2/services/model/Topic.dart';
 import 'package:flutter_app2/services/net/api.dart';
 import 'package:flutter_app2/services/provider/view_state.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter/cupertino.dart' show Navigator;
 
@@ -161,6 +164,19 @@ class RestfulApi {
       'password': password,
     });
     BotToast.showText(text: "注册成功");
+  }
+
+  static updateAvatar(File f) async {
+    print(f);
+    FormData data = new FormData();
+    MultipartFile multipartFile = await MultipartFile.fromBytes(
+      await f.readAsBytesSync(),
+      filename: "avatar.png",
+      contentType: MediaType("image", "png"),
+    );
+    data.files.add(MapEntry("avatarfile", multipartFile));
+    var response =  await http.post("/user/updateAvatar", data: data);
+    print(response);
   }
 
 }
