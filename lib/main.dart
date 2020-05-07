@@ -14,6 +14,7 @@ import 'package:flutter_app2/services/model/viewModel/locale_model.dart';
 import 'package:flutter_app2/services/model/viewModel/login_model.dart';
 import 'package:flutter_app2/services/model/viewModel/theme_model.dart';
 import 'package:flutter_app2/services/model/viewModel/user_model.dart';
+import 'package:flutter_app2/services/net/restful_go.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:jmessage_flutter/jmessage_flutter.dart';
@@ -184,4 +185,10 @@ main() async {
     print("----------极光 IM 点击消息通知事件");
     print(message);
   });
+
+  print(1);
+
+//  if (!Provider.of<UserModel>(_context,listen: false).hasUser) {
+//    Provider.of<UserModel>(_context,listen: false).refreshInfo();
+//  }
 }

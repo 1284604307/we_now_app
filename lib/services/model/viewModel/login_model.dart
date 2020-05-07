@@ -11,11 +11,14 @@ import 'package:flutter_app2/services/provider/view_state_model.dart';
 import 'package:oktoast/oktoast.dart';
 
 const String WeNow_LoginName = 'WeNow_LoginName';
+const String WeNow_LoginTicket = 'WeNow_LoginTicket';
 
 class LoginModel extends ViewStateModel {
   final UserModel userModel;
 
   LoginModel(this.userModel) : assert(userModel != null);
+
+
 
   String getLoginName() {
     return StorageManager.sharedPreferences.getString(WeNow_LoginName);
@@ -27,7 +30,8 @@ class LoginModel extends ViewStateModel {
       User user = await RestfulApi.login(loginName, password);
       userModel.saveUser(user);
       StorageManager.sharedPreferences
-          .setString(WeNow_LoginName, userModel.user.loginName);
+          ..setString(WeNow_LoginName, userModel.user.loginName)
+          ..setString(WeNow_LoginTicket, userModel.user.ticket);
 
         await Api.jMessage.login(
             username: loginName,
@@ -45,8 +49,6 @@ class LoginModel extends ViewStateModel {
     setBusy();
     try {
       await RestfulApi.register(loginName, password);
-      StorageManager.sharedPreferences
-          .setString(WeNow_LoginName, loginName);
       setIdle();
       return true;
     } catch (e, s) {
@@ -56,6 +58,8 @@ class LoginModel extends ViewStateModel {
   }
 
   Future<bool> logout() async {
+
+    StorageManager.sharedPreferences.remove(WeNow_LoginTicket);
     if (!userModel.hasUser) {
       //防止递归
       return false;

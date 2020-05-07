@@ -23,7 +23,8 @@ User _$UserFromJson(Map<String, dynamic> json) {
     ..email = json['email']
     ..phonenumber = json['phonenumber']
     ..sex = json['sex']
-    ..schoolId = json['schoolId'];
+    ..schoolId = json['schoolId']
+    ..ticket = json['ticket'];
 }
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{

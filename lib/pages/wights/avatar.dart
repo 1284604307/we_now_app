@@ -40,7 +40,7 @@ class Avatar extends StatelessWidget {
 
 class RectAvatar extends StatelessWidget{
 
-  StatefulWidget header;
+  Widget header;
   double width;
   double height;
   double borderWidth;

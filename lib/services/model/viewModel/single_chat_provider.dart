@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:extended_text/extended_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/common/Api.dart';
+import 'package:flutter_app2/pages/wights/avatar.dart';
 import 'package:flutter_app2/services/utils/special_text_span_builder.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jmessage_flutter/jmessage_flutter.dart';
@@ -381,10 +383,10 @@ class SingleChatProvider with ChangeNotifier {
     var msgColor;
 
     if (msgModel.message.isSend) {
-      msgMargin = EdgeInsets.only(right: 10, top: 10);
+      msgMargin = EdgeInsets.only(right: 10, top: 0);
       msgColor = Colors.lightBlue;
     } else {
-      msgMargin = EdgeInsets.only(left: 10, top: 10);
+      msgMargin = EdgeInsets.only(left: 10, top: 0);
       msgColor = Colors.white;
     }
 
@@ -395,9 +397,7 @@ class SingleChatProvider with ChangeNotifier {
       msgPadding = EdgeInsets.all(10.0);
     }
 
-    Widget userAvatar = CircleAvatar(
-      radius: 25,
-      backgroundImage: NetworkImage('${msgModel.avatar}'),
+    Widget userAvatar = RectAvatar(CachedNetworkImage( imageUrl: '${msgModel.avatar}',),
     );
 
     Widget msgContent = Container(

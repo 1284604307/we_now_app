@@ -3,7 +3,10 @@ import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_app2/services/config/storage_manager.dart';
+import 'package:flutter_app2/services/model/viewModel/login_model.dart';
+import 'package:flutter_app2/services/model/viewModel/user_model.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:provider/provider.dart';
 import 'api.dart';
 
 final Http http = Http();
@@ -21,14 +24,26 @@ class Http extends BaseHttp {
       // cookie持久化 异步
       ..add(CookieManager(
           PersistCookieJar(dir: StorageManager.applicationDocumentsDirectory.path+"/.cookies/")));
+
+    try{
+      var ticket = StorageManager.sharedPreferences.get(WeNow_LoginTicket);
+      var username = StorageManager.sharedPreferences.get(WeNow_LoginName);
+      if(ticket!=null && username!=null){
+        options.headers['ticket'] = ticket;
+        options.headers['username'] = username;
+      }
+    }catch(e){
+      print(e);
+    }
   }
 }
 
 class ApiInterceptor extends InterceptorsWrapper {
   @override
   onRequest(RequestOptions options) async {
-    debugPrint('---api-request--->url--> ${options.baseUrl}${options.path}' +
-        ' queryParameters: ${options.queryParameters}');
+//    debugPrint('---api-request--->url--> ${options.baseUrl}${options.path}' +
+//        ' queryParameters: ${options.queryParameters}');
+  debugPrint("${options.headers}");
 //    debugPrint('---api-request--->data--->${options.data}');
     return options;
   }

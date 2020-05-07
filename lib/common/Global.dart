@@ -36,7 +36,6 @@ class Global {
   //初始化全局信息，会在APP启动时执行
   static Future init() async {
     _prefs = await SharedPreferences.getInstance();
-    user.initInfo();
     var _profile = _prefs.getString("profile");
     if (_profile != null) {
       try {

@@ -4,6 +4,7 @@ import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/generated/l10n.dart';
 import 'package:flutter_app2/services/model/Article.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:quiver/strings.dart';
 
@@ -32,100 +33,104 @@ class ArticleItemWidget extends StatelessWidget {
     /// 用于Hero动画的标记
     UniqueKey uniqueKey = UniqueKey();
     return Stack(
-      children: <Widget>[
-        Material(
-          color: top
-              ? Theme.of(context).accentColor.withAlpha(10)
-              : backgroundColor,
-          child: InkWell(
-            onTap: onTap ??
-                () {
-                  Navigator.of(context)
-                      .pushNamed(RouteName.articleDetail, arguments: article);
-                },
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                  border: Border(
-                bottom: Divider.createBorderSide(context, width: 0.7),
-              )),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      ClipOval(
-                        child: WrapperImage(
-                          imageType: ImageType.random,
-                          url: "article.user.avatar",
-                          height: 20,
-                          width: 20,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Text(
-                          article.user==null ? '迭名' : "${article.user.userName}" ?? '迭名',
-                          style: Theme.of(context).textTheme.caption,
-                        ),
-                      ),
-                      Expanded(
-                        child: SizedBox.shrink(),
-                      ),
-                      Text("${article.createTime}",
-                          style: Theme.of(context).textTheme.caption),
-                    ],
-                  ),
-                  if (article.envelopePic==null||article.envelopePic.isEmpty)
-                    Padding(
-                      padding: EdgeInsets.only(top: 7),
-                      child: ArticleTitleWidget(article.title),
-                    )
-                  else
+        children: <Widget>[
+          Material(
+            color: top
+                ? Theme.of(context).accentColor.withAlpha(10)
+                : backgroundColor,
+            child: InkWell(
+              /**
+               * desc #2156 根据文章类型跳转到相关详情页 如webview，article详情页
+               */
+              onTap: onTap ??
+                      () {
+                        showToast("/lib/wights/article_list_Item.dart #2156");
+//                    Navigator.of(context)
+//                        .pushNamed(RouteName.articleDetail, arguments: article);
+                  },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                    border: Border(
+                      bottom: Divider.createBorderSide(context, width: 0.7),
+                    )),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              ArticleTitleWidget(article.title),
-                              SizedBox(
-                                height: 2,
-                              ),
-                              Text(
-                                article.prefix,
-                                style: Theme.of(context).textTheme.caption,
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ],
+                        ClipOval(
+                          child: WrapperImage(
+                            imageType: ImageType.random,
+                            url: "article.user.avatar",
+                            height: 20,
+                            width: 20,
                           ),
                         ),
-                        SizedBox(
-                          width: 5,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: Text(
+                            article.user==null ? '迭名' : "${article.user.userName}" ?? '迭名',
+                            style: Theme.of(context).textTheme.caption,
+                          ),
+                        ),
+                        Expanded(
+                          child: SizedBox.shrink(),
+                        ),
+                        Text("${article.createTime}",
+                            style: Theme.of(context).textTheme.caption),
+                      ],
+                    ),
+                    if (article.envelopePic==null||article.envelopePic.isEmpty)
+                      Padding(
+                        padding: EdgeInsets.only(top: 7),
+                        child: ArticleTitleWidget(article.title),
+                      )
+                    else
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                ArticleTitleWidget(article.title),
+                                SizedBox(
+                                  height: 2,
+                                ),
+                                Text(
+                                  article.prefix,
+                                  style: Theme.of(context).textTheme.caption,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                        ],
+                      ),
+                    Row(
+                      children: <Widget>[
+//                      if (top) ArticleTag(S.of(context).article_tag_top),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: Text(
+                            '${article.type} · ${article.title}',
+                            style: Theme.of(context).textTheme.overline,
+                          ),
                         ),
                       ],
                     ),
-                  Row(
-                    children: <Widget>[
-//                      if (top) ArticleTag(S.of(context).article_tag_top),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        child: Text(
-                          '${article.type} · ${article.title}',
-                          style: Theme.of(context).textTheme.overline,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-        ),
 //        Positioned(
 //          bottom: 0,
 //          right: 0,
@@ -144,7 +149,7 @@ class ArticleItemWidget extends StatelessWidget {
 //                  child: ArticleFavouriteWidget(article, uniqueKey),
 //                ),
 //        )
-      ],
+        ],
     );
   }
 }

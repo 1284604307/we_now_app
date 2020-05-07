@@ -33,6 +33,7 @@ class User with ChangeNotifier{
   // 性别
   var sex;
   var schoolId;
+  var ticket;
   User();
 
   static getUser(){
@@ -43,22 +44,4 @@ class User with ChangeNotifier{
   //不同的类使用不同的mixin即可
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);
-
-  initInfo() async{
-//    Dio dio = Api.getDio();
-//    var res = await dio.get("/user");
-//    print(res);
-//    if(res.statusCode==200){
-//      var data = res.data;
-//      print(data['code']);
-//      if(data['code']==0){
-//        Api.user =  User.fromJson(data['data']);
-//        print(Api.user.toJson());
-//        Api.login = true;
-//        notifyListeners();
-//      }
-//    }else{
-//      BotToast.showText(text:"服务错误");
-//    }
-  }
 }

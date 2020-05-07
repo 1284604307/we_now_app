@@ -22,6 +22,8 @@ abstract class BaseHttp extends DioForNative {
     (transformer as DefaultTransformer).jsonDecodeCallback = parseJson;
     interceptors..add(HeaderInterceptor());
     init();
+
+
   }
 
   void init();

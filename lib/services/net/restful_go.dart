@@ -23,20 +23,29 @@ import 'real_api.dart';
  * @createDate  2020/4/25
  */
 
-final Http http = Http();
 
 class RestfulApi {
 
   static Future login(String username, String password) async {
-    await http.post<Map>('/login', queryParameters: {
+    var ticket = await http.post('/login', queryParameters: {
       'username': username,
       'password': password,
       'rememberMe': true
     });
     print("登陆成功");
-    var user = await getInfo();
+    print(ticket.toString());
+    http.options.headers['ticket'] = ticket.toString();
+    http.options.headers['username'] = username;
+    User user = await getInfo();
+    user.ticket = ticket.toString();
     return user;
   }
+
+  putHeader(String name,String value){
+    http.options.headers[name] = value;
+  }
+
+  delHeader(String name){http.options.headers.remove(name);}
 
   static Future getInfo() async{
     var response = await http.get("/user");
@@ -44,6 +53,8 @@ class RestfulApi {
   }
 
   static Future logout() async{
+    http.options.headers.remove("ticket");
+    http.options.headers.remove("username");
     return http.get("/logout");
   }
 

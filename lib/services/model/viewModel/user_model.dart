@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:flutter_app2/services/config/storage_manager.dart';
+import 'package:flutter_app2/services/net/real_api.dart';
 import 'package:flutter_app2/services/net/restful_go.dart';
 
 class UserModel extends ChangeNotifier {
@@ -15,6 +16,8 @@ class UserModel extends ChangeNotifier {
   UserModel() {
     var userMap = StorageManager.localStorage.getItem(we_now_user);
     _user = userMap != null ? User.fromJson(userMap) : null;
+    if(_user==null&&http.options.headers['ticket']!=null)
+      refreshInfo();
   }
 
   refreshInfo() async {
@@ -26,7 +29,8 @@ class UserModel extends ChangeNotifier {
   saveUser(User user) {
     _user = user;
     notifyListeners();
-    StorageManager.localStorage.setItem(we_now_user, user);
+    StorageManager.localStorage
+        ..setItem(we_now_user, user);
   }
 
   /// 清除持久化的用户数据

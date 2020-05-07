@@ -5,11 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app2/pages/home/circle/circle_page.dart';
+import 'package:flutter_app2/pages/home/circle/circle_show.dart';
 import 'package:flutter_app2/pages/home/circle/test.dart';
 import 'package:flutter_app2/pages/wights/article_list_Item.dart';
 import 'package:flutter_app2/pages/wights/article_skeleton.dart';
 import 'package:flutter_app2/pages/wights/page_route_anim.dart';
 import 'package:flutter_app2/pages/wights/skeleton.dart';
+import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/helper/refresh_helper.dart';
 import 'package:flutter_app2/services/model/Article.dart';
 import 'package:flutter_app2/services/model/Topic.dart';
@@ -19,6 +22,7 @@ import 'package:flutter_app2/services/provider/provider_widget.dart';
 import 'package:flutter_app2/services/provider/view_state_widget.dart';
 import 'package:flutter_app2/services/utils/status_bar_utils.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -47,37 +51,43 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
               scale: 0.8,
               itemBuilder: (BuildContext context, int index) {
                 return
-                    Container(
-                      margin: EdgeInsets.all(5),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child:  Stack(
-                            children: <Widget>[
-                              CachedNetworkImage(
-                                width: double.infinity,
-                                imageUrl: model.banners[index].url,
-                                fit: BoxFit.fill,
-                              ),
-                              Positioned(
-                                top: 0,
-                                child: Container(
-                                  padding: EdgeInsets.only(left: 10,right: 10),
-                                  color: Colors.grey,
-                                  child: Text("${model.banners[index].title}"),
+                  /** desc 首页头部轮播图组件模型  #2150 此处应根据轮播图类型跳转到相关内容详情页
+                           如webview页，article详情页
+                  **/
+                    InkWell(
+                      onTap: (){showToast("lib/home/index.dart #2150");},
+                      child: Container(
+                        margin: EdgeInsets.all(5),
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child:  Stack(
+                              children: <Widget>[
+                                CachedNetworkImage(
+                                  width: double.infinity,
+                                  imageUrl: model.banners[index].url,
+                                  fit: BoxFit.fill,
                                 ),
-                              ),
-                              Positioned(
-                                bottom: 0,
-                                child: Container(
-                                  padding: EdgeInsets.only(left: 10,right: 10),
-                                  color: Colors.grey,
-                                  child: Text(
-                                    "${model.banners[index].content}",
+                                Positioned(
+                                  top: 0,
+                                  child: Container(
+                                    padding: EdgeInsets.only(left: 10,right: 10),
+                                    color: Colors.grey,
+                                    child: Text("${model.banners[index].title}"),
                                   ),
                                 ),
-                              )
-                            ],
-                          )
+                                Positioned(
+                                  bottom: 0,
+                                  child: Container(
+                                    padding: EdgeInsets.only(left: 10,right: 10),
+                                    color: Colors.grey,
+                                    child: Text(
+                                      "${model.banners[index].content}",
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
+                        ),
                       ),
                     );
               },
@@ -114,37 +124,43 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
+              // desc 首页热门动态组件模型
               return Container(
                 margin: EdgeInsets.all(10),
                 child: Stack(
                   children: <Widget>[
-                    Container(
-                      width: 200,
-                      decoration: BoxDecoration(
-                        border: new Border.all(color: Colors.grey, width: 0.5), // 边色与边宽度
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                      ),
-                      child: Column(
-                        children: <Widget>[
-                          ClipRRect(
-                            borderRadius: BorderRadius.only(topLeft:Radius.circular(5),topRight:Radius.circular(5)),
-                            child: Container(
-                                width: 200,
-                                height: 100,
-                                color: Colors.grey[400],
-                                child:  CachedNetworkImage(
-                                  fit: BoxFit.fill,
-                                  imageUrl: "${circles[index].envelopePic}",
-                                )
+                    InkWell(
+                      onTap: (){
+                        Navigator.push(context, NoAnimRouteBuilder( ShowCircle(circles[index]) ));
+                      },
+                      child:  Container(
+                        width: 200,
+                        decoration: BoxDecoration(
+                          border: new Border.all(color: Colors.grey, width: 0.5), // 边色与边宽度
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            ClipRRect(
+                              borderRadius: BorderRadius.only(topLeft:Radius.circular(5),topRight:Radius.circular(5)),
+                              child: Container(
+                                  width: 200,
+                                  height: 100,
+                                  color: Colors.grey[400],
+                                  child:  CachedNetworkImage(
+                                    fit: BoxFit.fill,
+                                    imageUrl: "${circles[index].envelopePic}",
+                                  )
+                              ),
                             ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.all(5),
-                            child: Center(
-                              child: Text("${circles[index].content}",maxLines: 2,textAlign: TextAlign.center,),
-                            ),
-                          )
-                        ],
+                            Container(
+                              margin: EdgeInsets.all(5),
+                              child: Center(
+                                child: Text("${circles[index].content}",maxLines: 2,textAlign: TextAlign.center,),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     )
                   ],
@@ -186,29 +202,35 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemBuilder: (context, index) {
-              return Container(
-                margin: EdgeInsets.all(10),
-                child: Stack(
-                  children: <Widget>[
-                    ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: new Border.all(color: Color.fromRGBO(0, 0, 0, 0.08), width: 0.5), // 边色与边宽度
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                        ),
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              height: 159,
-                              color: Colors.redAccent[100*index%200+100],
-                              child: CachedNetworkImage(imageUrl: topics[index].url,fit: BoxFit.cover,),
-                            ),
-                          ],
+              // desc 首页每日话题组件模型  #2147 此处应跳转到话题详情页 展示该话题详情及其属下的动态
+              return InkWell(
+                onTap: (){
+                  showToast("应跳转到话题详情,请在 lib/home/index.dart 搜索 #2147 任务以修复此处");
+                },
+                child: Container(
+                  margin: EdgeInsets.all(10),
+                  child: Stack(
+                    children: <Widget>[
+                      ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: new Border.all(color: Color.fromRGBO(0, 0, 0, 0.08), width: 0.5), // 边色与边宽度
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                height: 159,
+                                color: Colors.redAccent[100*index%200+100],
+                                child: CachedNetworkImage(imageUrl: topics[index].url,fit: BoxFit.cover,),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             },
@@ -346,6 +368,7 @@ class HomeArticleList extends StatelessWidget {
   Widget build(BuildContext context) {
     HomeModel homeModel = Provider.of(context);
     if (homeModel.isBusy) {
+      // desc 文章加载效果
       return SliverToBoxAdapter(
         child: SkeletonList(
           builder: (context, index) => ArticleSkeletonItem(),
@@ -356,6 +379,7 @@ class HomeArticleList extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
             (context, index) {
           Article item = homeModel.list[index];
+
           return ArticleItemWidget(
             item,
             index: index,
