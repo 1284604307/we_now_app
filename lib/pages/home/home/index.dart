@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app2/pages/home/circle/circle_page.dart';
 import 'package:flutter_app2/pages/home/circle/circle_show.dart';
 import 'package:flutter_app2/pages/home/circle/test.dart';
+import 'package:flutter_app2/pages/wights/ItemInfoDetail.dart';
 import 'package:flutter_app2/pages/wights/article_list_Item.dart';
 import 'package:flutter_app2/pages/wights/article_skeleton.dart';
 import 'package:flutter_app2/pages/wights/page_route_anim.dart';
@@ -25,6 +26,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 const double kHomeRefreshHeight = 180.0;
 
@@ -55,7 +57,11 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                            如webview页，article详情页
                   **/
                     InkWell(
-                      onTap: (){showToast("lib/home/index.dart #2150");},
+                      onTap: (){
+                        //showToast("lib/home/index.dart #2150");
+                        //导航至疫情地图
+                        Navigator.push(context, MaterialPageRoute(builder: (cx)=>ItemInfoDetail()));
+                        },
                       child: Container(
                         margin: EdgeInsets.all(5),
                         child: ClipRRect(
