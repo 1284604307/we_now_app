@@ -105,7 +105,7 @@ class ViewStateErrorWidget extends StatelessWidget {
     switch (error.errorType) {
       case ViewStateErrorType.networkTimeOutError:
         defaultImage = Transform.translate(
-          offset: Offset(-50, 0),
+          offset: Offset(0, 0),
           child: const Icon(IconFonts.pageNetworkError,
               size: 100, color: Colors.grey),
         );

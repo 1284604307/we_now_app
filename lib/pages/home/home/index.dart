@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app2/pages/home/article/webview.dart';
 import 'package:flutter_app2/pages/home/circle/circle_page.dart';
 import 'package:flutter_app2/pages/home/circle/circle_show.dart';
 import 'package:flutter_app2/pages/home/circle/test.dart';
@@ -55,7 +56,10 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                            如webview页，article详情页
                   **/
                     InkWell(
-                      onTap: (){showToast("lib/home/index.dart #2150");},
+                      onTap: (){
+                        Navigator.push(context, SizeRoute(WebViewPage()));
+//                        showToast("lib/home/index.dart #2150");
+                      },
                       child: Container(
                         margin: EdgeInsets.all(5),
                         child: ClipRRect(
@@ -269,7 +273,7 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                   return AnnotatedRegion<SystemUiOverlayStyle>(
                       value: StatusBarUtils.systemUiOverlayStyle(context),
                       child: ViewStateErrorWidget(
-                        buttonTextData: "滑稽",
+//                        buttonTextData: "滑稽",
                         error: homeModel.viewStateError,
                         onPressed: homeModel.initData)
                   );
