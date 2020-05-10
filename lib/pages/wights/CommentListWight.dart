@@ -36,12 +36,15 @@ class _State extends State<CommentListWight> {
 
   @override
   Widget build(BuildContext context) {
+    ScrollController controller = ScrollController();
+    controller.addListener((){
+//      print(controller.position);
+    });
     return SmartRefresher(
         controller: commentListModel.refreshController,
         enablePullUp: commentListModel.list.isNotEmpty,
-        enablePullDown: false,
+        enablePullDown: false ,
         footer: RefresherFooter(),
-        header: HomeRefreshHeader(),
         onRefresh: (){BotToast.showText(text: "太难了");},
         onLoading: (){
           commentListModel.loadMore();
@@ -49,10 +52,8 @@ class _State extends State<CommentListWight> {
         child:
         CustomScrollView(
           key: PageStorageKey<String>(keyName),
+          controller: controller,
           slivers: <Widget>[
-            SliverOverlapInjector(
-              handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-            ),
             SliverList(
               delegate: SliverChildBuilderDelegate(
                     (BuildContext c, int i) {

@@ -43,6 +43,7 @@ class CircleRecommendModel extends ViewStateRefreshListModel {
   Future<List> loadData({int pageNum}) async {
     List<Future> futures = [];
     if (pageNum == ViewStateRefreshListModel.pageNumFirst) {
+
     }
     else{
 

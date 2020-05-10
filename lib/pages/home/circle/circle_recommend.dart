@@ -4,6 +4,7 @@ import 'package:flutter_app2/common/Api.dart';
 import 'package:flutter_app2/common/pojos/AjaxResult.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
 import 'package:flutter_app2/pages/wights/article_skeleton.dart';
+import 'package:flutter_app2/pages/wights/avatar.dart';
 import 'package:flutter_app2/pages/wights/skeleton.dart';
 import 'package:flutter_app2/services/helper/refresh_helper.dart';
 import 'package:flutter_app2/services/model/Article.dart';
@@ -112,7 +113,6 @@ class _State extends State<CircleRecommend> with AutomaticKeepAliveClientMixin {
                                                 BorderRadius.circular(30),
                                               ),
                                               onTap: () {
-                                                print("我被点击了！啊~~~~好疼");
                                               },
                                             )),
                                         Container(
@@ -128,28 +128,19 @@ class _State extends State<CircleRecommend> with AutomaticKeepAliveClientMixin {
                                     children: <Widget>[
                                       Container(
                                           margin: EdgeInsets.only(right: 10),
-                                          child: InkWell(
-                                            splashColor: Colors.green[
-                                            900], // give any splashColor you want
-                                            child: ClipRRect(
-                                              borderRadius:
-                                              BorderRadius.circular(30),
-                                              child: Image.asset(
-                                                'assets/images/app/news_round.png',
-                                                width: 60,
-                                                height: 60,
-                                              ),
+                                          child: Avatar(
+                                            Image.asset(
+                                              'assets/images/app/news_round.png'
                                             ),
-                                            onTap: () {
-                                              print("我被点击了！啊~~~~好疼");
-                                            },
+                                            width: 60,
+                                            height: 60,
                                           )),
                                       Container(
                                           margin: EdgeInsets.only(right: 10),
                                           alignment: Alignment.center,
                                           width: 60,
                                           child: Column(
-                                            children: <Widget>[Text("最新更新")],
+                                            children: <Widget>[Text("用户名")],
                                           )),
                                     ],
                                   );
@@ -190,7 +181,6 @@ class _CicleList extends StatelessWidget {
   Widget build(BuildContext context) {
     CircleRecommendModel recommendModel = Provider.of(context);
     if (recommendModel.isBusy) {
-      print("------------busy");
       return SliverToBoxAdapter(
         child: SkeletonList(
           builder: (context, index) => ArticleSkeletonItem(),

@@ -3,19 +3,18 @@ import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app2/pages/home/article/article_show.dart';
 import 'package:flutter_app2/pages/home/article/webview.dart';
-import 'package:flutter_app2/pages/home/circle/circle_page.dart';
 import 'package:flutter_app2/pages/home/circle/circle_show.dart';
 import 'package:flutter_app2/pages/home/circle/test.dart';
 import 'package:flutter_app2/pages/wights/article_list_Item.dart';
 import 'package:flutter_app2/pages/wights/article_skeleton.dart';
 import 'package:flutter_app2/pages/wights/page_route_anim.dart';
 import 'package:flutter_app2/pages/wights/skeleton.dart';
-import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/helper/refresh_helper.dart';
 import 'package:flutter_app2/services/model/Article.dart';
+import 'package:flutter_app2/services/model/Banner.dart' as b;
 import 'package:flutter_app2/services/model/Topic.dart';
 import 'package:flutter_app2/services/model/viewModel/home_model.dart';
 import 'package:flutter_app2/services/model/viewModel/scroll_controller_model.dart';
@@ -51,14 +50,23 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
               viewportFraction: 1,
               scale: 0.8,
               itemBuilder: (BuildContext context, int index) {
+                b.Banner banner = model.banners[index];
                 return
                   /** desc 首页头部轮播图组件模型  #2150 此处应根据轮播图类型跳转到相关内容详情页
                            如webview页，article详情页
                   **/
                     InkWell(
                       onTap: (){
-                        Navigator.push(context, SizeRoute(WebViewPage()));
-//                        showToast("lib/home/index.dart #2150");
+                        switch(model.banners[index].type){
+                          case "外链":
+                            Navigator.push(context, SizeRoute(WebViewPage(title: banner.title,path: banner.path,)));
+                            break;
+                          case "文章":
+                            showToast("lib/home/index.dart #2150");
+                            break;
+                          default:
+                            showToast("lib/home/index.dart #2150");
+                        }
                       },
                       child: Container(
                         margin: EdgeInsets.all(5),
@@ -209,7 +217,8 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
               // desc 首页每日话题组件模型  #2147 此处应跳转到话题详情页 展示该话题详情及其属下的动态
               return InkWell(
                 onTap: (){
-                  showToast("应跳转到话题详情,请在 lib/home/index.dart 搜索 #2147 任务以修复此处");
+//                  showToast("应跳转到话题详情,请在 lib/home/index.dart 搜索 #2147 任务以修复此处");
+                  Navigator.push(context, NoAnimRouteBuilder(ArticleShowPage()));
                 },
                 child: Container(
                   margin: EdgeInsets.all(10),

@@ -46,9 +46,13 @@ class _State extends State<FriendListPage> {
               child: CustomScrollView(
                 slivers: <Widget>[
                   SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 15,bottom: 15),
-                      child: RowItem(left:" 新朋友 "),
+                    child: Container(
+                      decoration: BoxDecoration(
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 15,bottom: 15),
+                        child: RowItem(left:" 新朋友 "),
+                      ),
                     ),
                   ),
                   SliverList(delegate: SliverChildBuilderDelegate(

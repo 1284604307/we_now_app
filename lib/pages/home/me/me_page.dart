@@ -100,8 +100,8 @@ class _State extends State<MePage>{
                       onPressed: () {
                         loadingData();
                       },
-                      message: "用户未登录",
-                      buttonText: Text("去登陆"),
+                      message: "网络错误",
+                      buttonText: Text("重新加载"),
                     ),
                   SliverAppBar(
                     primary: true,// 预留状态栏
@@ -120,9 +120,15 @@ class _State extends State<MePage>{
                       if(userInfo!=null)
                       if(userInfo.username!=Provider.of<UserModel>(context).user.loginName)
                         IconButton(
-                          icon: Icon(Icons.person_add,color: Theme.of(context).primaryColorLight,),
+                          icon: Icon(
+                            userInfo.isFriend?Icons.person_pin:Icons.person_add,
+                            color: Theme.of(context).primaryColorLight,),
                           onPressed: (){
-                            Navigator.push(context, SizeRoute(FriendApplication(userInfo.username??"")));
+                            if(!userInfo.isFriend)
+                              Navigator.push(context, SizeRoute(FriendApplication(userInfo.username??"")));
+                            else{
+                              showToast("跳转到好友信息管理页 #1106");
+                            }
                           },
                         )
                       else
@@ -168,7 +174,9 @@ class _State extends State<MePage>{
                       bottom: false,
                       child: Builder(
                         builder: (BuildContext context) {
-                          return Container();
+                          return ListView.builder(itemBuilder: (c,i){
+                            return Container(color: Colors.yellow[i*50],height: 60,);
+                          },itemCount: 20,);
                         },
                       ),
                     );
