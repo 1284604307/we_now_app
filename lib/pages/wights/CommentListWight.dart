@@ -49,8 +49,7 @@ class _State extends State<CommentListWight> {
         onLoading: (){
           commentListModel.loadMore();
         },
-        child:
-        CustomScrollView(
+        child: CustomScrollView(
           key: PageStorageKey<String>(keyName),
           controller: controller,
           slivers: <Widget>[
@@ -157,101 +156,6 @@ class _State extends State<CommentListWight> {
     );
   }
 
-  commentListBuilder(Article circle){
-
-    return ListView.builder(
-
-        itemCount: 30,
-        itemBuilder: ((c,i){
-          return Container(
-            padding: EdgeInsets.all(15),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(right: 10,top: 5,),
-                  child: Avatar(null,width: 30,height: 30,),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      child: Text(
-                        "${circle.user.userName}",
-                        style: TextStyle(fontSize: 14,color: Theme.of(context).hintColor,fontWeight: FontWeight.w400),),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 2),
-                      child: Text(
-                        "4-24",
-                        style: TextStyle(fontSize: 12,color: Theme.of(context).hintColor),),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 5,bottom: 5),
-                      child: Text("${circle.content}",style: TextStyle(fontSize: 14),),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(right: 10),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
-                              Icon(IconFonts.thumbUp,size: 16,),
-                              t11("11",),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 10),
-                          child:InkWell(
-                            child: Icon(IconFonts.share,size: 16,),
-                          ),
-                        ),
-                        InkWell(
-                          child: Icon(IconFonts.message,size: 16,),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      width: 340,
-                      color: Colors.black12,
-                      margin:EdgeInsets.only(top: 10),
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          // desc 子评论
-                          RichText(
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                            text: TextSpan(
-                                text: "喵喵的鱼: ",
-                                style: TextStyle(color: Colors.blue,fontSize: 14.0),
-                                children: [
-                                  TextSpan(
-                                    text: "喵喵喜欢吃鱼鱼\n兄嘻嘻嘻嘻sadxxxxxxxxxxxxxxxxxxxasdxxxxxxxxxxxxxxxxxxxxxxxx ",
-                                    style: TextStyle(color: Theme.of(context).textTheme.display1.color,fontSize: 14.0),
-                                  )
-                                ]
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                )
-              ],
-            ),
-            decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(width: 0.15, color: Theme.of(context).hintColor))
-            ),
-          );
-        }
-        )
-    );
-  }
 
   t11(str) => Text(str,style: TextStyle(fontSize: 12,),);
 

@@ -174,3 +174,97 @@ class RowItem extends StatelessWidget{
       ),
     );
   }}
+
+
+const BUTTON_BACKGROUND_COLOR = Color.fromARGB(255, 58, 58, 67);
+
+const BUTTON_ACCENT_COLOR = Color.fromARGB(255, 234, 67, 89);
+
+class FollowAnimation extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return FollowAnimationState();
+  }
+}
+
+class FollowAnimationState extends State with SingleTickerProviderStateMixin {
+  bool _follow = false;
+
+  AnimationController _controller;
+
+  Animation leftAnimation, rightAnimation;
+
+  static const TOTAL_WIDTH = 180.0;
+
+  static const MESSAGE_BTN_WIDTH = 60.0;
+
+  static const GAP = 4.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
+
+    var rectTween = RelativeRectTween(
+        begin: RelativeRect.fromLTRB(0, 0, 0, 0),
+        end: RelativeRect.fromLTRB(0, 0, MESSAGE_BTN_WIDTH + GAP, 0));
+    var rectTween1 = RelativeRectTween(
+        begin: RelativeRect.fromLTRB(TOTAL_WIDTH, 0, -MESSAGE_BTN_WIDTH, 0),
+        end: RelativeRect.fromLTRB(TOTAL_WIDTH - MESSAGE_BTN_WIDTH, 0, 0, 0));
+
+    leftAnimation = rectTween.animate(_controller);
+    rightAnimation = rectTween1.animate(_controller);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: TOTAL_WIDTH,
+      height: 40,
+      child: Stack(
+        children: <Widget>[
+          PositionedTransition(
+            rect: leftAnimation,
+            child: RaisedButton(
+              color: _follow ? BUTTON_BACKGROUND_COLOR : BUTTON_ACCENT_COLOR,
+              child: _follow
+                  ? Text("取消关注", style: TextStyle(color: Colors.white))
+                  : Text(
+                "+关注",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                setState(() {
+                  if (_follow) {
+                    _controller.reverse();
+                  } else {
+                    _controller.forward();
+                  }
+                  _follow = !_follow;
+                });
+              },
+            ),
+          ),
+          PositionedTransition(
+            rect: rightAnimation,
+            child: RaisedButton(
+              child: Icon(
+                Icons.message,
+                color: Colors.white,
+              ),
+              color: BUTTON_BACKGROUND_COLOR,
+              onPressed: () {},
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+}
