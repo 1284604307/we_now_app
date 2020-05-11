@@ -2,6 +2,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app2/pages/home/my_page/setting_page.dart';
+import 'package:flutter_app2/pages/home/my_page/user_profile.dart';
 import 'package:flutter_app2/pages/login/demo.dart';
 import 'package:flutter_app2/pages/wights/bottom_clipper.dart';
 import 'package:flutter_app2/pages/wights/page_route_anim.dart';
@@ -118,7 +119,14 @@ class MyPageState extends State<MyPage>{
                             Navigator.push(context, NoAnimRouteBuilder(MyApp()));
                           },
                         ),
-                        CardItem(width/4),
+                        CardItem(
+                          width/4,
+                          icon: Icon(Icons.map),
+                          text: "上下联动案例",
+                          taped: (){
+                            Navigator.push(context, NoAnimRouteBuilder(UserProfileScreen()));
+                          },
+                        ),
                         CardItem(width/4),
                       ],
                     ),

@@ -9,7 +9,7 @@ import 'package:flutter_app2/pages/wights/page_route_anim.dart';
  */
 class Avatar extends StatelessWidget {
 
-  StatefulWidget header;
+  Widget header;
   double width;
   double height;
   double borderWidth;
