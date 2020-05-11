@@ -8,6 +8,7 @@ import 'package:flutter_app2/pages/home/article/article_show.dart';
 import 'package:flutter_app2/pages/home/article/webview.dart';
 import 'package:flutter_app2/pages/home/circle/circle_show.dart';
 import 'package:flutter_app2/pages/home/circle/test.dart';
+import 'package:flutter_app2/pages/home/topic/topic_page.dart';
 import 'package:flutter_app2/pages/wights/ItemInfoDetail.dart';
 import 'package:flutter_app2/pages/wights/article_list_Item.dart';
 import 'package:flutter_app2/pages/wights/article_skeleton.dart';
@@ -221,8 +222,9 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
               // desc 首页每日话题组件模型  #2147 此处应跳转到话题详情页 展示该话题详情及其属下的动态
               return InkWell(
                 onTap: (){
-//                  showToast("应跳转到话题详情,请在 lib/home/index.dart 搜索 #2147 任务以修复此处");
-                  Navigator.push(context, NoAnimRouteBuilder(ArticleShowPage()));
+                  showToast("应跳转到话题详情,请在 lib/home/index.dart 搜索 #2147 任务以修复此处");
+
+                  Navigator.push(context, NoAnimRouteBuilder(TopicPage(topics[index].id,topic: topics[index],)));
                 },
                 child: Container(
                   margin: EdgeInsets.all(10),

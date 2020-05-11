@@ -34,7 +34,6 @@ class MePage extends StatefulWidget{
     return _State(username: username);
   }
 
-
 }
 
 class _State extends State<MePage>{
