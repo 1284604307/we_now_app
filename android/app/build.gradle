@@ -42,7 +42,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
-
 //        desc 极光推送配置
         ndk {
             //选择要添加的对应 cpu 类型的 .so 库。
@@ -53,6 +52,7 @@ android {
                 JPUSH_PKGNAME : applicationId,
                 JPUSH_APPKEY : "3ee80f9fe9855e97c89dd52a", // NOTE: JPush 上注册的包名对应的 Appkey.
                 JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+                TENCENT_APP_ID: "1110421384" // QQ SDK
         ]
     }
 

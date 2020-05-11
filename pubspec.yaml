@@ -106,6 +106,10 @@ dependencies:
   package_info: 0.4.0+17
   device_info: 0.4.2+2
 
+  # 腾讯SDK
+  tencent_kit: 1.0.4
+  okhttp_kit: ^1.0.0
+
 dev_dependencies:
   # Your other dev_dependencies here
   build_runner: ^1.0.0

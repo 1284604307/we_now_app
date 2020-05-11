@@ -2,7 +2,9 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app2/pages/home/my_page/setting_page.dart';
+import 'package:flutter_app2/pages/login/demo.dart';
 import 'package:flutter_app2/pages/wights/bottom_clipper.dart';
+import 'package:flutter_app2/pages/wights/page_route_anim.dart';
 import 'package:flutter_app2/services/config/resource_mananger.dart';
 import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/generated/l10n.dart';
@@ -108,7 +110,14 @@ class MyPageState extends State<MyPage>{
                             print("事件发生");
                           },
                         ),
-                        CardItem(width/4),
+                        CardItem(
+                          width/4,
+                          icon: Icon(Icons.radio_button_unchecked),
+                          text: "腾讯SDK DEMO",
+                          taped: (){
+                            Navigator.push(context, NoAnimRouteBuilder(MyApp()));
+                          },
+                        ),
                         CardItem(width/4),
                         CardItem(width/4),
                       ],
@@ -127,7 +136,7 @@ class MyPageState extends State<MyPage>{
     print(Theme.of(context).brightness);
     if (MediaQuery.of(context).platformBrightness ==
         Brightness.dark) {
-      BotToast.showText(text: "检测到系统为暗黑模式,已为你自动切换");
+      BotToast.showText(text: "检测到系统为夜间模式,已为你自动切换");
     } else {
       Provider.of<ThemeModel>(context,listen: false).switchTheme(
           userDarkMode:

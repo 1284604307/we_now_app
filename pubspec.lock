@@ -644,6 +644,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.1+2"
+  okhttp_kit:
+    dependency: "direct main"
+    description:
+      name: okhttp_kit
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.2"
   oktoast:
     dependency: "direct main"
     description:
@@ -936,6 +943,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.2.0"
+  tencent_kit:
+    dependency: "direct main"
+    description:
+      name: tencent_kit
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.4"
   term_glyph:
     dependency: transitive
     description:
