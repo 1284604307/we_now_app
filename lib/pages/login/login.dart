@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 
@@ -20,6 +21,7 @@ import 'package:flutter_app2/services/provider/provider_widget.dart';
 import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
+import 'package:tencent_kit/tencent_kit.dart';
 
 /**
  * @author Ming
@@ -40,7 +42,34 @@ class LoginPageState extends State<LoginPage>{
   final _usernameFocus = FocusNode();
   final _passwordFocus = FocusNode();
   var _isLoading = false;
+  LoginModel model;
+  
+  static const String _TENCENT_APPID = '1110421384';
+  Tencent _tencent = Api.tencent;
+  StreamSubscription<TencentLoginResp> _login;
+  TencentLoginResp _loginResp;
 
+  @override
+  void initState() {
+    super.initState();
+    _login = _tencent.loginResp().listen(_listenLogin);
+  }
+
+  void _listenLogin(TencentLoginResp resp) async {
+    _loginResp = resp;
+//    String content = 'login: ${resp.openid} - ${resp.accessToken}';
+    print(resp.openid);
+    print(resp.accessToken);
+    try{
+      BotToast.showLoading();
+      await model.loginByQQ(resp.openid, resp.accessToken);
+      Navigator.of(context).pop();
+      BotToast.closeAllLoading();
+    }catch(e){
+      print(e);
+      BotToast.closeAllLoading();
+    }
+  }
 
   @override
   void dispose() {
@@ -76,6 +105,7 @@ class LoginPageState extends State<LoginPage>{
     );
     return ProviderWidget<LoginModel>(
       model: LoginModel(Provider.of(context)),
+      onModelReady: (loginModel){model = loginModel;},
       builder: (c,model,child){
         return WillPopScope(
           child: Scaffold(
@@ -84,12 +114,12 @@ class LoginPageState extends State<LoginPage>{
                 centerTitle: true,
                 title: Text("登录"),
               ),
-              body: Container(
-                alignment: Alignment.center,
-                child: new Container(
-                    height: 400,
-                    child: Container(
-                        margin: EdgeInsets.all(20),
+              body: ListView(
+                children: <Widget>[
+                  new Container(
+                      height: 400,
+                      child: Container(
+                          margin: EdgeInsets.all(20),
                           child:Column(
                             children: <Widget>[
                               TextFormField(
@@ -127,14 +157,42 @@ class LoginPageState extends State<LoginPage>{
                               ),
                               LoginButton(userController,passController),
                             ],
+                          )
+                      )
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Divider(height: 1,),
+                  ),
+                  new Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        InkWell(
+                          onTap: (){
+                            _tencent.login(
+                              scope: [TencentScope.GET_SIMPLE_USERINFO],);
+                          },
+                          child: Container(
+                            child: Column(
+                              children: <Widget>[
+                                Image.asset("assets/icons/qq_icon.png",width: 60,height: 60,),
+                                Text("QQ 登录",style: TextStyle(),)
+                              ],
+                            ),
+                          ),
                         )
-                    )
-                ),
+                      ],
+                    ),
+                  )
+                ],
               )
           ),
           onWillPop: () {
-            if(!model.isBusy)
+            if(!model.isBusy){
+              BotToast.closeAllLoading();
               Navigator.pop(context);
+            }
             return;
           },
         );

@@ -41,6 +41,20 @@ class RestfulApi {
     return user;
   }
 
+  static Future loginByQQ(String openid, String access_token) async {
+    var ticket = await http.post('/login/qq', queryParameters: {
+      'openid': openid,
+      'access_token': access_token,
+    });
+    print("登陆成功");
+    print(ticket.toString());
+    User user = await getInfo();
+    http.options.headers['ticket'] = ticket.toString();
+    http.options.headers['username'] = user.loginName;
+    user.ticket = ticket.toString();
+    return user;
+  }
+
   putHeader(String name,String value){
     http.options.headers[name] = value;
   }

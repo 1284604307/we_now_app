@@ -8,11 +8,8 @@ import 'package:flutter_app2/pages/wights/bottom_clipper.dart';
 import 'package:flutter_app2/pages/wights/page_route_anim.dart';
 import 'package:flutter_app2/services/config/resource_mananger.dart';
 import 'package:flutter_app2/services/config/router_manger.dart';
-import 'package:flutter_app2/services/generated/l10n.dart';
 import 'package:flutter_app2/services/model/viewModel/theme_model.dart';
 import 'package:flutter_app2/services/model/viewModel/user_model.dart';
-import 'package:flutter_app2/services/provider/provider_widget.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 
 import 'my_page_card_item.dart';
@@ -29,7 +26,6 @@ class MyPage extends StatefulWidget{
 }
 
 class MyPageState extends State<MyPage>{
-
 
   @override
   Widget build(BuildContext context) {

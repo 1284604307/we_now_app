@@ -122,7 +122,7 @@ class _State extends State<CommentPage> with AutomaticKeepAliveClientMixin {
                 ],
               ),
             );
-        }, model: CommentListModel(1),
+        }, model: CommentListModel(this.id),
       ),
     );
 //    return ProviderWidget<CommentListModel>(

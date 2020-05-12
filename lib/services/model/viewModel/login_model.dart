@@ -45,6 +45,27 @@ class LoginModel extends ViewStateModel {
     }
   }
 
+  Future<bool> loginByQQ(openid,accessToken) async {
+    setBusy();
+    try {
+      User user = await RestfulApi.loginByQQ(openid, accessToken);
+      userModel.saveUser(user);
+      StorageManager.sharedPreferences
+        ..setString(WeNow_LoginName, userModel.user.loginName)
+        ..setString(WeNow_LoginTicket, userModel.user.ticket);
+
+      await Api.jMessage.login(
+          username: userModel.user.loginName,
+          password: "${userModel.user.loginName}123456"
+      );
+      setIdle();
+      return true;
+    } catch (e, s) {
+      setError(e,s);
+      return false;
+    }
+  }
+
   Future<bool> register(loginName, password) async {
     setBusy();
     try {
