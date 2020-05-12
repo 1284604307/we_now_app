@@ -360,7 +360,14 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
   bool get wantKeepAlive => true;
 }
 
+articleRouter(Article article,context){
 
+  if(article.link!=null){
+    Navigator.push(context, NoAnimRouteBuilder(WebViewPage(title:article.title,path: article.link,)));
+  }else{
+    Navigator.push(context, NoAnimRouteBuilder(ArticleShowPage(article)));
+  }
+}
 
 class HomeTopArticleList extends StatelessWidget {
   @override
@@ -374,6 +381,9 @@ class HomeTopArticleList extends StatelessWidget {
             item,
             index: index,
             top: true,
+            onTap: (){
+              articleRouter(item,context);
+            },
           );
         },
         childCount: homeModel.topArticles?.length ?? 0,
@@ -398,10 +408,13 @@ class HomeArticleList extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
             (context, index) {
           Article item = homeModel.list[index];
-
           return ArticleItemWidget(
             item,
             index: index,
+            onTap:(){
+              articleRouter(item,context);
+//              Navigator.push(context, NoAnimRouteBuilder(ArticleShowPage(item)));
+            },
           );
         },
         childCount: homeModel.list?.length ?? 0,

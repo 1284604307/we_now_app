@@ -25,9 +25,10 @@ class _state extends State<ShowImagePage>{
   File image;
   Uint8List image_list;
   ExtendedImage eI;
+  String netUrl;
 
-  _state({File image,Uint8List list,ExtendedImage extendedImage}) :
-        this.image = image,this.image_list = list,this.eI = extendedImage;
+  _state({File image,Uint8List list,ExtendedImage extendedImage,String netUrl}) :
+        this.image = image,this.image_list = list,this.eI = extendedImage,this.netUrl =netUrl;
 
   getExtendedImage(){
     if(image!=null){
@@ -40,12 +41,19 @@ class _state extends State<ShowImagePage>{
     }
     if(image_list!=null){
       print("---------image_list");
-      ExtendedImage.memory(
+      return ExtendedImage.memory(
         image_list,width: double.infinity,
         height: double.infinity,
         mode: ExtendedImageMode.gesture ,
       );
-      if(eI!=null) return eI;
+    }
+    if(netUrl != null){
+      print("喜喜喜喜喜喜");
+      return ExtendedImage.network(
+        netUrl,width: double.infinity,
+        height: double.infinity,
+        mode: ExtendedImageMode.gesture ,
+      );
     }
     if(eI!=null){
       return eI;

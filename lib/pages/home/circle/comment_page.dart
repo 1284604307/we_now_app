@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/pages/wights/CommentListWight.dart';
+import 'package:flutter_app2/pages/wights/LittleWidgets.dart';
 import 'package:flutter_app2/pages/wights/avatar.dart';
 import 'package:flutter_app2/services/config/resource_mananger.dart';
 import 'package:flutter_app2/services/helper/refresh_helper.dart';
@@ -39,8 +40,7 @@ class _State extends State<CommentPage> with AutomaticKeepAliveClientMixin {
       child: ProviderWidget<CommentListModel>(
         onModelReady: (m){m.initData();},
         builder: (BuildContext context, CommentListModel commentListModel, Widget child) {
-          return
-            SmartRefresher(
+          return SmartRefresher(
               controller: commentListModel.refreshController,
               enablePullDown: false,
               enablePullUp: commentListModel.list.isNotEmpty,
@@ -106,7 +106,7 @@ class _State extends State<CommentPage> with AutomaticKeepAliveClientMixin {
                                   ),
                                   // desc 子评论容器
                                   if(commentListModel.list[i].children.length>0)
-                                    chidrenComment(commentListModel.list[i])
+                                    ChildrenComment(commentListModel.list[i])
                                 ],
                               )
                             ],
@@ -125,13 +125,6 @@ class _State extends State<CommentPage> with AutomaticKeepAliveClientMixin {
         }, model: CommentListModel(this.id),
       ),
     );
-//    return ProviderWidget<CommentListModel>(
-//        model: CommentListModel(id),
-//        builder: (BuildContext context, CommentListModel model, Widget child) {
-//          return CommentListWight(name,model);
-//        },
-//        onModelReady: (model){model.initData();},
-//    );
   }
 
   @override
