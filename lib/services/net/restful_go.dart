@@ -125,12 +125,15 @@ class RestfulApi {
     return response.data.map<Comment>((item) => Comment.fromJson(item)).toList();
   }
 
-
   static Future fetchChildrenComment(commentId,{pageNum=0}) async{
     var response = await http.get('/public/circle/commentChildren/$commentId/$pageNum');
     return response.data.map<Comment>((item) => Comment.fromJson(item)).toList();
   }
 
+  static Future fetchArticle(articleId) async{
+    var response = await http.get('/public/circle/info/$articleId');
+    return Article.fromJson(response.data);
+  }
 
   static fetchCollectList(int pageNum) {
 
@@ -183,6 +186,13 @@ class RestfulApi {
     var response = await http.get('/public/circle/popular');
     return response.data.map<Article>((item) => Article.fromJson(item)).toList();
   }
+
+  // desc 话题详情
+  static Future fetchTopic(topicId) async{
+    var response = await http.get('/public/topic/info/$topicId');
+    return Topic.fromJson(response.data);
+  }
+
 
   static register(loginName, password) async {
     await http.post('/user/register', queryParameters: {

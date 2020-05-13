@@ -34,6 +34,7 @@ class _state extends State<WebViewPage>{
   Widget build(BuildContext context) {
     WebViewController _controller;
     BotToast.showLoading();
+    print(path);
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(title: Text("$title"),),

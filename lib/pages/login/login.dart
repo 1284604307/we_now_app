@@ -60,15 +60,16 @@ class LoginPageState extends State<LoginPage>{
 //    String content = 'login: ${resp.openid} - ${resp.accessToken}';
     print(resp.openid);
     print(resp.accessToken);
-    try{
-      BotToast.showLoading();
-      await model.loginByQQ(resp.openid, resp.accessToken);
-      Navigator.of(context).pop();
-      BotToast.closeAllLoading();
-    }catch(e){
-      print(e);
-      BotToast.closeAllLoading();
-    }
+    if(resp.openid!=null)
+      try{
+        BotToast.showLoading();
+        await model.loginByQQ(resp.openid, resp.accessToken);
+        Navigator.of(context).pop();
+        BotToast.closeAllLoading();
+      }catch(e){
+        print(e);
+        BotToast.closeAllLoading();
+      }
   }
 
   @override

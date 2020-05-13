@@ -1,8 +1,10 @@
 import 'dart:ui';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/services/model/Topic.dart';
+import 'package:flutter_app2/services/net/restful_go.dart';
 import 'package:flutter_app2/services/provider/view_state_widget.dart';
 import 'package:path/path.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -12,27 +14,36 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
  */
 class TopicPage extends StatefulWidget {
 
-  int tipId;
+  int topicId;
   Topic topic;
-  TopicPage(this.tipId,{this.topic});
+  TopicPage(this.topicId,{this.topic});
 
   @override
-  _State createState() => _State(this.tipId,topic: this.topic);
+  _State createState() => _State(this.topicId,topic: this.topic);
 
 }
 
 class _State extends State<TopicPage> {
 
-  int tipId;
+  int topicId;
   Topic topic;
-  _State(this.tipId,{this.topic});
+  _State(this.topicId,{this.topic});
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     if(topic==null){
-      //加载
+      try{
+        BotToast.showLoading();
+        RestfulApi.fetchTopic(topicId).then((topic){
+          this.topic = topic;
+          BotToast.closeAllLoading();
+          setState(() {});
+        });
+      }catch(e){
+        BotToast.closeAllLoading();
+      }
     }else{
 
     }
@@ -42,14 +53,14 @@ class _State extends State<TopicPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(topic.toJson());
+//    print(topic.toJson());
     TextStyle textStyle({fw,size}) => TextStyle(
       color: Colors.white,
       fontWeight: fw,fontSize: size
     );
     return Scaffold(
       appBar: AppBar(
-        title: Text("${topic.topic??""}"),
+        title: Text("${topic?.topic??"话题详情页"}"),
       ),
       body: SmartRefresher(
         controller: RefreshController(),
@@ -81,10 +92,10 @@ class _State extends State<TopicPage> {
                               filter: ImageFilter.blur(
                               sigmaX: 2,
                               sigmaY: 2,
-                            ),
-                            child: Container(
-                              color: Colors.transparent,
-                            ),
+                              ),
+                              child: Container(
+                                color: Colors.transparent,
+                              ),
                           ),
                           ),
                           Column(
