@@ -7,12 +7,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:extended_image/extended_image.dart';
+import 'package:extended_text_field/extended_text_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app2/common/Api.dart';
+import 'package:flutter_app2/common/constant.dart';
 import 'package:flutter_app2/pages/wights/GridViewNithWight.dart';
 import 'package:flutter_app2/pages/wights/LittleWidgets.dart';
+import 'package:flutter_app2/pages/wights/extend_textfield/my_special_text_span_builder.dart';
 import 'package:flutter_app2/services/model/Article.dart';
 import 'package:flutter_app2/common/pojos/AjaxResult.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
@@ -27,6 +30,7 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:provider/provider.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'circle_show.dart';
 
@@ -183,114 +187,343 @@ class _State extends State<CreateCirclePage>
   List<Widget> images = [];
   List<Asset> asserts = [];
   List<Uint8List> imageData = [];
+  PanelController panelController = PanelController();
+
+  var textLength = 0;
+
+  @override
+  initState(){
+    super.initState();
+    _mEtController.text = Api.newCircleEntity.content;
+    textLength = _mEtController.text.length;
+    print(Api.newCircleEntity.content);
+    _mEtController.addListener(() {
+      Api.newCircleEntity.content = _mEtController.text;
+      setState(() {
+        textLength = _mEtController.text.length;
+      });
+    });
+  }
+
+  MySpecialTextSpanBuilder _mySpecialTextSpanBuilder = MySpecialTextSpanBuilder();
+  TextEditingController _mEtController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController circleTextController = TextEditingController();
-    circleTextController.text = Api.newCircleEntity.content;
-    print(Api.newCircleEntity.content);
-    circleTextController.addListener(() {
-      Api.newCircleEntity.content = circleTextController.text;
-    });
-    // TODO: implement build
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        title: Text(
-          "创作",
-          style: TextStyle(
-              fontWeight: FontWeight.normal,
-              fontSize: 18,
-              fontStyle: FontStyle.normal),
-        ),
-        actions: <Widget>[
-          Container(
-            margin: EdgeInsets.only(right: 20),
-            alignment: Alignment.centerRight,
-            child: InkWell(
-              child: Container(padding: EdgeInsets.all(10), child: Text("发布")),
-              onTap: () {
-                print(circleTextController.toString());
-                print(images.toList().toString());
-                publish();
-              },
+    super.build(context);
+    return WillPopScope(
+      child: SlidingUpPanel(
+        minHeight: 0,
+        maxHeight: 400,
+        backdropEnabled: true,
+        controller: panelController,
+        header: Container(
+          width: MediaQuery.of(context).size.width,
+          height: 45,
+          color: Colors.grey,
+          child:Material(
+            child: Row(
+              children: <Widget>[
+                Text("内容")
+              ],
             ),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.only(bottom: 10, left: 15, right: 15),
-        child: Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(bottom: 30),
-              // desc 动态内容文本框
-              child: TextField(
-                controller: circleTextController,
-                autofocus: true,
-                minLines: 6,
-                maxLines: 1000,
-                focusNode: FocusNode(),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: "发布新动态！就是现在~",
-                  labelStyle: null,
+          ),
+        ),
+        panel: Material(
+            child: Container(
+              color: Colors.grey ,
+              padding: EdgeInsets.only(top: 50,left: 5,right: 5),
+              alignment: Alignment.topCenter,
+//          color: Colors.white,
+              child: Row(
+                children: <Widget>[
+
+                ],
+              ),
+            ),
+          ),
+        body: Scaffold(
+          resizeToAvoidBottomInset: true,
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(
+              "新动态",
+              style: TextStyle(
+                  fontWeight: FontWeight.normal,
+                  fontSize: 18,
+                  fontStyle: FontStyle.normal),
+            ),
+            actions: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 20),
+                alignment: Alignment.centerRight,
+                child: InkWell(
+                  child: Container(padding: EdgeInsets.all(10), child: Text("发布")),
+                  onTap: () {
+                    print(_mEtController.toString());
+                    print(images.toList().toString());
+                    publish();
+                  },
+                ),
+              )
+            ],
+          ),
+          body: Column(
+            children: <Widget>[
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.only(bottom: 10, left: 15, right: 15),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Container(
+                        padding:
+                        EdgeInsets.only(top: 10.0, left: 10.0, right: 10, bottom: 20),
+                        constraints: new BoxConstraints(minHeight: 50.0),
+                        child:
+                        ExtendedTextField(
+                          //    textSelectionControls: _myExtendedMaterialTextSelectionControls,
+                          specialTextSpanBuilder: _mySpecialTextSpanBuilder,
+                          controller: _mEtController,
+                          minLines: 6,
+                          maxLines: 1000,
+//                          focusNode: focusNode,
+                          style: TextStyle(color: Colors.black, fontSize: 15),
+                          decoration: InputDecoration.collapsed(
+                              hintText: "发布新动态！就是现在~",
+                              hintStyle: TextStyle(color: Color(0xff919191), fontSize: 15)),
+                        ),
+                      ),
+                      Container(
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          primary: false,
+                          itemCount: images.length + 1,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3, //横轴三个子widget
+                              crossAxisSpacing: 5,
+                              mainAxisSpacing: 5 //分别是 x y 的间隔
+                          ),
+                          itemBuilder: (context, index) {
+                            if (index == images.length) {
+                              if (index >= 9) return null;
+                              return selectNewImage();
+                            }
+                            // desc 返回一个包装了删除键的栈
+                            return Stack(
+                              children: <Widget>[
+                                images[index],
+                                Positioned(
+                                  right: 0,
+                                  top: 0,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(40),
+                                    child: Container(
+                                      width: 30,
+                                      height: 30,
+                                      color: Color.fromRGBO(0, 0, 0, 0.25),
+                                      child: IconButton(
+                                        icon: Icon(
+                                          Icons.close,
+                                          size: 15,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: () {
+                                          print(index);
+                                          setState(() {
+                                            images.removeAt(index);
+                                            asserts.removeAt(index);
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Container(
-              child: GridView.builder(
-                shrinkWrap: true,
-                primary: false,
-                itemCount: images.length + 1,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3, //横轴三个子widget
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 5 //分别是 x y 的间隔
-                    ),
-                itemBuilder: (context, index) {
-                  if (index == images.length) {
-                    if (index >= 9) return null;
-                    return selectNewImage();
-                  }
-                  // desc 返回一个包装了删除键的栈
-                  return Stack(
-                    children: <Widget>[
-                      images[index],
-                      Positioned(
-                        right: 0,
-                        top: 0,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(40),
-                          child: Container(
-                            width: 30,
-                            height: 30,
-                            color: Color.fromRGBO(0, 0, 0, 0.25),
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.close,
-                                size: 15,
-                                color: Colors.white,
-                              ),
-                              onPressed: () {
-                                print(index);
-                                setState(() {
-                                  images.removeAt(index);
-                                  asserts.removeAt(index);
-                                });
-                              },
-                            ),
-                          ),
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(""),
+                    Padding(
+                      padding: EdgeInsets.only(right: 30),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Container(
+                          color: Colors.grey[200],
+                          padding: EdgeInsets.all(3),
+                          child: Text(" $textLength ",maxLines: 1,style: TextStyle(color: Colors.grey),),
                         ),
-                      )
-                    ],
-                  );
-                },
+                      ),
+                    )
+
+
+                  ],
+                ),
               ),
-            ),
-          ],
+              // desc 底部操作栏
+              buildBottom()
+            ],
+          ),
         ),
       ),
+      onWillPop: () {
+        if(panelController.isPanelOpen){
+          panelController.close();
+        }else
+          Navigator.pop(context);
+        return;
+      },
+    );
+  }
+
+
+  //输入框底部布局
+  Widget buildBottom() {
+    return Column(
+      children: <Widget>[
+        Container(
+            color: Color(0xffF9F9F9),
+            padding: EdgeInsets.only(left: 15, right: 5, top: 10, bottom: 10),
+            child: Row(
+              /* mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,*/
+              children: <Widget>[
+                // desc 图片选择 已完成 √
+                new Expanded(
+                  child: InkWell(
+                    child: Image.asset(
+                      Constant.ASSETS_IMG + 'icon_image.webp',
+                      width: 25.0,
+                      height: 25.0,
+                    ),
+                    onTap: () {
+                      toSelectImage();
+                    },
+                  ),
+                  flex: 1,
+                ),
+                // desc At他人 @用户
+                new Expanded(
+                  child: InkWell(
+                    child: Image.asset(
+                      Constant.ASSETS_IMG + 'icon_mention.png',
+                      width: 25.0,
+                      height: 25.0,
+                    ),
+                    onTap: () {
+                      // desc @人
+//                      Routes
+//                          .navigateTo(
+//                              context, '${Routes.weiboPublishAtUsrPage}')
+//                          .then((result) {
+//                        WeiboAtUser mAtUser = result as WeiboAtUser;
+//                        if (mAtUser != null) {
+//                          mWeiBoSubmitText = mWeiBoSubmitText +
+//                              "[@" +
+//                              mAtUser.nick +
+//                              ":" +
+//                              mAtUser.id +
+//                              "]";
+//                          //   _mEtController.text = _mEtController.text + "@" + mAtUser.nick+" ";
+//                          //   print("_mEtControllerfield的值:" + mWeiBoSubmitText);
+//
+//                          _mEtController.text = _mEtController.text +
+//                              "[@" +
+//                              mAtUser.nick +
+//                              ":" +
+//                              mAtUser.id +
+//                              "]";
+//                          //   _mEtController.buildTextSpan()
+//                          // _mEtController.text=_mEtController.text+"#aaaa#" ;
+//                        }
+//                      });
+                    },
+                  ),
+                  flex: 1,
+                ),
+                // desc 话题 #话题#
+                new Expanded(
+                  child: InkWell(
+                    child: Image.asset(
+                      Constant.ASSETS_IMG + 'icon_topic.png',
+                      width: 25.0,
+                      height: 25.0,
+                    ),
+                    onTap: () {
+
+//                          _mEtController.text = _mEtController.text +
+//                              "#" +
+//                              mTopic.topicdesc +
+//                              ":" +
+//                              mTopic.topicid +
+//                              "#";
+
+                    },
+                  ),
+                  flex: 1,
+                ),
+                // desc 表情选择
+                new Expanded(
+                  child: InkWell(
+                    child: Image.asset(
+                      Constant.ASSETS_IMG + 'icon_emotion.png',
+                      width: 25.0,
+                      height: 25.0,
+                    ),
+                    onTap: () {
+//                      _getWH();
+//                      setState(() {
+//
+//                        if (mEmojiLayoutShow) {
+//                          mBottomLayoutShow = true;
+//                          mEmojiLayoutShow = false;
+//                          showSoftKey();
+//                        } else {
+//                          mBottomLayoutShow = true;
+//                          mEmojiLayoutShow = true;
+//                          hideSoftKey();
+//                        }
+//                      });
+//
+//                      _getWH();
+                    },
+                  ),
+                  flex: 1,
+                ),
+                new Expanded(
+                  child: Container(),
+                  flex: 3,
+                ),
+              ],
+            )),
+//        Visibility(
+//          visible: mBottomLayoutShow,
+//          child: Container(
+//            key: globalKey,
+//            child: Visibility(
+//              visible: mEmojiLayoutShow,
+//              child: EmojiWidget(onEmojiClockBack: (value) {
+//                if (value == 0) {
+//                  _mEtController.clear();
+//                } else {
+//                  _mEtController.text =
+//                      _mEtController.text + "[/" + value.toString() + "]";
+//                }
+//              }),
+//            ),
+//            height: _softKeyHeight,
+//          ),
+//        ),
+      ],
     );
   }
 
@@ -328,41 +561,8 @@ class _State extends State<CreateCirclePage>
   Widget selectNewImage() {
 //    var _width = (this.context.size.width -40)/3;
     return Listener(onPointerDown: (event) async {
-      //desc 每行单张图片大小 (this.context.size.width - 40)/3
-//          print((this.context.size.width - 40)/3);
-      List<Asset> package;
-      try {
-        package = await MultiImagePicker.pickImages(
-            enableCamera: true,
-            maxImages: 9,
-            selectedAssets: asserts,
-            cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
-            materialOptions: MaterialOptions(
-//                actionBarColor: GlobalConfig.titleColor,
-              actionBarTitle: "选择图片",
-              allViewTitle: "所有图片",
-              selectCircleStrokeColor: "#000000",
-            ));
-      } catch (e) {
-        return;
-      }
-      print("------------${asserts.length}------------------");
-      List<Widget> newImages = [];
-      List<Uint8List> datas = [];
-      for (var i = 0; i < package.length; i++) {
-        ByteData memoryData = await package[i].getByteData(quality: 100);
-        Uint8List data = memoryData.buffer.asUint8List();
-        datas.add(data);
-        print("  加载 -------------- ${package[i].name} ----------------------");
-        newImages.add(ClickableImage(list: data));
-      }
-      await asserts.addAll(package);
-      setState(() {
-        asserts = package;
-        images = newImages;
-        imageData = datas;
-      });
-    }, child: LayoutBuilder(
+      await toSelectImage();
+      }, child: LayoutBuilder(
       builder: (context, con) {
         return DottedBorder(
           strokeWidth: 2,
@@ -377,6 +577,44 @@ class _State extends State<CreateCirclePage>
         );
       },
     ));
+  }
+
+  toSelectImage() async{
+
+    //desc 每行单张图片大小 (this.context.size.width - 40)/3
+//          print((this.context.size.width - 40)/3);
+    List<Asset> package;
+    try {
+      package = await MultiImagePicker.pickImages(
+          enableCamera: true,
+          maxImages: 9,
+          selectedAssets: asserts,
+          cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+          materialOptions: MaterialOptions(
+//                actionBarColor: GlobalConfig.titleColor,
+            actionBarTitle: "选择图片",
+            allViewTitle: "所有图片",
+            selectCircleStrokeColor: "#000000",
+          ));
+    } catch (e) {
+      return;
+    }
+    print("------------${asserts.length}------------------");
+    List<Widget> newImages = [];
+    List<Uint8List> datas = [];
+    for (var i = 0; i < package.length; i++) {
+      ByteData memoryData = await package[i].getByteData(quality: 100);
+      Uint8List data = memoryData.buffer.asUint8List();
+      datas.add(data);
+      print("  加载 -------------- ${package[i].name} ----------------------");
+      newImages.add(ClickableImage(list: data));
+    }
+    await asserts.addAll(package);
+    setState(() {
+      asserts = package;
+      images = newImages;
+      imageData = datas;
+    });
   }
 
   @override

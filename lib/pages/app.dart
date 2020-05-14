@@ -1,9 +1,11 @@
 import 'dart:math';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:fluro/fluro.dart' as routers;
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/common/Global.dart';
 import 'package:flutter_app2/pages/home/message/message_page.dart';
+import 'package:flutter_app2/services/config/router_manger.dart';
 
 import 'home/circle/circle_page.dart';
 import 'home/home/index.dart';
@@ -29,6 +31,11 @@ class AppState extends State<App>{
   Widget build(BuildContext context) {
     Global.context = context;
     DateTime  _willPopTime ;
+
+
+    final router = routers.Router();
+    Routes.configureRoutes(router);
+    Routes.router=router;
 
     final pageController = PageController();
     final pages = [Home(),SelectLocationFromMapPage(), CirclePage(), MessagePage(),MyPage()];

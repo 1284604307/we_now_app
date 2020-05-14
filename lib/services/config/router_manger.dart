@@ -5,6 +5,7 @@ import 'package:flutter_app2/pages/home/chat/chat_page.dart';
 import 'package:flutter_app2/pages/home/chat/friend_application.dart';
 import 'package:flutter_app2/pages/home/chat/frined_list_page.dart';
 import 'package:flutter_app2/pages/home/chat/frined_notify_page.dart';
+import 'package:flutter_app2/pages/home/circle/publish/weibo_publish_stopic_page.dart';
 import 'package:flutter_app2/pages/home/circle/test.dart';
 import 'package:flutter_app2/pages/home/me/me_page.dart';
 import 'package:flutter_app2/pages/home/my_page/setting_page.dart';
@@ -14,6 +15,8 @@ import 'package:flutter_app2/pages/login/register.dart';
 import 'package:flutter_app2/pages/wights/page_route_anim.dart';
 import 'package:flutter_app2/services/config/storage_manager.dart';
 import 'package:flutter_app2/services/model/Article.dart';
+
+import 'package:fluro/fluro.dart' as routers;
 
 class RouteName {
   static const String root = '/';
@@ -117,4 +120,73 @@ class PopRoute extends PopupRoute {
 
   @override
   Duration get transitionDuration => _duration;
+}
+
+var weiboPublishTopicHandler = new routers.Handler(
+    handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+      return WeiBoPublishTopicPage();
+    });
+
+
+class Routes {
+  static routers.Router router;
+
+  static String weiboPublishTopicPage= '/weiboPublishTopicPage';
+
+  static void configureRoutes(routers.Router router) {
+    // List widgetDemosList = new WidgetDemoList().getDemos();
+    router.notFoundHandler = new routers.Handler(
+        handlerFunc: (BuildContext context, Map<String, List<String>> params) {
+          print('route not found!');
+        });
+
+    router.define(weiboPublishTopicPage,handler:weiboPublishTopicHandler);
+  }
+
+    // 对参数进行encode，解决参数中有特殊字符，影响fluro路由匹配(https://www.jianshu.com/p/e575787d173c)
+  static Future navigateTo(BuildContext context, String path, {Map<String, dynamic> params, bool clearStack=false, routers.TransitionType transition = routers.TransitionType.fadeIn}) {
+    String query =  "";
+    if (params != null) {
+      int index = 0;
+      for (var key in params.keys) {
+        var value = Uri.encodeComponent(params[key]);
+        if (index == 0) {
+          query = "?";
+        } else {
+          query = query + "\&";
+        }
+        query += "$key=$value";
+        index++;
+      }
+    }
+    print('我是navigateTo传递的参数：$query');
+
+    path = path + query;
+    return router.navigateTo(context, path, clearStack:clearStack , transition:transition);
+  }
+
+
+  // 对参数进行encode，解决参数中有特殊字符，影响fluro路由匹配(https://www.jianshu.com/p/e575787d173c)
+  static Future navigatepushAndRemoveUntil(BuildContext context, String path, {Map<String, dynamic> params, bool clearStack=false, routers.TransitionType transition = routers.TransitionType.fadeIn}) {
+    String query =  "";
+    if (params != null) {
+      int index = 0;
+      for (var key in params.keys) {
+        var value = Uri.encodeComponent(params[key]);
+        if (index == 0) {
+          query = "?";
+        } else {
+          query = query + "\&";
+        }
+        query += "$key=$value";
+        index++;
+      }
+    }
+    print('我是navigateTo传递的参数：$query');
+
+    path = path + query;
+    return router.navigateTo(context, path, clearStack:clearStack , transition:transition );
+  }
+
+
 }

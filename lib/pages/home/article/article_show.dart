@@ -41,21 +41,22 @@ class _State extends State<ArticleShowPage>  with SingleTickerProviderStateMixin
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    loadArticle();
+  }
+
+  loadArticle(){
     if(article==null){
       BotToast.showLoading();
-      try{
-        RestfulApi.fetchArticle(articleId).then((article){
-          this.article = article;
-          BotToast.closeAllLoading();
-          setState(() {});
-        });
-      }catch(e){
-        showToast("加载失败");
+      RestfulApi.fetchArticle(articleId).then((article){
+        this.article = article;
         BotToast.closeAllLoading();
-      }finally{
-      }
+        setState((){});
+      }).catchError((onError){
+        BotToast.closeAllLoading();
+        showToast("网络错误");
+        setState(() {});
+      });
     }
   }
 
@@ -75,7 +76,7 @@ class _State extends State<ArticleShowPage>  with SingleTickerProviderStateMixin
           centerTitle: true,
         ),
         body: article==null?
-        ViewStateEmptyWidget(onPressed: () {},):
+        ViewStateEmptyWidget(onPressed: () {loadArticle();},):
         ProviderWidget<CommentListModel>(
           onModelReady: (m){m.initData();},
           builder: (BuildContext context, CommentListModel commentListModel, Widget child) {

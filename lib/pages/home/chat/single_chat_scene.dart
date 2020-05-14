@@ -18,10 +18,10 @@ class SingleChatScene extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(
-              create: (context) => SingleChatProvider()
-                ..context = context
-                ..jmUserInfo = userInfo
-                ..initConversation())
+            create: (context) => SingleChatProvider()
+              ..context = context
+              ..jmUserInfo = userInfo
+              ..initConversation())
         ],
         child: Consumer<SingleChatProvider>(builder: (_, provider, widget) {
           return Scaffold(
@@ -61,19 +61,20 @@ class GroupChatList extends StatelessWidget {
                 provider.getHistoryMessages();
               },
               footer: CustomFooter(
-                  loadStyle: LoadStyle.HideAlways,
-                  builder: (context, mode) {
-                    if (mode == LoadStatus.loading) {
-                      return Container(
-                        child: Container(
-                          height: 20.0,
-                          width: 20.0,
-                          child: CupertinoActivityIndicator(),
-                        ),
-                      );
-                    } else
-                      return Container();
-                  }),
+                loadStyle: LoadStyle.HideAlways,
+                builder: (context, mode) {
+                  if (mode == LoadStatus.loading) {
+                    return Container(
+                      child: Container(
+                        height: 20.0,
+                        width: 20.0,
+                        child: CupertinoActivityIndicator(),
+                      ),
+                    );
+                  } else
+                  return Container();
+                }
+              ),
               child: Scrollable(
                 controller: provider.scrollController,
                 axisDirection: AxisDirection.up,
@@ -113,23 +114,24 @@ class GroupChatInput extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Offstage(
+
                 offstage: provider.talkFOT,
                 child: Row(
                   children: <Widget>[
                     Container(
-                      width: 20.0,
+                      width: 10.0,
                     ),
                     Expanded(
                       child: Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15)),
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(15)),
                         child: ExtendedTextField(
                           specialTextSpanBuilder:
                               provider.mySpecialTextSpanBuilder,
                           controller: provider.textInputController,
                           focusNode: provider.fsNode,
-                          // autofocus: true,
                           maxLines: null,
                           textInputAction: TextInputAction.send,
                           decoration: InputDecoration(
@@ -137,6 +139,8 @@ class GroupChatInput extends StatelessWidget {
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 8),
                             border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
                             hintStyle:
                                 TextStyle(color: Colors.grey[400]),
                           ),
@@ -155,11 +159,6 @@ class GroupChatInput extends StatelessWidget {
                     ),
                     IconButton(
                       icon: Icon(Icons.tag_faces,color: Theme.of(context).primaryColor,),
-//                      Image.asset(
-//                        'images/chat_emoji.png',
-//                        height: 24,
-//                        width: 24,
-//                      ),
                       onPressed: () {
                         provider.emojiOpen = !provider.emojiOpen;
                       },
@@ -176,7 +175,7 @@ class GroupChatInput extends StatelessWidget {
                             provider.emojiOpen) {
                           provider.sendTextMessage(
                               provider.textInputController.text);
-                          // provider.emojiOpen = false;
+                           provider.emojiOpen = false;
                         } else {
                           provider.sendImageMessage();
                         }
@@ -185,29 +184,29 @@ class GroupChatInput extends StatelessWidget {
                   ],
                 ),
               ),
+              // desc 表情选择
               Offstage(
-                  // 表情选择
-                  offstage: !provider.emojiOpen,
-                  child: Container(
-                    height: provider.keyboardHeight,
-                    padding:
-                        EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
-                    child: GridView.count(
-                      shrinkWrap: true,
-                      crossAxisCount: 7,
-                      children: provider.emojiArray.map((emojiName) {
-                        return IconButton(
-                          icon: Image.asset('emoji/$emojiName.png'),
-                          onPressed: () {
-                            provider.textInputController.text += emojiName;
-                          },
-                        );
-                      }).toList(),
-                      mainAxisSpacing: 1,
-                      crossAxisSpacing: 1,
-                      childAspectRatio: 1.0,
-                    ),
-                  ))
+                offstage: !provider.emojiOpen,
+                child: Container(
+                  height: provider.keyboardHeight,
+                  padding:
+                      EdgeInsets.only(left: 10, right: 10, top: 0, bottom: 0),
+                  child: GridView.count(
+                    shrinkWrap: true,
+                    crossAxisCount: 7,
+                    children: provider.emojiArray.map((emojiName) {
+                      return IconButton(
+                        icon: Image.asset('emoji/$emojiName.png'),
+                        onPressed: () {
+                          provider.textInputController.text += emojiName;
+                        },
+                      );
+                    }).toList(),
+                    mainAxisSpacing: 1,
+                    crossAxisSpacing: 1,
+                    childAspectRatio: 1.0,
+                  ),
+                ))
             ],
           ));
     });

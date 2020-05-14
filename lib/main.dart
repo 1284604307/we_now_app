@@ -1,7 +1,6 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app2/pages/home/chat/chat_page.dart';
 import 'package:flutter_app2/pages/home/me/me_page.dart';
 import 'package:flutter_app2/pages/loading.dart';
 import 'package:flutter_app2/pages/login/login.dart';

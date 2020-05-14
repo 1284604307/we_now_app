@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/pages/global/global_config.dart';
+import 'package:flutter_app2/pages/home/circle/weibo_publish_page.dart';
 import 'package:flutter_app2/pages/home/index/hot.dart';
 import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/helper/dialog_helper.dart';
@@ -104,5 +105,6 @@ class CirclePageState extends State<CirclePage> with AutomaticKeepAliveClientMix
       ),
     );
   }
+
 
 }
