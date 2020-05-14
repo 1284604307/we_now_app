@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/pages/wights/CommentListWight.dart';
@@ -58,7 +59,9 @@ class _State extends State<CommentPage> with AutomaticKeepAliveClientMixin {
                             children: <Widget>[
                               Padding(
                                 padding: EdgeInsets.only(right: 10,top: 5,),
-                                child: Avatar(null,width: 30,height: 30,),
+                                child: Avatar(CachedNetworkImage(
+                                  imageUrl: "${commentListModel.list[i].user?.avatar}",
+                                ),width: 30,height: 30,),
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

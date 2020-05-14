@@ -109,30 +109,46 @@ class RestfulApi {
     return response.data.map<Article>((item) => Article.fromJson(item)).toList();
   }
 
+  // desc 推荐文章
   static Future fetchRecommendCircles(pageNum) async{
     var response = await http.get('/public/circle/hots/$pageNum');
     return response.data.map<Article>((item) => Article.fromJson(item)).toList();
   }
 
+  // desc 学校文章
   static Future fetchSchoolCircles(pageNum) async{
     var response = await http.get('/public/circle/school/$pageNum');
     return response.data.map<Article>((item) => Article.fromJson(item)).toList();
   }
 
+  // desc 话题下文章
+  static Future fetchTopicCircles(topicId,{pageNum=0}) async{
+    var response = await http.get('/public/circle/topic/$topicId/$pageNum');
+    return response.data.map<Article>((item) => Article.fromJson(item)).toList();
+  }
 
+  // desc 动态的评论
   static Future fetchArticleComment(articleId,{pageNum=0}) async{
     var response = await http.get('/public/circle/comments/$articleId/$pageNum');
     return response.data.map<Comment>((item) => Comment.fromJson(item)).toList();
   }
 
+  // desc 评论的子评论
   static Future fetchChildrenComment(commentId,{pageNum=0}) async{
     var response = await http.get('/public/circle/commentChildren/$commentId/$pageNum');
     return response.data.map<Comment>((item) => Comment.fromJson(item)).toList();
   }
 
+  // desc 指定文章
   static Future fetchArticle(articleId) async{
     var response = await http.get('/public/circle/info/$articleId');
     return Article.fromJson(response.data);
+  }
+
+  // desc 话题下置顶文章
+  static Future fetchTopicTopCircles(topicId) async {
+    var response = await http.get('/public/circle/topic/top/$topicId');
+    return response.data.map<Article>((item) => Article.fromJson(item)).toList();
   }
 
   static fetchCollectList(int pageNum) {
@@ -214,5 +230,6 @@ class RestfulApi {
     var response =  await http.post("/user/updateAvatar", data: data);
     print(response);
   }
+
 
 }

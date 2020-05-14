@@ -35,7 +35,7 @@ import 'circle_show.dart';
  * @date 2020/4/19
  * @email 1284604307@qq.com
  */
-Widget talkWidget(context, count, Article circle) {
+Widget talkWidget(context, Article circle) {
   /// 用于Hero动画的标记
   UniqueKey uniqueKey = UniqueKey();
   return InkWell(
@@ -56,14 +56,14 @@ Widget talkWidget(context, count, Article circle) {
             child: Row(
               children: <Widget>[
                 // desc 头像
-                Avatar(CachedNetworkImage(imageUrl: "${circle.user.avatar}")),
+                Avatar(CachedNetworkImage(imageUrl: "${circle.user?.avatar}")),
                 Container(
                   margin: EdgeInsets.only(left: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start, //垂直方向 向左靠齐
                     children: <Widget>[
                       Text(
-                        " ${circle.user.userName} ",
+                        " ${circle.user?.userName} ",
                         textAlign: TextAlign.left,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),

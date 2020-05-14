@@ -111,7 +111,7 @@ class _CicleList extends StatelessWidget {
             (context, index) {
           Article item = recommendModel.list[index];
           // desc 生成<动态>模型
-          return talkWidget(context, index, item);
+          return talkWidget(context, item);
         },
         childCount: recommendModel.list?.length ?? 0,
       ),

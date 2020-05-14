@@ -1,6 +1,7 @@
 import 'package:flutter_app2/services/model/Article.dart';
 import 'package:flutter_app2/services/net/restful_go.dart';
 import 'package:flutter_app2/services/provider/view_state_refresh_list_model.dart';
+import 'package:oktoast/oktoast.dart';
 
 /**
  * @createDate  2020/4/27
@@ -42,12 +43,6 @@ class CircleRecommendModel extends ViewStateRefreshListModel {
   @override
   Future<List> loadData({int pageNum}) async {
     List<Future> futures = [];
-    if (pageNum == ViewStateRefreshListModel.pageNumFirst) {
-
-    }
-    else{
-
-    }
 
     futures.add(RestfulApi.fetchRecommendCircles(pageNum));
 
@@ -57,6 +52,30 @@ class CircleRecommendModel extends ViewStateRefreshListModel {
     } else {
       return result[0];
     }
+  }
+
+  @override
+  onCompleted(List data) {
+  }
+}
+
+
+class CircleTopicModel extends ViewStateRefreshListModel {
+
+  var id;
+  CircleTopicModel(this.id);
+
+  List<Article> _circle_Hots;
+  List<Article> get tops => _circle_Hots;
+
+
+  @override
+  Future<List> loadData({int pageNum}) async {
+
+    if (pageNum == ViewStateRefreshListModel.pageNumFirst) {
+      _circle_Hots = await RestfulApi.fetchTopicTopCircles(id);
+    }
+    return await RestfulApi.fetchTopicCircles(id,pageNum:pageNum);
   }
 
   @override

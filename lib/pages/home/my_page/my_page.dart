@@ -1,6 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app2/pages/home/chat/frined_list_page.dart';
 import 'package:flutter_app2/pages/home/my_page/setting_page.dart';
 import 'package:flutter_app2/pages/home/my_page/user_profile.dart';
 import 'package:flutter_app2/pages/login/demo.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_app2/services/config/resource_mananger.dart';
 import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/model/viewModel/theme_model.dart';
 import 'package:flutter_app2/services/model/viewModel/user_model.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 
 import 'my_page_card_item.dart';
@@ -112,7 +114,7 @@ class MyPageState extends State<MyPage>{
                           icon: Icon(Icons.radio_button_unchecked),
                           text: "腾讯SDK DEMO",
                           taped: (){
-                            Navigator.push(context, NoAnimRouteBuilder(MyApp()));
+                            showToast("第三方登录已部署，本路由已销毁");
                           },
                         ),
                         CardItem(
@@ -124,6 +126,38 @@ class MyPageState extends State<MyPage>{
                           },
                         ),
                         CardItem(width/4),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    color: Theme.of(context).cardColor,
+                    width: MediaQuery.of(context).size.width,
+                    child: Wrap(
+                      children: <Widget>[
+                        CardItem(
+                          width/4,
+                          icon: Icon(IconFonts.draw,color: Colors.lightBlueAccent,),
+                          text: "主题色",
+                          taped: (){
+                            showToast("功能未部署 #1632");
+                          },
+                        ),
+                        CardItem(
+                          width/4,
+                          icon: Icon(Icons.favorite,color: Colors.pinkAccent,),
+                          text: "我的喜欢",
+                          taped: (){
+                            showToast("应联通到我的->个人->喜欢 #1633");
+                          },
+                        ),
+                        CardItem(
+                          width/4,
+                          icon: Icon(Icons.leak_add,color: Colors.pinkAccent,),
+                          text: "友人",
+                          taped: (){
+                            Navigator.push(context, NoAnimRouteBuilder(FriendListPage()));
+                          },
+                        ),
                       ],
                     ),
                   ),

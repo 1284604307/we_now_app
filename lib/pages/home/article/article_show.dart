@@ -94,6 +94,10 @@ class _State extends State<ArticleShowPage>  with SingleTickerProviderStateMixin
                   SliverToBoxAdapter(
                     child: Divider(height: 2,color: Colors.grey,),
                   ),
+                  if(commentListModel.list.isEmpty)
+                    SliverToBoxAdapter(
+                      child: Container()
+                    ),
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                           (BuildContext c, int i) {
