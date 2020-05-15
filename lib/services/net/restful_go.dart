@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter_app2/common/pojos/AjaxResult.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/helper/dialog_helper.dart';
@@ -12,9 +9,7 @@ import 'package:flutter_app2/services/model/Banner.dart';
 import 'package:flutter_app2/services/model/Comment.dart';
 import 'package:flutter_app2/services/model/Topic.dart';
 import 'package:flutter_app2/services/net/api.dart';
-import 'package:flutter_app2/services/provider/view_state.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:flutter/cupertino.dart' show Navigator;
 
 import 'real_api.dart';
@@ -26,6 +21,7 @@ import 'real_api.dart';
 
 class RestfulApi {
 
+  //desc 登录
   static Future login(String username, String password) async {
     var ticket = await http.post('/login', queryParameters: {
       'username': username,
@@ -231,5 +227,20 @@ class RestfulApi {
     print(response);
   }
 
+  // desc 获取话题标签
+  static fetchTopics(topic) async {
+    if(topic!=""){
+      return [
+        Topic.fromJson({"url":"","topic":"搜索神器","visible":22}),
+        Topic.fromJson({"url":"https://www.duifene.com/theme/img/module.icon.PNG?ljw=201702","topic":"厉害了","visible":67}),
+      ];
+    }else
+      return [
+        Topic.fromJson({"url":"https://www.duifene.com/theme/img/module.icon.PNG?ljw=201702","topic":"嘻嘻嘻","visible":22}),
+        Topic.fromJson({"url":"https://www.duifene.com/theme/img/module.icon.PNG?ljw=201702","topic":"厉害了","visible":67}),
+        Topic.fromJson({"url":"https://www.duifene.com/theme/img/module.icon.PNG?ljw=201702","topic":"痒局长","visible":45}),
+        Topic.fromJson({"url":"https://www.duifene.com/theme/img/module.icon.PNG?ljw=201702","topic":"我的天哪","visible":24}),
+      ];
+  }
 
 }

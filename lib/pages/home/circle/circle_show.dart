@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:decorated_flutter/decorated_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app2/pages/global/global_config.dart';
 import 'package:flutter_app2/pages/home/circle/comment_page.dart';
 import 'package:flutter_app2/pages/wights/CommentListWight.dart';
 import 'package:flutter_app2/pages/wights/GridViewNithWight.dart';

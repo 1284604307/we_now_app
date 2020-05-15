@@ -1,38 +1,34 @@
-import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:extended_text_field/extended_text_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app2/common/Api.dart';
 import 'package:flutter_app2/common/constant.dart';
+import 'package:flutter_app2/pages/home/message/emoji_widget.dart';
 import 'package:flutter_app2/pages/wights/GridViewNithWight.dart';
 import 'package:flutter_app2/pages/wights/LittleWidgets.dart';
 import 'package:flutter_app2/pages/wights/extend_textfield/my_special_text_span_builder.dart';
+import 'package:flutter_app2/pages/wights/page_route_anim.dart';
 import 'package:flutter_app2/services/model/Article.dart';
-import 'package:flutter_app2/common/pojos/AjaxResult.dart';
-import 'package:flutter_app2/pages/global/global_config.dart';
 import 'package:flutter_app2/pages/wights/ClickableImage.dart';
 import 'package:flutter_app2/pages/wights/avatar.dart';
-import 'package:flutter_app2/pages/wights/show_image.dart';
-import 'package:flutter_app2/services/model/viewModel/favourite_model.dart';
+import 'package:flutter_app2/services/model/Topic.dart';
 import 'package:flutter_app2/services/net/restful_go.dart';
+import 'package:flutter_app2/services/utils/sp_util.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:photo_view/photo_view.dart';
-import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'circle_show.dart';
+import 'publish/weibo_publish_stopic_page.dart';
 
 /**
  * @author Ming
@@ -182,25 +178,45 @@ class CreateCirclePage extends StatefulWidget {
   }
 }
 
+// desc 发布新动态页
 class _State extends State<CreateCirclePage>
     with AutomaticKeepAliveClientMixin {
+
   List<Widget> images = [];
   List<Asset> asserts = [];
   List<Uint8List> imageData = [];
   PanelController panelController = PanelController();
 
-  var textLength = 0;
+  double _softKeyHeight = SpUtil.getDouble(Constant.SP_KEYBOARD_HEGIHT, 235);
 
-  @override
-  initState(){
-    super.initState();
+  String showPanel = "";
+  var textLength = 0;
+  FocusNode focusNode = FocusNode();
+
+  List<String> topicIds = [];
+
+  _initTextEdit(){
     _mEtController.text = Api.newCircleEntity.content;
     textLength = _mEtController.text.length;
-    print(Api.newCircleEntity.content);
     _mEtController.addListener(() {
       Api.newCircleEntity.content = _mEtController.text;
       setState(() {
         textLength = _mEtController.text.length;
+      });
+    });
+  }
+
+  @override
+  initState(){
+    super.initState();
+    _initTextEdit();
+    KeyboardVisibility.onChange.listen((bool visible) {
+      setState(() {
+        if(visible){
+          setState(() {
+            showPanel = "";
+          });
+        }
       });
     });
   }
@@ -210,34 +226,144 @@ class _State extends State<CreateCirclePage>
 
   @override
   Widget build(BuildContext context) {
+
     super.build(context);
     return WillPopScope(
       child: SlidingUpPanel(
+        boxShadow: null,
+        snapPoint: 0.5,
         minHeight: 0,
-        maxHeight: 400,
-        backdropEnabled: true,
+        maxHeight: _softKeyHeight*2,
         controller: panelController,
         header: Container(
           width: MediaQuery.of(context).size.width,
-          height: 45,
+          height: 50,
           color: Colors.grey,
           child:Material(
-            child: Row(
-              children: <Widget>[
-                Text("内容")
-              ],
+            child:
+            Container(
+                color: Color(0xffF9F9F9),
+                padding: EdgeInsets.only(left: 15, right: 5, top: 10, bottom: 10),
+                child: Row(
+                  /* mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,*/
+                  children: <Widget>[
+                    // desc 图片选择 已完成 √
+                    new Expanded(
+                      child: InkWell(
+                        child: Image.asset(
+                          Constant.ASSETS_IMG + 'icon_image.webp',
+                          width: 25.0,
+                          height: 25.0,
+                        ),
+                        onTap: () {
+                          toSelectImage();
+                        },
+                      ),
+                      flex: 1,
+                    ),
+                    // desc At他人 @用户
+                    new Expanded(
+                      child: InkWell(
+                        child: Image.asset(
+                          Constant.ASSETS_IMG + 'icon_mention.png',
+                          width: 25.0,
+                          height: 25.0,
+                        ),
+                        onTap: () {
+                          // desc @人
+//                      Routes
+//                          .navigateTo(
+//                              context, '${Routes.weiboPublishAtUsrPage}')
+//                          .then((result) {
+//                        WeiboAtUser mAtUser = result as WeiboAtUser;
+//                        if (mAtUser != null) {
+//                          mWeiBoSubmitText = mWeiBoSubmitText +
+//                              "[@" +
+//                              mAtUser.nick +
+//                              ":" +
+//                              mAtUser.id +
+//                              "]";
+//                          //   _mEtController.text = _mEtController.text + "@" + mAtUser.nick+" ";
+//                          //   print("_mEtControllerfield的值:" + mWeiBoSubmitText);
+//
+//                          _mEtController.text = _mEtController.text +
+//                              "[@" +
+//                              mAtUser.nick +
+//                              ":" +
+//                              mAtUser.id +
+//                              "]";
+//                          //   _mEtController.buildTextSpan()
+//                          // _mEtController.text=_mEtController.text+"#aaaa#" ;
+//                        }
+//                      });
+                        },
+                      ),
+                      flex: 1,
+                    ),
+                    // desc 话题 #话题#
+                    new Expanded(
+                      child: InkWell(
+                        child: Image.asset(
+                          Constant.ASSETS_IMG + 'icon_topic.png',
+                          width: 25.0,
+                          height: 25.0,
+                        ),
+                        onTap: () {
+                          focusNode.unfocus();
+                          setState(() {
+                            showPanel = "话题";
+                          });
+                        },
+                      ),
+                      flex: 1,
+                    ),
+                    // desc 表情选择
+                    new Expanded(
+                      child: InkWell(
+                        child: Image.asset(
+                          Constant.ASSETS_IMG + 'icon_emotion.png',
+                          width: 25.0,
+                          height: 25.0,
+                        ),
+                        onTap: () async {
+                          focusNode.unfocus();
+                          setState(() {
+                            showPanel = "表情";
+                          });
+                        },
+                      ),
+                      flex: 1,
+                    ),
+                    new Expanded(
+                      child: InkWell(onTap: (){},child: Container(color: Colors.red,),),
+                      flex: 3,
+                    ),
+                  ],
+                )
             ),
-          ),
+            ),
         ),
         panel: Material(
             child: Container(
               color: Colors.grey ,
-              padding: EdgeInsets.only(top: 50,left: 5,right: 5),
+              padding: EdgeInsets.only(top: 46),
               alignment: Alignment.topCenter,
 //          color: Colors.white,
-              child: Row(
+              child: Column(
                 children: <Widget>[
-
+                  // desc #表情选择#
+                  Visibility(
+                    visible: true,
+                    child: EmojiWidget(onEmojiClockBack: (value) {
+                      if (value == 0) {
+                        _mEtController.clear();
+                      } else {
+                        _mEtController.text =
+                            _mEtController.text + "[/" + value.toString() + "]";
+                      }
+                    }),
+                  )
                 ],
               ),
             ),
@@ -259,10 +385,14 @@ class _State extends State<CreateCirclePage>
                 alignment: Alignment.centerRight,
                 child: InkWell(
                   child: Container(padding: EdgeInsets.all(10), child: Text("发布")),
-                  onTap: () {
-                    print(_mEtController.toString());
-                    print(images.toList().toString());
-                    publish();
+                  onTap: () async {
+                      print(_mEtController.toString());
+                      print(images.toList().toString());
+                      BotToast.showLoading();
+                      publish().then((onValue)=>BotToast.closeAllLoading()).catchError((onError){
+                        BotToast.closeAllLoading();
+                        showToast("发布错误");
+                      });
                   },
                 ),
               )
@@ -285,6 +415,7 @@ class _State extends State<CreateCirclePage>
                           //    textSelectionControls: _myExtendedMaterialTextSelectionControls,
                           specialTextSpanBuilder: _mySpecialTextSpanBuilder,
                           controller: _mEtController,
+                          focusNode: focusNode,
                           minLines: 6,
                           maxLines: 1000,
 //                          focusNode: focusNode,
@@ -364,13 +495,11 @@ class _State extends State<CreateCirclePage>
                         ),
                       ),
                     )
-
-
                   ],
                 ),
               ),
               // desc 底部操作栏
-              buildBottom()
+              buildBottom(),
             ],
           ),
         ),
@@ -459,14 +588,7 @@ class _State extends State<CreateCirclePage>
                       height: 25.0,
                     ),
                     onTap: () {
-
-//                          _mEtController.text = _mEtController.text +
-//                              "#" +
-//                              mTopic.topicdesc +
-//                              ":" +
-//                              mTopic.topicid +
-//                              "#";
-
+                      goSelectTopic();
                     },
                   ),
                   flex: 1,
@@ -479,55 +601,72 @@ class _State extends State<CreateCirclePage>
                       width: 25.0,
                       height: 25.0,
                     ),
-                    onTap: () {
-//                      _getWH();
-//                      setState(() {
-//
-//                        if (mEmojiLayoutShow) {
-//                          mBottomLayoutShow = true;
-//                          mEmojiLayoutShow = false;
-//                          showSoftKey();
-//                        } else {
-//                          mBottomLayoutShow = true;
-//                          mEmojiLayoutShow = true;
-//                          hideSoftKey();
-//                        }
-//                      });
-//
-//                      _getWH();
+                    onTap: () async {
+                        focusNode.unfocus();
+                        setState(() {
+                          showPanel = "表情";
+                        });
                     },
                   ),
                   flex: 1,
                 ),
                 new Expanded(
-                  child: Container(),
+                  child: InkWell(onTap: (){},child: Container(color: Colors.red,),),
                   flex: 3,
                 ),
               ],
-            )),
-//        Visibility(
-//          visible: mBottomLayoutShow,
-//          child: Container(
-//            key: globalKey,
-//            child: Visibility(
-//              visible: mEmojiLayoutShow,
-//              child: EmojiWidget(onEmojiClockBack: (value) {
-//                if (value == 0) {
-//                  _mEtController.clear();
-//                } else {
-//                  _mEtController.text =
-//                      _mEtController.text + "[/" + value.toString() + "]";
-//                }
-//              }),
-//            ),
-//            height: _softKeyHeight,
-//          ),
-//        ),
+            )
+        ),
+        Visibility(
+          visible: showPanel!="",
+          child: Container(
+            height: 235,
+            child: Stack(
+              children: <Widget>[
+                // desc #表情选择#
+                Visibility(
+                  visible: showPanel == "表情",
+                  child: EmojiWidget(onEmojiClockBack: (value) {
+                    if (value == 0) {
+                      _mEtController.clear();
+                    } else {
+                      _mEtController.text =
+                          _mEtController.text + "[/" + value.toString() + "]";
+                    }
+                  }),
+                ),
+                // desc #话题选择#
+                Visibility(
+                  visible: showPanel == "话题",
+                  child: Column(
+                    children: <Widget>[
+                      Text("当前只能选择一个话题！",textAlign: TextAlign.center,),
+                      Expanded(
+                        child: ListView.builder(itemBuilder: (c,i){
+                          return Text("$i");
+                        },itemCount: 12,
+                          primary: false,
+                          shrinkWrap: true,)
+                      )
+                    ],
+                  ),
+                ),
+                // desc #At功能#
+                Visibility(
+                  visible: showPanel == "At",
+                  child: Container(
+                    child: Text("这个还没有做好哦~"),
+                  ),
+                )
+              ],
+            ),
+          ),
+        )
       ],
     );
   }
 
-  void publish() async {
+  Future<void> publish() async {
     List<String> urls = [];
     // desc 有图片先上传
     if (asserts.length > 0) {
@@ -553,9 +692,7 @@ class _State extends State<CreateCirclePage>
       "content": Api.newCircleEntity.content,
       "urls":urls
     });
-
     print(res);
-
   }
 
   Widget selectNewImage() {
@@ -619,4 +756,16 @@ class _State extends State<CreateCirclePage>
 
   @override
   bool get wantKeepAlive => true;
+
+  void goSelectTopic() {
+    Navigator.of(context).push(SizeRoute(WeiBoPublishTopicPage())).then((data){
+      print(data);
+      if(data!=null){
+        Topic topic = data as Topic;
+        _mEtController.text = _mEtController.text +
+            "#${topic.topic}#";
+        topicIds.add(topic.topic);
+      }
+    });
+  }
 }

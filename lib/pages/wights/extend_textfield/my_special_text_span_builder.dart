@@ -6,7 +6,7 @@ import 'topic_text.dart';
 import 'emoji_text.dart';
 
 class MySpecialTextSpanBuilder extends SpecialTextSpanBuilder {
-  /// whether show background for @somebody
+
   final bool showAtBackground;
   MySpecialTextSpanBuilder({this.showAtBackground= false});
 

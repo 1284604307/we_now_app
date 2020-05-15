@@ -27,16 +27,6 @@ class Api{
 //  StreamSubscription<TencentShareResp> _share;
 
 
-  TencentLoginResp _loginResp;
-
-  void _listenLogin(TencentLoginResp resp) {
-    _loginResp = resp;
-    String content = 'login: ${resp.openid} - ${resp.accessToken}';
-    print(resp.openid);
-    print(resp.accessToken);
-//    _showTips('登录', content);
-  }
-
   void _listenShare(TencentShareResp resp) {
     String content = 'share: ${resp.ret} - ${resp.msg}';
 //    _showTips('分享', content);

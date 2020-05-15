@@ -9,7 +9,6 @@ import 'package:flutter_app2/services/config/router_manger.dart';
 
 import 'home/circle/circle_page.dart';
 import 'home/home/index.dart';
-import 'home/index/home_page.dart';
 import 'home/my_page/my_page.dart';
 import 'package:flutter_app2/pages/maps/other.dart';
 
@@ -31,11 +30,6 @@ class AppState extends State<App>{
   Widget build(BuildContext context) {
     Global.context = context;
     DateTime  _willPopTime ;
-
-
-    final router = routers.Router();
-    Routes.configureRoutes(router);
-    Routes.router=router;
 
     final pageController = PageController();
     final pages = [Home(),SelectLocationFromMapPage(), CirclePage(), MessagePage(),MyPage()];

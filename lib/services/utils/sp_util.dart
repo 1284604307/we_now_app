@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter_app2/services/config/storage_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:synchronized/synchronized.dart';
 
@@ -28,7 +29,7 @@ class SpUtil {
   SpUtil._();
 
   Future _init() async {
-    _prefs = await SharedPreferences.getInstance();
+    _prefs = StorageManager.sharedPreferences;
   }
 
   /// put object.

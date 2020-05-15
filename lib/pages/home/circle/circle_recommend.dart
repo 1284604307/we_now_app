@@ -1,8 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app2/common/Api.dart';
-import 'package:flutter_app2/common/pojos/AjaxResult.dart';
-import 'package:flutter_app2/pages/global/global_config.dart';
 import 'package:flutter_app2/pages/wights/article_skeleton.dart';
 import 'package:flutter_app2/pages/wights/avatar.dart';
 import 'package:flutter_app2/pages/wights/skeleton.dart';
