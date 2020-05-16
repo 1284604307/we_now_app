@@ -10,9 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app2/common/Api.dart';
 import 'package:flutter_app2/common/constant.dart';
+import 'package:flutter_app2/pages/home/circle/publish/publish_topic_page.dart';
 import 'package:flutter_app2/pages/home/message/emoji_widget.dart';
 import 'package:flutter_app2/pages/wights/GridViewNithWight.dart';
 import 'package:flutter_app2/pages/wights/LittleWidgets.dart';
+import 'package:flutter_app2/pages/wights/article/content.dart';
 import 'package:flutter_app2/pages/wights/extend_textfield/my_special_text_span_builder.dart';
 import 'package:flutter_app2/pages/wights/page_route_anim.dart';
 import 'package:flutter_app2/services/model/Article.dart';
@@ -28,7 +30,6 @@ import 'package:oktoast/oktoast.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import 'circle_show.dart';
-import 'publish/weibo_publish_stopic_page.dart';
 
 /**
  * @author Ming
@@ -84,9 +85,7 @@ Widget talkWidget(context, Article circle) {
           Column(
             children: <Widget>[
               new Container(
-                  child: new Text(
-                    "${circle.content}",
-                  ),
+                  child: textContent("${circle.content}",context,false),
                   margin: new EdgeInsets.only(top: 6.0, bottom: 6.0),
                   alignment: Alignment.topLeft),
               // desc 九图组件
@@ -386,10 +385,14 @@ class _State extends State<CreateCirclePage>
                 child: InkWell(
                   child: Container(padding: EdgeInsets.all(10), child: Text("发布")),
                   onTap: () async {
+                      BotToast.showLoading();
                       print(_mEtController.toString());
                       print(images.toList().toString());
-                      BotToast.showLoading();
-                      publish().then((onValue)=>BotToast.closeAllLoading()).catchError((onError){
+                      publish().then((onValue){
+                        BotToast.closeAllLoading();
+                        showToast("发布成功");
+                        Navigator.pop(context);
+                      }).catchError((onError){
                         BotToast.closeAllLoading();
                         showToast("发布错误");
                       });
@@ -758,7 +761,7 @@ class _State extends State<CreateCirclePage>
   bool get wantKeepAlive => true;
 
   void goSelectTopic() {
-    Navigator.of(context).push(SizeRoute(WeiBoPublishTopicPage())).then((data){
+    Navigator.of(context).push(SizeRoute(PublishTopicPage())).then((data){
       print(data);
       if(data!=null){
         Topic topic = data as Topic;

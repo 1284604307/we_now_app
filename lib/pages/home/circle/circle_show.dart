@@ -1,22 +1,14 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:decorated_flutter/decorated_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/pages/home/circle/comment_page.dart';
-import 'package:flutter_app2/pages/wights/CommentListWight.dart';
 import 'package:flutter_app2/pages/wights/GridViewNithWight.dart';
 import 'package:flutter_app2/pages/wights/LittleWidgets.dart';
+import 'package:flutter_app2/pages/wights/article/content.dart';
 import 'package:flutter_app2/pages/wights/avatar.dart';
-import 'package:flutter_app2/services/config/resource_mananger.dart';
-import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/model/Article.dart';
-import 'package:flutter_app2/services/model/viewModel/comment_model.dart';
-import 'package:flutter_app2/services/net/api.dart';
 import 'package:flutter_app2/services/net/restful_go.dart';
-import 'package:flutter_app2/services/provider/provider_widget.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class ShowCircle extends StatefulWidget{
@@ -251,7 +243,6 @@ class _state extends State<ShowCircle>
   }
 
 
-
   circleShow(Article circle){
     var content = circle.content;//"滑稽\n滑天下之大稽\n滑稽之天下滑稽，滑稽也\n有云，滑稽之大着，滑天下也！\n\n\n\n\n\n\n 是言滑稽者，大暨！";
     var time = circle.createTime;
@@ -292,10 +283,7 @@ class _state extends State<ShowCircle>
                 )
             ),
             // desc 内容
-            Container(
-              margin: EdgeInsets.only(top: 5,bottom: 5),
-              child: Text("$content",textAlign: TextAlign.left),
-            ),
+            textContent(content,context,false),
             // desc 九图展示
             GridViewNithWight(circle.url),
           ],

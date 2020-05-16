@@ -22,10 +22,11 @@ class TopicPage extends StatefulWidget {
 
   int topicId;
   Topic topic;
-  TopicPage(this.topicId,{this.topic});
+  String topicName;
+  TopicPage({this.topicId,this.topic,this.topicName});
 
   @override
-  _State createState() => _State(this.topicId,topic: this.topic);
+  _State createState() => _State(topicId:this.topicId,topic: this.topic,topicName:this.topicName);
 
 }
 
@@ -33,25 +34,30 @@ class _State extends State<TopicPage> {
 
   int topicId;
   Topic topic;
-  _State(this.topicId,{this.topic});
+  String topicName;
+  _State({this.topicId,this.topic,this.topicName});
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    if(topic==null){
-      try{
-        BotToast.showLoading();
-        RestfulApi.fetchTopic(topicId).then((topic){
-          this.topic = topic;
-          BotToast.closeAllLoading();
-          setState(() {});
-        });
-      }catch(e){
-        BotToast.closeAllLoading();
-      }
-    }else{
+    if(topic==null)
+      loadTopic();
 
+  }
+
+  loadTopic() async{
+//    BotToast.showLoading();
+    try{
+      if(topicId!=null){
+        this.topic = await RestfulApi.fetchTopic(topicId);
+      }else{
+        print("-----------------------------$topicName");
+        this.topic = await RestfulApi.fetchTopicByName(topicName);
+      }
+      BotToast.closeAllLoading();
+      setState(() {});
+    }catch(e){
+      BotToast.closeAllLoading();
     }
   }
 
@@ -60,6 +66,7 @@ class _State extends State<TopicPage> {
   @override
   Widget build(BuildContext context) {
 //    print(topic.toJson());
+
     TextStyle textStyle({fw,size}) => TextStyle(
       color: Colors.white,
       fontWeight: fw,fontSize: size

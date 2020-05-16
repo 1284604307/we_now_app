@@ -69,7 +69,7 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                             Navigator.push(context, SizeRoute(ArticleShowPage(banner.articleId)));
                             break;
                           case "话题":
-                            Navigator.push(context, SizeRoute(TopicPage(banner.articleId??1)));
+                            Navigator.push(context, SizeRoute(TopicPage(topicId:banner.articleId??1)));
                             break;
                           default:
 //                            showToast("lib/home/index.dart #2150 banner默认动作为空");
@@ -238,7 +238,7 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                 onTap: (){
                   showToast("应跳转到话题详情,请在 lib/home/index.dart 搜索 #2147 任务以修复此处");
 
-                  Navigator.push(context, NoAnimRouteBuilder(TopicPage(topics[index].id,topic: topics[index],)));
+                  Navigator.push(context, NoAnimRouteBuilder(TopicPage(topicId:topics[index].id,topic: topics[index],)));
                 },
                 child: Container(
                   margin: EdgeInsets.all(10),

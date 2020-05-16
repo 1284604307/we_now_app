@@ -11,6 +11,7 @@ import 'package:flutter_app2/services/model/Topic.dart';
 import 'package:flutter_app2/services/net/api.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:flutter/cupertino.dart' show Navigator;
+import 'package:oktoast/oktoast.dart';
 
 import 'real_api.dart';
 
@@ -200,8 +201,13 @@ class RestfulApi {
   }
 
   // desc 话题详情
-  static Future fetchTopic(topicId) async{
-    var response = await http.get('/public/topic/info/$topicId');
+  static Future fetchTopic(id) async{
+    var response = await http.get('/public/topic/info/id/$id');
+    return Topic.fromJson(response.data);
+  }
+
+  static Future fetchTopicByName(name) async{
+    var response =await http.get('/public/topic/info/name/$name');
     return Topic.fromJson(response.data);
   }
 
@@ -229,18 +235,8 @@ class RestfulApi {
 
   // desc 获取话题标签
   static fetchTopics(topic) async {
-    if(topic!=""){
-      return [
-        Topic.fromJson({"url":"","topic":"搜索神器","visible":22}),
-        Topic.fromJson({"url":"https://www.duifene.com/theme/img/module.icon.PNG?ljw=201702","topic":"厉害了","visible":67}),
-      ];
-    }else
-      return [
-        Topic.fromJson({"url":"https://www.duifene.com/theme/img/module.icon.PNG?ljw=201702","topic":"嘻嘻嘻","visible":22}),
-        Topic.fromJson({"url":"https://www.duifene.com/theme/img/module.icon.PNG?ljw=201702","topic":"厉害了","visible":67}),
-        Topic.fromJson({"url":"https://www.duifene.com/theme/img/module.icon.PNG?ljw=201702","topic":"痒局长","visible":45}),
-        Topic.fromJson({"url":"https://www.duifene.com/theme/img/module.icon.PNG?ljw=201702","topic":"我的天哪","visible":24}),
-      ];
+    var response =  await http.get("/public/topic/search/${topic??""}");
+    return response.data.map<Topic>((item) => Topic.fromJson(item)).toList();
   }
 
 }

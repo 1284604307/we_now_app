@@ -3,14 +3,14 @@ import 'package:flutter_app2/services/model/Topic.dart';
 import "package:dio/dio.dart";
 import 'package:flutter_app2/services/net/restful_go.dart';
 
-class WeiBoPublishTopicPage extends StatefulWidget {
+class PublishTopicPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return WeiBoPublishTopicPageState();
+    return PublishTopicPageState();
   }
 }
 
-class WeiBoPublishTopicPageState extends State<WeiBoPublishTopicPage> {
+class PublishTopicPageState extends State<PublishTopicPage> {
 
   List<Topic> topicList= [];
   int _selectCount = 0;
