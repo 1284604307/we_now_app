@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:bot_toast/bot_toast.dart';
+import 'package:decorated_flutter/decorated_flutter.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/helper/dialog_helper.dart';
@@ -237,6 +238,10 @@ class RestfulApi {
   static fetchTopics(topic) async {
     var response =  await http.get("/public/topic/search/${topic??""}");
     return response.data.map<Topic>((item) => Topic.fromJson(item)).toList();
+  }
+
+  static Future updateUser(User user) async{
+    await http.post("/user",queryParameters: {"user":user});
   }
 
 }

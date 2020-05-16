@@ -15,11 +15,11 @@ part 'User.g.dart';
  */
 @JsonSerializable()
 class User with ChangeNotifier{
-  var loginName = "未登录";
-  var userName = "未登录";
-  var createTime = "";
-  var createCount = 0;
-  var avatar = "assets/images/loading.jpg";
+  var loginName;
+  var userName;
+  var createTime ;
+  var createCount;
+  var avatar;
   var likeCount = 9992;
   var collectCount = 9993;
   var followCount = 9994;
@@ -34,6 +34,9 @@ class User with ChangeNotifier{
   var sex;
   var schoolId;
   var ticket;
+  var signature;
+
+  var birthday;
   User();
 
   static getUser(){

@@ -159,7 +159,9 @@ class RowItem extends StatelessWidget{
                   ),
                 if(leftWidget!=null)leftWidget,
                 if(other!=null)
-                  other,
+                  Container(width:MediaQuery.of(context).size.width-180 ,
+                      child: other
+                  )
               ],
             ),
             Container(
@@ -416,5 +418,11 @@ class FirstChildComment extends StatelessWidget{
       ),
     );
   }
+
+}
+
+class NonStyleField extends TextField{
+
+
 
 }
