@@ -91,7 +91,6 @@ Widget  textContent(String mTextContent, BuildContext context,bool isDetail){
                 map['display'] = showStr;
                 map['value'] = idStr;
                 //   print("正则:"+str+"---"+idStr+"--"+startIndex.toString()+"--"+str.lastIndexOf("#").toString());
-
                 return map;
               },
               onTap: (String content,String contentId) async {

@@ -35,6 +35,7 @@ class _State extends State<TopicPage> {
   int topicId;
   Topic topic;
   String topicName;
+  String error = "";
   _State({this.topicId,this.topic,this.topicName});
 
   @override
@@ -46,7 +47,7 @@ class _State extends State<TopicPage> {
   }
 
   loadTopic() async{
-//    BotToast.showLoading();
+    BotToast.showLoading();
     try{
       if(topicId!=null){
         this.topic = await RestfulApi.fetchTopic(topicId);
@@ -55,6 +56,9 @@ class _State extends State<TopicPage> {
         this.topic = await RestfulApi.fetchTopicByName(topicName);
       }
       BotToast.closeAllLoading();
+      if(this.topic == null){
+        showToast("该话题不存在");
+      }
       setState(() {});
     }catch(e){
       BotToast.closeAllLoading();
@@ -87,7 +91,9 @@ class _State extends State<TopicPage> {
                 slivers: <Widget>[
                   if(topic==null)
                     SliverToBoxAdapter(
-                      child: ViewStateEmptyWidget(onPressed: () {},),
+                      child: ViewStateEmptyWidget(message: "话题不存在",onPressed: (){
+                          Navigator.pop(context);
+                        },buttonText: Text("退出"),),
                     )
                   else
                     SliverToBoxAdapter(
@@ -163,54 +169,57 @@ class _State extends State<TopicPage> {
                       ),
                     ),
 
-
-                  // DESC 话题下动态 top , non-top
-                  if(model.tops!=null)
+                  if(topic!=null)
                     ...[
-                      SliverToBoxAdapter(
+                      // DESC 话题下动态 top , non-top
+                      if(model.tops!=null)
+                        ...[
+                          SliverToBoxAdapter(
+                              child: Container(
+                                padding: EdgeInsets.all(20),
+                                height: 0.15,
+                                color: Colors.grey,
+                              )
+                          ),
+                          SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                                    (c,i){
+                                  return talkWidget(c, model.tops[i]);
+                                },
+                                childCount: model.tops.length
+                            ),
+                          ),
+                        ],
+                      if(model.list!=null&&model.list.length>0)
+                        ...[
+                          SliverToBoxAdapter(
+                              child: Container(
+                                padding: EdgeInsets.all(20),
+                                height: 0.15,
+                                color: Colors.grey,
+                              )
+                          ),
+                          SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                                    (c,i){
+                                  return talkWidget(c, model.list[i]);
+                                },
+                                childCount: model.list.length
+                            ),
+                          ),
+                        ]
+                      else
+                        SliverToBoxAdapter(
                           child: Container(
-                            padding: EdgeInsets.all(20),
-                            height: 0.15,
-                            color: Colors.grey,
-                          )
-                      ),
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                                (c,i){
-                              return talkWidget(c, model.tops[i]);
-                            },
-                            childCount: model.tops.length
-                        ),
-                      ),
-                    ],
-                  if(model.list!=null&&model.list.length>0)
-                    ...[
-                      SliverToBoxAdapter(
-                          child: Container(
-                            padding: EdgeInsets.all(20),
-                            height: 0.15,
-                            color: Colors.grey,
-                          )
-                      ),
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                                (c,i){
-                              return talkWidget(c, model.list[i]);
-                            },
-                            childCount: model.list.length
-                        ),
-                      ),
-                    ]
-                  else
-                    SliverToBoxAdapter(
-                      child: Container(
-                        color: Colors.white,
-                        padding: EdgeInsets.only(top: 30),
-                        child: ViewStateEmptyWidget(
-                          onPressed: () {model.refresh();},
+                              color: Colors.white,
+                              padding: EdgeInsets.only(top: 30),
+                              child: ViewStateEmptyWidget(
+                                message: "一个动态都没有呢~",
+                                onPressed: () {model.refresh();},
+                              )
+                          ),
                         )
-                      ),
-                    )
+                    ]
                 ],
               ),
             );
