@@ -5,6 +5,7 @@ import 'package:flutter_app2/services/model/Article.dart';
 import 'package:jmessage_flutter/jmessage_flutter.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:tencent_kit/tencent_kit.dart';
 
 
 /**
@@ -18,4 +19,16 @@ class Api{
   static JPush jpush ;
   static JmessageFlutter jMessage;
   static Database db;
+
+
+  static const String _TENCENT_APPID = '1110421384';
+  static Tencent tencent = Tencent()..registerApp(appId: _TENCENT_APPID);
+//  StreamSubscription<TencentLoginResp> _login;
+//  StreamSubscription<TencentShareResp> _share;
+
+
+  void _listenShare(TencentShareResp resp) {
+    String content = 'share: ${resp.ret} - ${resp.msg}';
+//    _showTips('分享', content);
+  }
 }

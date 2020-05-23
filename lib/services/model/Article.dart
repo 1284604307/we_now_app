@@ -39,7 +39,7 @@ class Article {
   // 置顶
   bool top;
 
-  num userId;
+  var userId;
   User user;
 
   Article();

@@ -1,9 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:bot_toast/bot_toast.dart';
-import 'package:flutter_app2/common/pojos/AjaxResult.dart';
+import 'package:decorated_flutter/decorated_flutter.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/helper/dialog_helper.dart';
@@ -12,10 +10,9 @@ import 'package:flutter_app2/services/model/Banner.dart';
 import 'package:flutter_app2/services/model/Comment.dart';
 import 'package:flutter_app2/services/model/Topic.dart';
 import 'package:flutter_app2/services/net/api.dart';
-import 'package:flutter_app2/services/provider/view_state.dart';
 import 'package:http_parser/http_parser.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:flutter/cupertino.dart' show Navigator;
+import 'package:oktoast/oktoast.dart';
 
 import 'real_api.dart';
 
@@ -26,6 +23,7 @@ import 'real_api.dart';
 
 class RestfulApi {
 
+  //desc 登录
   static Future login(String username, String password) async {
     var ticket = await http.post('/login', queryParameters: {
       'username': username,
@@ -37,6 +35,20 @@ class RestfulApi {
     http.options.headers['ticket'] = ticket.toString();
     http.options.headers['username'] = username;
     User user = await getInfo();
+    user.ticket = ticket.toString();
+    return user;
+  }
+
+  static Future loginByQQ(String openid, String access_token) async {
+    var ticket = await http.post('/login/qq', queryParameters: {
+      'openid': openid,
+      'access_token': access_token,
+    });
+    print("登陆成功");
+    print(ticket.toString());
+    User user = await getInfo();
+    http.options.headers['ticket'] = ticket.toString();
+    http.options.headers['username'] = user.loginName;
     user.ticket = ticket.toString();
     return user;
   }
@@ -95,28 +107,47 @@ class RestfulApi {
     return response.data.map<Article>((item) => Article.fromJson(item)).toList();
   }
 
+  // desc 推荐文章
   static Future fetchRecommendCircles(pageNum) async{
     var response = await http.get('/public/circle/hots/$pageNum');
     return response.data.map<Article>((item) => Article.fromJson(item)).toList();
   }
 
+  // desc 学校文章
   static Future fetchSchoolCircles(pageNum) async{
     var response = await http.get('/public/circle/school/$pageNum');
     return response.data.map<Article>((item) => Article.fromJson(item)).toList();
   }
 
+  // desc 话题下文章
+  static Future fetchTopicCircles(topicId,{pageNum=0}) async{
+    var response = await http.get('/public/circle/topic/$topicId/$pageNum');
+    return response.data.map<Article>((item) => Article.fromJson(item)).toList();
+  }
 
+  // desc 动态的评论
   static Future fetchArticleComment(articleId,{pageNum=0}) async{
     var response = await http.get('/public/circle/comments/$articleId/$pageNum');
     return response.data.map<Comment>((item) => Comment.fromJson(item)).toList();
   }
 
-
+  // desc 评论的子评论
   static Future fetchChildrenComment(commentId,{pageNum=0}) async{
     var response = await http.get('/public/circle/commentChildren/$commentId/$pageNum');
     return response.data.map<Comment>((item) => Comment.fromJson(item)).toList();
   }
 
+  // desc 指定文章
+  static Future fetchArticle(articleId) async{
+    var response = await http.get('/public/circle/info/$articleId');
+    return Article.fromJson(response.data);
+  }
+
+  // desc 话题下置顶文章
+  static Future fetchTopicTopCircles(topicId) async {
+    var response = await http.get('/public/circle/topic/top/$topicId');
+    return response.data.map<Article>((item) => Article.fromJson(item)).toList();
+  }
 
   static fetchCollectList(int pageNum) {
 
@@ -170,6 +201,18 @@ class RestfulApi {
     return response.data.map<Article>((item) => Article.fromJson(item)).toList();
   }
 
+  // desc 话题详情
+  static Future fetchTopic(id) async{
+    var response = await http.get('/public/topic/info/id/$id');
+    return Topic.fromJson(response.data);
+  }
+
+  static Future fetchTopicByName(name) async{
+    var response =await http.get('/public/topic/info/name/$name');
+    return Topic.fromJson(response.data);
+  }
+
+
   static register(loginName, password) async {
     await http.post('/user/register', queryParameters: {
       'username': loginName,
@@ -189,6 +232,16 @@ class RestfulApi {
     data.files.add(MapEntry("avatarfile", multipartFile));
     var response =  await http.post("/user/updateAvatar", data: data);
     print(response);
+  }
+
+  // desc 获取话题标签
+  static fetchTopics(topic) async {
+    var response =  await http.get("/public/topic/search/${topic??""}");
+    return response.data.map<Topic>((item) => Topic.fromJson(item)).toList();
+  }
+
+  static Future updateUser(User user) async{
+    await http.post("/user",queryParameters: {"user":user});
   }
 
 }

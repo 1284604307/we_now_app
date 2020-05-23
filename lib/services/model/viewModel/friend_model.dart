@@ -18,10 +18,12 @@ class FriendModel extends ViewStateModel{
   loadData() async{
 
     _friends = await Api.jMessage.getFriends();
-    _friends.add(JMUserInfo.fromJson({
-      "username":"-123",
-      "nickname":"用于测试的本地数据"
-    }));
+    if(_friends.length==0){
+      _friends.add(JMUserInfo.fromJson({
+        "username":"-123",
+        "nickname":"您的列表内没有任何朋友~快去添加一个吧!"
+      }));
+    }
     notifyListeners();
     return _friends;
   }

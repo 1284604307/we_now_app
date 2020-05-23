@@ -45,7 +45,9 @@ class _HomeState extends State<Home> {
   void _listenLogin(TencentLoginResp resp) {
     _loginResp = resp;
     String content = 'login: ${resp.openid} - ${resp.accessToken}';
-    _showTips('登录', content);
+    print(resp.openid);
+    print(resp.accessToken);
+//    _showTips('登录', content);
   }
 
   void _listenShare(TencentShareResp resp) {
@@ -122,6 +124,7 @@ class _HomeState extends State<Home> {
                 } else {
                   _showTips('UnionID',
                       '${unionid.error} - ${unionid.errorDescription}');
+                  print(unionid.openid);
                 }
               }
             },

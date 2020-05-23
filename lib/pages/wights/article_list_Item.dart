@@ -163,7 +163,7 @@ class ArticleTitleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Html(
       padding: EdgeInsets.symmetric(vertical: 5),
-      useRichText: false,
+      useRichText: true,
       data: title,
       defaultTextStyle: Theme.of(context).textTheme.subtitle,
     );

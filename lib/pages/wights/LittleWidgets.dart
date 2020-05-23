@@ -4,9 +4,11 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app2/pages/wights/avatar.dart';
 import 'package:flutter_app2/services/config/resource_mananger.dart';
 import 'package:flutter_app2/services/helper/favourite_helper.dart';
 import 'package:flutter_app2/services/model/Article.dart';
+import 'package:flutter_app2/services/model/Comment.dart';
 import 'package:flutter_app2/services/model/viewModel/favourite_model.dart';
 import 'package:flutter_app2/services/model/viewModel/user_model.dart';
 import 'package:flutter_app2/services/provider/provider_widget.dart';
@@ -157,7 +159,9 @@ class RowItem extends StatelessWidget{
                   ),
                 if(leftWidget!=null)leftWidget,
                 if(other!=null)
-                  other,
+                  Container(width:MediaQuery.of(context).size.width-180 ,
+                      child: other
+                  )
               ],
             ),
             Container(
@@ -267,4 +271,158 @@ class FollowAnimationState extends State with SingleTickerProviderStateMixin {
     _controller.dispose();
     super.dispose();
   }
+}
+
+
+
+
+childComment(Comment comment,textTheme){
+  return RichText(
+    maxLines: 3,
+    overflow: TextOverflow.ellipsis,
+    text: TextSpan(
+        text: comment.user!=null?"${comment.user.userName}":"匿名",
+        style: TextStyle(color: Colors.blue,fontSize: 14.0),
+        children: [
+          if(comment.toId > 0)
+            TextSpan(text: " 回复 ",
+                style: TextStyle(color: textTheme.display1.color,fontSize: 14.0),
+                children: [
+                  TextSpan(text: "${comment.toId}",style: TextStyle(color: Colors.blue,fontSize: 14.0),)
+                ]
+            ),
+          TextSpan(
+            text: "：${comment.content}",
+            style: TextStyle(color: textTheme.display1.color,fontSize: 14.0),
+          )
+        ]
+    ),
+  );
+}
+
+
+t11(str) => Text(str,style: TextStyle(fontSize: 12,),);
+
+
+class ChildrenComment extends StatelessWidget{
+
+  Comment comment;
+  ChildrenComment(this.comment);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return InkWell(
+      onTap: (){
+        showToast("应跳转到二级评论详情页");
+      },
+      child: Container(
+        width: 340,
+        color: Colors.black12,
+        margin:EdgeInsets.only(top: 10),
+        padding: EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            ...comment.children.map((comment){
+              return childComment(comment, Theme.of(context).textTheme);
+            }),
+            if(comment.children.length>3)
+              Padding(
+                padding: EdgeInsets.only(top: 5),
+                child: InkWell(
+                  onTap: (){ showToast(comment.cid.toString()); },
+                  child: Text("更多回复",
+                    style: TextStyle(color: Colors.blue,fontSize: 14.0),),
+                ),
+              )
+          ],
+        ),
+      ),
+    );
+  }
+
+}
+
+class FirstChildComment extends StatelessWidget{
+
+
+  Comment comment;
+  FirstChildComment(this.comment);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Container(
+      padding: EdgeInsets.all(15),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 10,top: 5,),
+            child: Avatar(null,width: 30,height: 30,),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              // desc 当前评论部分
+              if(comment.user!=null)
+                Container(
+                  child: Text(
+                    "${comment.user.userName}",
+                    style: TextStyle(fontSize: 14,color: Theme.of(context).hintColor,fontWeight: FontWeight.w400),),
+                ),
+              Container(
+                margin: EdgeInsets.only(top: 2),
+                child: Text(
+                  "${comment.createTime}",
+                  style: TextStyle(fontSize: 12,color: Theme.of(context).hintColor),),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 5,bottom: 5),
+                child: Text("${comment.content}",style: TextStyle(fontSize: 14),),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(right: 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Icon(IconFonts.thumbUp,size: 16,),
+//                                      t11("11",),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(right: 10),
+                    child:InkWell(
+                      child: Icon(IconFonts.share,size: 16,),
+                    ),
+                  ),
+                  InkWell(
+                    child: Icon(IconFonts.message,size: 16,),
+                  ),
+                ],
+              ),
+              // desc 子评论容器
+              if(comment.children.length>0)
+                ChildrenComment(comment)
+            ],
+          )
+        ],
+      ),
+      decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(width: 0.15, color: Theme.of(context).hintColor))
+      ),
+    );
+  }
+
+}
+
+class NonStyleField extends TextField{
+
+
+
 }

@@ -1,13 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app2/common/Api.dart';
-import 'package:flutter_app2/pages/global/global_config.dart';
-import 'package:flutter_app2/pages/home/chat/chat_page.dart';
 import 'package:flutter_app2/pages/home/chat/single_chat_scene.dart';
-import 'package:flutter_app2/pages/home/circle/test.dart';
-import 'package:flutter_app2/pages/maps/other.dart';
-import 'package:flutter_app2/pages/wights/LittleWidgets.dart';
 import 'package:flutter_app2/pages/wights/avatar.dart';
 import 'package:flutter_app2/pages/wights/page_route_anim.dart';
 import 'package:flutter_app2/services/config/resource_mananger.dart';
@@ -15,17 +8,13 @@ import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/helper/dialog_helper.dart';
 import 'package:flutter_app2/services/helper/jpush_helper.dart';
 import 'package:flutter_app2/services/helper/refresh_helper.dart';
-import 'package:flutter_app2/services/model/Message.dart';
 import 'package:flutter_app2/services/model/viewModel/message_model.dart';
 import 'package:flutter_app2/services/model/viewModel/user_model.dart';
 import 'package:flutter_app2/services/provider/provider_widget.dart';
 import 'package:flutter_app2/services/provider/view_state_widget.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:jmessage_flutter/jmessage_flutter.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:sqflite/sqflite.dart';
 
 class MessagePage extends StatefulWidget{
   @override

@@ -34,7 +34,7 @@ Article _$ArticleFromJson(Map<String, dynamic> json) {
     ..like = json['like'] as bool
     ..fresh = json['fresh'] as bool
     ..top = json['top'] as bool
-    ..userId = json['userId'] as num
+    ..userId = json['userId']
     ..user = json['user'] == null
         ? null
         : User.fromJson(json['user'] as Map<String, dynamic>);

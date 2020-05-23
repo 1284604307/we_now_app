@@ -65,12 +65,17 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                             Navigator.push(context, SizeRoute(WebViewPage(title: banner.title,path: banner.path,)));
                             break;
                           case "文章":
-                            showToast("lib/home/index.dart #2150");
+                            print(banner.articleId);
+                            Navigator.push(context, SizeRoute(ArticleShowPage(banner.articleId)));
+                            break;
+                          case "话题":
+                            Navigator.push(context, SizeRoute(TopicPage(topicId:banner.articleId??1)));
                             break;
                           default:
-                            showToast("lib/home/index.dart #2150");
+//                            showToast("lib/home/index.dart #2150 banner默认动作为空");
+                            break;
                             //导航至疫情地图
-                            Navigator.push(context, MaterialPageRoute(builder: (cx)=>ItemInfoDetail()));
+//                            Navigator.push(context, MaterialPageRoute(builder: (cx)=>ItemInfoDetail()));
                         }
                       },
                       child: Container(
@@ -86,19 +91,28 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                                 ),
                                 Positioned(
                                   top: 0,
-                                  child: Container(
-                                    padding: EdgeInsets.only(left: 10,right: 10),
-                                    color: Colors.grey,
-                                    child: Text("${model.banners[index].title}"),
+                                  child: Opacity(
+                                    opacity: 0.4,
+                                    child: Container(
+                                      padding: EdgeInsets.only(left: 10,right: 10),
+                                      color: Colors.white,
+                                      child: Text("${model.banners[index].title}",
+                                          style: TextStyle(color: Colors.black),),
+                                    ),
                                   ),
                                 ),
                                 Positioned(
                                   bottom: 0,
-                                  child: Container(
-                                    padding: EdgeInsets.only(left: 10,right: 10),
-                                    color: Colors.grey,
-                                    child: Text(
-                                      "${model.banners[index].content}",
+                                  right: 0,
+                                  child: Opacity(
+                                    opacity: 0.4,
+                                    child: Container(
+                                      padding: EdgeInsets.only(left: 10,right: 10),
+                                      color: Colors.white,
+                                      child: Text(
+                                        "${model.banners[index].content}",
+                                        style: TextStyle(color: Colors.black),
+                                      ),
                                     ),
                                   ),
                                 )
@@ -224,7 +238,7 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
                 onTap: (){
                   showToast("应跳转到话题详情,请在 lib/home/index.dart 搜索 #2147 任务以修复此处");
 
-                  Navigator.push(context, NoAnimRouteBuilder(TopicPage(topics[index].id,topic: topics[index],)));
+                  Navigator.push(context, NoAnimRouteBuilder(TopicPage(topicId:topics[index].id,topic: topics[index],)));
                 },
                 child: Container(
                   margin: EdgeInsets.all(10),
@@ -360,7 +374,15 @@ class _State extends State<Home> with AutomaticKeepAliveClientMixin {
   bool get wantKeepAlive => true;
 }
 
+articleRouter(Article article,context){
 
+  if(article.link!=null){
+    showToast("进入webview");
+    Navigator.push(context, NoAnimRouteBuilder(WebViewPage(title:article.title,path: article.link,)));
+  }else{
+    Navigator.push(context, NoAnimRouteBuilder(ArticleShowPage(article.id)));
+  }
+}
 
 class HomeTopArticleList extends StatelessWidget {
   @override
@@ -374,6 +396,9 @@ class HomeTopArticleList extends StatelessWidget {
             item,
             index: index,
             top: true,
+            onTap: (){
+              articleRouter(item,context);
+            },
           );
         },
         childCount: homeModel.topArticles?.length ?? 0,
@@ -398,10 +423,13 @@ class HomeArticleList extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
             (context, index) {
           Article item = homeModel.list[index];
-
           return ArticleItemWidget(
             item,
             index: index,
+            onTap:(){
+              articleRouter(item,context);
+//              Navigator.push(context, NoAnimRouteBuilder(ArticleShowPage(item)));
+            },
           );
         },
         childCount: homeModel.list?.length ?? 0,

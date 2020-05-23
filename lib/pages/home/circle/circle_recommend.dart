@@ -1,8 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app2/common/Api.dart';
-import 'package:flutter_app2/common/pojos/AjaxResult.dart';
-import 'package:flutter_app2/pages/global/global_config.dart';
 import 'package:flutter_app2/pages/wights/article_skeleton.dart';
 import 'package:flutter_app2/pages/wights/avatar.dart';
 import 'package:flutter_app2/pages/wights/skeleton.dart';
@@ -33,7 +30,6 @@ class _State extends State<CircleRecommend> with AutomaticKeepAliveClientMixin {
     super.build(context);
     return ProviderWidget<CircleRecommendModel>(
       onModelReady: (model) {
-        print("model 准备好了");
         model.initData();
       },
       model: CircleRecommendModel(),
@@ -192,7 +188,7 @@ class _CicleList extends StatelessWidget {
             (context, index) {
           Article item = recommendModel.list[index];
           // desc 生成<动态>模型
-          return talkWidget(context, index, item);
+          return talkWidget(context, item);
         },
         childCount: recommendModel.list?.length ?? 0,
       ),

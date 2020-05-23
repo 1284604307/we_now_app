@@ -6,6 +6,7 @@ import 'package:flutter_app2/common/Api.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:flutter_app2/pages/app.dart';
 import 'package:flutter_app2/pages/home/chat/friend_application.dart';
+import 'package:flutter_app2/pages/home/circle/circle_person.dart';
 import 'package:flutter_app2/pages/home/circle/circle_show.dart';
 import 'package:flutter_app2/pages/wights/avatar.dart';
 import 'package:flutter_app2/pages/wights/page_route_anim.dart';
@@ -168,17 +169,22 @@ class _State extends State<MePage>{
                   physics: NeverScrollableScrollPhysics(),
                   // These are the contents of the tab views, below the tabs.
                   children: _tabs.map((String name) {
-                    return SafeArea(
-                      top: false,
-                      bottom: false,
-                      child: Builder(
-                        builder: (BuildContext context) {
-                          return ListView.builder(itemBuilder: (c,i){
-                            return Container(color: Colors.yellow[i*50],height: 60,);
-                          },itemCount: 20,);
-                        },
-                      ),
-                    );
+                    switch(name){
+                      case "动态":
+                        return CirclePerson();
+                      default:
+                        return SafeArea(
+                          top: false,
+                          bottom: false,
+                          child: Builder(
+                            builder: (BuildContext context) {
+                              return ListView.builder(itemBuilder: (c,i){
+                                return Container(color: Colors.yellow[i*50],height: 60,);
+                              },itemCount: 20,);
+                            },
+                          ),
+                        );
+                    }
                   }).toList(),
                 ),
               ),
@@ -253,75 +259,3 @@ _Header(JMUserInfo userInfo,context){
       ]
   );
 }
-
-//class HeaderState extends State<Header> with TickerProviderStateMixin {
-//
-//  JMUserInfo userInfo;
-//  String username;
-//
-//  @override
-//  void initState() {
-//    super.initState();
-//    Api.jMessage.getMyInfo().then((info){
-//      showToast(info.toJson().toString());
-//      setState(() {
-//        userInfo = info;
-//      });
-//    });
-//  }
-//
-//  HeaderState(this.username);
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    double rpx = MediaQuery.of(context).size.width/750;
-//    return  Stack(
-//        children: <Widget>[
-//          Image.asset(
-//            "assets/images/loading.jpg",
-//            width: 750*rpx,
-//            fit: BoxFit.cover,
-//          ),
-//          Positioned(
-//            top: 240*rpx,
-//            left: 30*rpx,
-//            child:Row(
-//              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//              children: <Widget>[
-//                Row(
-//                  crossAxisAlignment: CrossAxisAlignment.center,
-//                  children: <Widget>[
-//                    Container(
-//                      margin: EdgeInsets.all(10),
-//                      child: Avatar(
-//                        CachedNetworkImage(
-//                          fit: BoxFit.cover,
-//                          imageUrl: "http://i2.hdslb.com/bfs/face/06a07dad46ecb426e26e3340b3ae4e6f308066ea.jpg@70w_70h_1c_100q.webp",
-//                        ),
-//                        width: 60,
-//                        height: 60,
-//                      ),
-//                    ),
-//                    Column(
-//                      crossAxisAlignment: CrossAxisAlignment.start,
-//                      children: <Widget>[
-//                        Text("${userInfo.nickname}(${userInfo.username})",
-//                          style: TextStyle(
-//                              color: Colors.white,
-//                              fontWeight: FontWeight.bold,
-//                              fontSize: 18
-//                          ),
-//                        ),
-//                        Text("个性签名",style: TextStyle(color: Colors.white),)
-//                      ],
-//                    )
-//                  ],
-//                ),
-//              ],
-//            ),
-//          )
-//        ]
-//    );
-//  }
-//
-//}

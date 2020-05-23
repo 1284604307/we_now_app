@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_app2/pages/app.dart';
 import 'package:flutter_app2/pages/home/chat/chat_page.dart';
-import 'package:flutter_app2/pages/home/chat/friend_application.dart';
 import 'package:flutter_app2/pages/home/chat/frined_list_page.dart';
 import 'package:flutter_app2/pages/home/chat/frined_notify_page.dart';
 import 'package:flutter_app2/pages/home/circle/test.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_app2/pages/loading.dart';
 import 'package:flutter_app2/pages/login/login.dart';
 import 'package:flutter_app2/pages/login/register.dart';
 import 'package:flutter_app2/pages/wights/page_route_anim.dart';
-import 'package:flutter_app2/services/config/storage_manager.dart';
 import 'package:flutter_app2/services/model/Article.dart';
 
 class RouteName {
@@ -91,30 +89,4 @@ class Router {
                 ));
     }
   }
-}
-
-/// Pop路由
-class PopRoute extends PopupRoute {
-  final Duration _duration = Duration(milliseconds: 300);
-  Widget child;
-
-  PopRoute({@required this.child});
-
-  @override
-  Color get barrierColor => null;
-
-  @override
-  bool get barrierDismissible => true;
-
-  @override
-  String get barrierLabel => null;
-
-  @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
-    return child;
-  }
-
-  @override
-  Duration get transitionDuration => _duration;
 }
