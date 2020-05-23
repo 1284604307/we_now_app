@@ -11,6 +11,8 @@ import 'home/index/home_page.dart';
 import 'home/my_page/my_page.dart';
 import 'package:flutter_app2/pages/maps/other.dart';
 
+import 'maps/test.dart';
+
 class App extends StatefulWidget{
   @override
   AppState createState()=>AppState();
@@ -31,8 +33,8 @@ class AppState extends State<App>{
     DateTime  _willPopTime ;
 
     final pageController = PageController();
-    final pages = [Home(),SelectLocationFromMapPage(), CirclePage(), MessagePage(),MyPage()];
-//HomePage(测试页)/SelectLocationFromMapPage(导航测试页)
+    final pages = [Home(),SelectLocationItemInfoDetail(), CirclePage(), MessagePage(),MyPage()];
+//HomePage(测试页)/SelectLocationFromMapPage(导航测试页)//SelectLocationItemInfoDetail
 
     void onTap(int index) {
       pageController.jumpToPage(index);
