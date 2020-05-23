@@ -57,23 +57,23 @@ class MyPageState extends State<MyPage>{
                         ),
                         // desc 头部按钮排列
                         Container(
-                          width: width,
-                          margin: EdgeInsets.only(top: 30,left: 10,right: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              IconButton(
-                                icon: Icon(Icons.settings),
-                                onPressed: (){
-                                  Navigator.push(context, MaterialPageRoute(
-                                      builder: (BuildContext context) {
-                                        return SettingPage();
-                                      }
-                                  ));
-                                },
-                              )
-                            ],
-                          )
+                            width: width,
+                            margin: EdgeInsets.only(top: 30,left: 10,right: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                IconButton(
+                                  icon: Icon(Icons.settings),
+                                  onPressed: (){
+                                    Navigator.push(context, MaterialPageRoute(
+                                        builder: (BuildContext context) {
+                                          return SettingPage();
+                                        }
+                                    ));
+                                  },
+                                )
+                              ],
+                            )
                         ),
                         // desc 个人信息卡片
                         Positioned(

@@ -30,6 +30,7 @@ class _State extends State<CircleRecommend> with AutomaticKeepAliveClientMixin {
     super.build(context);
     return ProviderWidget<CircleRecommendModel>(
       onModelReady: (model) {
+        print("model 准备好了");
         model.initData();
       },
       model: CircleRecommendModel(),
