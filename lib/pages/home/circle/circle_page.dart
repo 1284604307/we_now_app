@@ -84,7 +84,11 @@ class CirclePageState extends State<CirclePage> with AutomaticKeepAliveClientMix
                                   builder: (context) {
                                     return new CreateCirclePage();
                                   }
-                              ));
+                              )).then((newArticle){
+                                if(newArticle!=null){
+                                  this.initState();
+                                }
+                              });
                             }else{
                               if(await DialogHelper.showLoginDialog(context))
                                 Navigator.pushNamed(context, RouteName.login);

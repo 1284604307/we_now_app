@@ -35,13 +35,13 @@ class CircleSchoolModel extends ViewStateRefreshListModel {
 }
 
 
-class CircleRecommendModel extends ViewStateRefreshListModel {
+class CircleRecommendModel extends ViewStateRefreshListModel<Article> {
 
   List<Article> _circles_Hots;
   List<Article> get recommendCircles => _circles_Hots;
 
   @override
-  Future<List> loadData({int pageNum}) async {
+  Future<List<Article>> loadData({int pageNum}) async {
     List<Future> futures = [];
 
     futures.add(RestfulApi.fetchRecommendCircles(pageNum));
@@ -59,8 +59,7 @@ class CircleRecommendModel extends ViewStateRefreshListModel {
   }
 }
 
-
-class CircleTopicModel extends ViewStateRefreshListModel {
+class CircleTopicModel extends ViewStateRefreshListModel<Article> {
 
   var id;
   CircleTopicModel(this.id);
@@ -70,7 +69,7 @@ class CircleTopicModel extends ViewStateRefreshListModel {
 
 
   @override
-  Future<List> loadData({int pageNum}) async {
+  Future<List<Article>> loadData({int pageNum}) async {
 
     if (pageNum == ViewStateRefreshListModel.pageNumFirst) {
       _circle_Hots = await RestfulApi.fetchTopicTopCircles(id);
@@ -82,4 +81,17 @@ class CircleTopicModel extends ViewStateRefreshListModel {
   onCompleted(List data) {
   }
 }
+
+class CirclePersonModel extends ViewStateRefreshListModel<Article> {
+
+  @override
+  Future<List<Article>> loadData({int pageNum}) async {
+    return await RestfulApi.fetchRecommendCircles(pageNum);
+  }
+
+  @override
+  onCompleted(List data) {
+  }
+}
+
 
