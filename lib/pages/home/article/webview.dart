@@ -1,8 +1,8 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_app2/services/model/Banner.dart' as myBanner;
 import 'package:flutter/material.dart';
-import 'package:flutter_app2/services/model/Article.dart';
+import 'package:flutter_app2/services/provider/view_state.dart';
+import 'package:flutter_app2/services/provider/view_state_widget.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -28,20 +28,27 @@ class _state extends State<WebViewPage>{
 
   String title;
   String path;
+  bool success = true;
   _state({this.title,this.path});
+
+  WebViewController _controller;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    BotToast.showLoading();
+  }
 
   @override
   Widget build(BuildContext context) {
-    WebViewController _controller;
-    BotToast.showLoading();
-    print(path);
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(title: Text("$title"),),
-          body: WebView(
+          body: success?WebView(
             initialUrl: path,
             //JS执行模 式 是否允许JS执行
-            javascriptMode: JavascriptMode.unrestricted,
+            javascriptMode: JavascriptMode.disabled,
             onWebViewCreated: (WebViewController controller){
               _controller = controller;
             },
@@ -60,8 +67,18 @@ class _state extends State<WebViewPage>{
 //              setState(() {
 //              });
             },
+            onWebResourceError: (error){
+              success = false;
+              setState(() {});
+            },
+
 //                    javascriptChannels: JavascriptChannel(),
-          ),
+          ):ViewStateEmptyWidget(onPressed: () {
+            BotToast.showLoading();
+            success = true;
+            _controller.reload();
+            setState(() {});
+          },),
       ),
       onWillPop: () async{
         BotToast.closeAllLoading();

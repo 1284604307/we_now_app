@@ -31,6 +31,8 @@ class _state extends State<ShowCircle>
   TabController tabController;
   PanelController panelController = PanelController();
 
+  String comment ="";
+  TextEditingController tController;
   _state(this._article);
 
 
@@ -38,12 +40,13 @@ class _state extends State<ShowCircle>
   void initState() {
     super.initState();
     this.tabController = TabController(length: 2, vsync: this);
+    tController = new TextEditingController();
+
   }
 
   @override
   Widget build(BuildContext context) {
 
-    TextEditingController tController = new TextEditingController();
 
     var _tabs = ["评论","点赞"];
     return WillPopScope(
@@ -53,13 +56,16 @@ class _state extends State<ShowCircle>
         backdropEnabled: true,
         controller: panelController,
         header: Container(
-          width: 400,
+          width: MediaQuery.of(context).size.width,
           height: 45,
           color: Colors.black12,
           child:Material(
             child:  bottomWidget(),
           ),
         ),
+        onPanelClosed: (){
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
         panel: Material(
           // desc 底部三大件， 上拉
           child: Container(

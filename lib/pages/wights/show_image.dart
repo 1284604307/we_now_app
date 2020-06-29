@@ -67,10 +67,13 @@ class _state extends State<ShowImagePage>{
     return WillPopScope(
       child: Container(
         color: Colors.white,
-        child:getExtendedImage()
+        child:SingleChildScrollView(
+          child: getExtendedImage(),
+        )
       ),
       onWillPop: () {
         Navigator.pop(context);
+        return;
       },
     );
   }

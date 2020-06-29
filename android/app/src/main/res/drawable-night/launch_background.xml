@@ -7,8 +7,9 @@
     <item>
         <bitmap
             android:gravity="fill"
-            android:src="@mipmap/launch_image"
+            android:src="@mipmap/we_now_start"
             android:tint="#aa000000"
             android:tintMode="src_over" />
     </item>
+    <item name="android:windowIsTranslucent">true</item>
 </layer-list>

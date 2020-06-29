@@ -166,7 +166,9 @@ class _State extends State<ArticleShowPage>  with SingleTickerProviderStateMixin
         List imgList = img.split(',');
         if(imgList.length==2){
           Navigator.push(context, NoAnimRouteBuilder(ShowImagePage(extendedImage: ExtendedImage.memory(
-            base64.decode(img.split(',')[1]), //设置宽度
+            base64.decode(img.split(',')[1]),
+            fit: BoxFit.fitWidth,
+            enableSlideOutPage: true,
             mode: ExtendedImageMode.gesture ,
           )
           ),));
@@ -174,7 +176,9 @@ class _State extends State<ArticleShowPage>  with SingleTickerProviderStateMixin
          showToast(img);
          print(img);
           Navigator.push(context, NoAnimRouteBuilder(ShowImagePage(extendedImage: ExtendedImage.network(
-            img, //设置宽度
+            img,
+            enableSlideOutPage: true,
+            fit: BoxFit.contain,
             mode: ExtendedImageMode.gesture ,
           )),));
         }

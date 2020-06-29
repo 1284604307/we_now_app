@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app2/common/Global.dart';
 import 'package:flutter_app2/pages/home/message/message_page.dart';
 import 'package:flutter_app2/services/config/router_manger.dart';
+import 'package:flutter_app2/services/utils/platform_utils.dart';
 
 import 'home/circle/circle_page.dart';
 import 'home/home/index.dart';
@@ -57,7 +58,7 @@ class AppState extends State<App>{
       ),
       BottomNavigationBarItem(
           title: Text(
-            '保留页',
+            '疫情动员',
           ),
           icon:Icon(Icons.compare_arrows)
 //            icon: _currentIndex == 0? Icon(Icons.home):Icon(Icons.home)
@@ -105,15 +106,17 @@ class AppState extends State<App>{
           return false;
         }
         else {
-          if (_willPopTime == null || (DateTime.now().difference(_willPopTime) >
+          if (_willPopTime == null || (_willPopTime.difference(_willPopTime) >
               Duration(seconds: 1))) {
             //两次点击间隔超过1秒，重新计时
-            BotToast.showText(text: "再次点击将退出应用");
+            BotToast.showText(text: "再次点击将退出应用 ");
             _willPopTime = DateTime.now();
             print(_willPopTime);
             return false;
+          }else{
+            BotToast.showText(text: "应用退出 ");
+            return true;
           }
-          return true;
         }
       }
     );
