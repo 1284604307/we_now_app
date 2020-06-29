@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Git.dart';
-
 const _themes = <MaterialColor>[
   Colors.blue,
   Colors.cyan,

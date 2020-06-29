@@ -55,20 +55,30 @@ class _State extends State<FriendNotifyPage> {
                         (c,i){
                          UserNotifyMessage notify =  cM.notifies[i];
 
+                         print(cM.notifies[i]);
+
                       return RowItem(
                           onPressed:(){
                             showToast("进入到好友请求详细页");
                           } ,
-                          other:Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text("${notify.fromUserName}",style: TextStyle(fontWeight: FontWeight.bold),),
-                              Text("${JpushHelper.parseNotify(notify)}",style: TextStyle(color: Colors.grey),),
-                              Text("${notify.reason}",style: TextStyle(color: Colors.grey),),
-                            ],
+                          leftWidget: Avatar(AvatarImage(notify.fromUserName)) ,
+                          other: Container(
+                            padding: EdgeInsets.only(left: 10,top: 5),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text("${notify.fromUserName}",style: TextStyle(fontWeight: FontWeight.bold),maxLines: 1,overflow: TextOverflow.ellipsis,),
+                                Text("${JpushHelper.parseNotify(notify)}",style: TextStyle(color: Colors.grey),maxLines: 1,overflow: TextOverflow.ellipsis,),
+                                Text(
+                                  "${notify.reason}..",
+                                  style: TextStyle(color: Colors.grey),maxLines: 1,overflow: TextOverflow.ellipsis,),
+                              ],
+                            ),
                           ),
                           action: <Widget>[
-                            if(notify.done)
+                            if(notify.type == JMContactNotifyType.invite_accepted)
+                              Container(child: Text("已同意"),)
+                            else if(notify.done)
                               Text("${notify.status}")
                             else
                               RaisedButton(onPressed: () {

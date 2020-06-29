@@ -95,7 +95,7 @@ class FriendItem extends StatelessWidget{
         padding: EdgeInsets.all(10),
         child: Row(
           children: <Widget>[
-            Avatar(CachedNetworkImage(imageUrl: "${user.avatarThumbPath}",)),
+            Avatar(AvatarImage(user.username)),
             Padding(padding: EdgeInsets.only(left: 10),child: Container(
               width: MediaQuery.of(context).size.width-80,
               child: Text("${user.nickname}(${user.username})",

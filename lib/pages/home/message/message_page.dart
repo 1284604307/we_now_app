@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:flutter_app2/pages/home/chat/single_chat_scene.dart';
 import 'package:flutter_app2/pages/wights/avatar.dart';
 import 'package:flutter_app2/pages/wights/page_route_anim.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_app2/services/config/router_manger.dart';
 import 'package:flutter_app2/services/helper/dialog_helper.dart';
 import 'package:flutter_app2/services/helper/jpush_helper.dart';
 import 'package:flutter_app2/services/helper/refresh_helper.dart';
+import 'package:flutter_app2/services/model/viewModel/UsersModel.dart';
 import 'package:flutter_app2/services/model/viewModel/message_model.dart';
 import 'package:flutter_app2/services/model/viewModel/user_model.dart';
 import 'package:flutter_app2/services/provider/provider_widget.dart';
@@ -87,7 +89,9 @@ class MessagePageState extends State<MessagePage> with AutomaticKeepAliveClientM
                             children: <Widget>[
                               Container(
                                 margin: EdgeInsets.only(right: 10),
-                                child: RectAvatar(null,width: 50,height: 50,),
+                                child: RectAvatar(
+                                  Icon(Icons.notifications,color: Colors.blue,size: 30,)
+                                ,width: 50,height: 50,),
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,7 +145,6 @@ class ConversationItem extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    JMNormalMessage message = conversation.latestMessage;
     String msgTime;
     String messageText;
     if (conversation.latestMessage is JMTextMessage) {
@@ -152,6 +155,9 @@ class ConversationItem extends StatelessWidget{
     } else {
       messageText = '欢迎加入群聊！';
     }
+
+    JMUserInfo jmUserInfo = conversation.target as JMUserInfo;
+
     return InkWell(
       onTap: onPressed??(){Navigator.push(context, SlideBaseRouteBuilder.left( SingleChatScene(userInfo: conversation.target,) ,speed: 5.0));},
       child: Container(
@@ -162,10 +168,12 @@ class ConversationItem extends StatelessWidget{
           children: <Widget>[
             Row(
               children: <Widget>[
-                Avatar(CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  imageUrl: "${conversation.target}",
-                ),
+                Avatar(
+                  AvatarImage(jmUserInfo.username),
+//                  CachedNetworkImage(
+//                    fit: BoxFit.cover,
+//                    imageUrl: "${jmUserInfo.username}",
+//                  ),
                   width: 50,
                   height: 50,),
                 Container(

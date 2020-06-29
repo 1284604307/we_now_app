@@ -12,6 +12,7 @@ import 'package:flutter_app2/services/model/Topic.dart';
 import 'package:flutter_app2/services/net/api.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:flutter/cupertino.dart' show Navigator;
+import 'package:jmessage_flutter/jmessage_flutter.dart';
 import 'package:oktoast/oktoast.dart';
 
 import 'real_api.dart';
@@ -244,4 +245,9 @@ class RestfulApi {
     await http.post("/user",queryParameters: {"user":user});
   }
 
+  static Future<User> getUserInfo(username) async{
+    var res = await http.get("/public/user/$username");
+    print("------------\n ${res.data} \n------------------");
+    return User.fromJson(res.data);
+  }
 }

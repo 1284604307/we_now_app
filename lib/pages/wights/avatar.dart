@@ -1,8 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app2/common/pojos/User.dart';
 import 'package:flutter_app2/pages/home/me/me_page.dart';
 import 'package:flutter_app2/pages/wights/page_route_anim.dart';
+import 'package:flutter_app2/services/config/provider_manager.dart';
+import 'package:flutter_app2/services/model/viewModel/UsersModel.dart';
+import 'package:flutter_app2/services/net/restful_go.dart';
+import 'package:provider/provider.dart';
 
 /**
  * @createDate  2020/4/28
@@ -37,6 +42,45 @@ class Avatar extends StatelessWidget {
     );
   }
 
+}
+
+class AvatarImage extends StatefulWidget{
+
+  String username;
+
+  AvatarImage(this.username);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _AvatarState(this.username);
+  }
+
+}
+
+class _AvatarState extends State<AvatarImage>{
+
+  String username ;
+  String avatarPath;
+  _AvatarState(this.username);
+
+  @override
+  void initState(){
+    super.initState();
+    print("----获取$username的属性");
+    Provider.of<UsersModel>(context,listen: false).get(username).then((user){
+      this.avatarPath = user.avatar;
+      setState(() {
+
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CachedNetworkImage(
+      fit: BoxFit.cover,
+      imageUrl: "$avatarPath",);
+  }
 
 }
 
@@ -56,7 +100,8 @@ class RectAvatar extends StatelessWidget{
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        Navigator.of(context).push(SizeRoute(MePage(username: username,)));
+        if(username!=null)
+          Navigator.of(context).push(SizeRoute(MePage(username: username,)));
       },
       child: Container(
         width: (width??41),

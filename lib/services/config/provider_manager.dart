@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app2/common/pojos/User.dart';
+import 'package:flutter_app2/services/model/viewModel/UsersModel.dart';
 import 'package:flutter_app2/services/model/viewModel/buddy_model.dart';
 import 'package:flutter_app2/services/model/viewModel/favourite_model.dart';
 import 'package:flutter_app2/services/model/viewModel/friend_model.dart';
@@ -33,6 +34,9 @@ List<SingleChildWidget> independentServices = [
   ),
   ChangeNotifierProvider<FriendModel>(
     create: (context) => FriendModel(),
+  ),
+  ChangeNotifierProvider<UsersModel>(
+    create: (context) => UsersModel(),
   ),
 ];
 

@@ -397,8 +397,7 @@ class SingleChatProvider with ChangeNotifier {
       msgPadding = EdgeInsets.all(10.0);
     }
 
-    Widget userAvatar = RectAvatar(CachedNetworkImage( imageUrl: '${msgModel.avatar}',),
-    );
+    Widget userAvatar = Avatar(AvatarImage(msgModel.message.from.username));
 
     Widget msgContent = Container(
         margin: msgMargin,
